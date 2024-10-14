@@ -1,0 +1,35 @@
+{
+	"compilerOptions": {
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"paths": {
+			"@/*": ["./src/*"],
+			"@/public/*": ["./public/*"],
+			"@/screens/*": ["./src/components/screens/*"],
+			"@/ui/*": ["./src/components/ui/*"],
+			"@/components/*": ["./src/components/*"],
+			"@/pages/*": ["./src/pages/*"],
+			"@/providers/*": ["./src/providers/*"],
+			"@/shared/*": ["./src/shared/*"]
+		},
+		"strictNullChecks": true
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"src/components/layout/Sidebar/Search/SearchList",
+		"src/components/layout/Sidebar/Users/UsersList"
+	],
+	"exclude": ["node_modules"]
+}

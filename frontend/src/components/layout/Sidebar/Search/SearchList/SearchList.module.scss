@@ -1,0 +1,6 @@
+.container {
+	@apply p-3 border border-gray-800 rounded-xl mt-4;
+	> a {
+		@apply rounded-xl flex flex-col items-start py-3 px-4 relative hover:bg-zinc-900 transition-colors;
+	}
+}

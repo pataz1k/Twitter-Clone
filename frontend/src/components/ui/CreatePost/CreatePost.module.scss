@@ -1,0 +1,15 @@
+.wrap {
+	.input {
+		@apply mb-3 text-white placeholder:text-gray-600 block bg-transparent resize-none p-2 rounded-xl w-full border border-gray-700 border-solid outline-none overflow-y-hidden h-auto max-h-28;
+	}
+
+	.info {
+		@apply flex justify-between px-1 mb-2;
+		.additionalButtons {
+			@apply flex gap-3;
+			button > svg {
+				@apply size-8 hover:fill-blue-500 transition-all;
+			}
+		}
+	}
+}

@@ -1,0 +1,30 @@
+.wrap {
+	@apply flex  flex-col gap-5;
+}
+.buttonWrap {
+	@apply flex gap-4;
+
+	> button {
+		// Базовые стили для кнопки
+		@apply bg-transparent border-none flex gap-2 cursor-default;
+
+		// Стиль для svg по умолчанию
+		> svg {
+			@apply fill-white size-6 cursor-pointer; // Белый цвет по умолчанию
+			transition: fill 0.3s ease; // Плавный переход цвета
+		}
+
+		// Стиль для активного состояния
+		&.active {
+			> svg {
+				fill: red !important; // Красный цвет, когда кнопка активна
+			}
+		}
+		&:disabled {
+			@apply cursor-not-allowed;
+			> svg {
+				@apply cursor-not-allowed;
+			}
+		}
+	}
+}
