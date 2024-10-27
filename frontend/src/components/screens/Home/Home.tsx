@@ -12,14 +12,12 @@ import { PostService } from '@/services/post.service'
 const Home: FC = () => {
 	const { isAuth } = useContext(AuthContext)
 
-	const { isSuccess, data } = useQuery(
+	const { isSuccess, data, refetch } = useQuery(
 		['get all posts'],
 		() => PostService.getAll(),
 		{ select: ({ data }) => data }
 	)
-	if (isSuccess) {
-		console.log(data.data)
-	}
+
 	return (
 		<div>
 			{isAuth ? (
@@ -36,7 +34,7 @@ const Home: FC = () => {
 				</div>
 			)}
 			<div className="border-t border-gray-700 py-2">
-				{isSuccess && <PostsList posts={data.data} />}
+				{isSuccess && <PostsList posts={data.data} refetchPosts={refetch} />}
 			</div>
 		</div>
 	)

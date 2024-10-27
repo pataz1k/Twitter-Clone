@@ -17,7 +17,7 @@ interface IProfileResponse {
 const Profile: FC = () => {
 	const { isAuth, accessToken, updateAuthStatus } = useContext(AuthContext)
 
-	const { isSuccess, data } = useQuery(
+	const { isSuccess, data, refetch } = useQuery(
 		['get user profile'],
 		() => AuthService.me(accessToken),
 		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
@@ -29,7 +29,7 @@ const Profile: FC = () => {
 			{isSuccess ? (
 				<>
 					<ProfileData profile={data?.data} />
-					<ProfilePostList profile={data?.data} />
+					<ProfilePostList profile={data?.data} refetchPosts={refetch} />
 				</>
 			) : (
 				<h1>You aren't auth.</h1>

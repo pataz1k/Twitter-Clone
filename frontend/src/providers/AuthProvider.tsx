@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useState,
 } from 'react'
+import { useJwt } from 'react-jwt'
 
 import { CookieService } from '@/services/cookie.service'
 
@@ -12,12 +13,19 @@ interface IAuthContext {
 	isAuth: boolean
 	accessToken: string
 	updateAuthStatus: () => void
+	accountID: string
+}
+interface IDecodedToken {
+	id: string
+	iat: number
+	exp: number
 }
 
 const initialValue = {
 	isAuth: false,
 	accessToken: '',
 	updateAuthStatus: () => {},
+	accountID: '',
 }
 
 const AuthContext = createContext<IAuthContext>(initialValue)
@@ -49,8 +57,17 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 		})
 	}
 
+	const { decodedToken, isExpired } = useJwt<IDecodedToken>(accessToken)
+
 	return (
-		<AuthContext.Provider value={{ isAuth, accessToken, updateAuthStatus }}>
+		<AuthContext.Provider
+			value={{
+				isAuth,
+				accessToken,
+				updateAuthStatus,
+				accountID: decodedToken?.id || '',
+			}}
+		>
 			{children}
 		</AuthContext.Provider>
 	)

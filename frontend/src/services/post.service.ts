@@ -8,4 +8,18 @@ export const PostService = {
 	async getAll() {
 		return axiosClassic.get(getPostsUrl(''))
 	},
+	async toggleLike(postId: string, token: string) {
+		return axiosClassic.get(getPostsUrl(`${postId}/togglelike`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	},
+	async toggleRetweet(postId: string, token: string) {
+		return axiosClassic.get(getPostsUrl(`${postId}/toggleRetweet`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	},
 }

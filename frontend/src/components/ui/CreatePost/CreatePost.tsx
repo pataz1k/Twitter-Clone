@@ -1,13 +1,33 @@
 import cn from 'classnames'
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
+import { useQuery } from 'react-query'
+
+import { AuthContext } from '@/providers/AuthProvider'
+
+import { IProfile } from '@/shared/types/profile.types'
 
 import MaterialIcon from '../MaterialIcons'
+import ProfileItem from '../ProfileItem'
 
 import classes from './CreatePost.module.scss'
+import { AuthService } from '@/services/auth.service'
+
+interface IProfileResponse {
+	success: boolean
+	data: IProfile
+}
 
 const CreatePost: FC = () => {
 	const [inputValue, setInputValue] = useState('')
 	const [lettersCount, setLettersCount] = useState(0)
+
+	const { isAuth, accessToken } = useContext(AuthContext)
+
+	const { isSuccess, data } = useQuery(
+		['get user profile'],
+		() => AuthService.me(accessToken),
+		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
+	)
 
 	const handleChange = (event) => {
 		setLettersCount(event.target.value.length)
@@ -21,7 +41,11 @@ const CreatePost: FC = () => {
 	}
 	return (
 		<div className={classes.wrap}>
-			<div>Profile Data</div>
+			<ProfileItem
+				avatar={data?.data.avatar!}
+				username={data?.data.username!}
+				id={data?.data._id!}
+			/>
 			<textarea
 				name="create post"
 				className={classes.input}
@@ -29,7 +53,6 @@ const CreatePost: FC = () => {
 				placeholder="What's happening?"
 				value={inputValue}
 				onChange={handleChange}
-				contentEditable
 				maxLength={240}
 			/>
 			<div className={classes.info}>

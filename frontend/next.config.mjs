@@ -6,7 +6,23 @@ const nextConfig = {
 		SERVER_URL: process.env.SERVER_URL,
 	},
 	images: {
-		domains: ['res.cloudinary.com', 'via.placeholder.com', 'localhost'],
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'res.cloudinary.com',
+				pathname: '**',
+			},
+			{
+				protocol: 'https',
+				hostname: 'via.placeholder.com',
+				pathname: '**',
+			},
+			{
+				protocol: 'https',
+				hostname: 'localhost',
+				pathname: '**',
+			},
+		],
 	},
 
 	async rewrites() {

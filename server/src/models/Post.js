@@ -16,7 +16,6 @@ const PostSchema = new mongoose.Schema({
   },
   files: {
     type: [String],
-    validate: (v) => v === null || v.length > 0,
   },
   likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
   retweets: [{ type: mongoose.Schema.ObjectId, ref: "User" }],

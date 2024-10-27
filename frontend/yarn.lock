@@ -1454,7 +1454,7 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
-fsevents@~2.3.2:
+fsevents@^2.3.2, fsevents@~2.3.2:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
@@ -2507,6 +2507,13 @@ react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-jwt@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-jwt/-/react-jwt-1.2.2.tgz#768d5584438a6f7ce4b138f09c3c9f73c4cb1b64"
+  integrity sha512-1I0Ei1F9m7Nzo1jaeeZk7dpUC4srIVC3bUxDqgD9mFltoTyytp5TFPkK3XMWfLE5iYUsQ+C7tNYbf/gd61D4Sw==
+  optionalDependencies:
+    fsevents "^2.3.2"
 
 react-query@^3.39.3:
   version "3.39.3"

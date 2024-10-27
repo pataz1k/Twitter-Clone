@@ -24,6 +24,8 @@ interface IAuthRespose {
 const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 	const { updateAuthStatus } = useContext(AuthContext)
 
+	const registerPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
+
 	const {
 		register,
 		handleSubmit,
@@ -68,9 +70,9 @@ const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 					{...register('password', {
 						required: { value: true, message: 'Password is required' },
 						pattern: {
-							value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+							value: authType == 'signup' ? registerPattern : /^.*$/,
 							message:
-								'Password must be at least 8 characters long and contain at least one letter and one number',
+								'Password must be at least 6 characters long and contain at least one letter and one number',
 						},
 					})}
 				/>

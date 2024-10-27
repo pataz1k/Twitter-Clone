@@ -7,7 +7,10 @@ import { IProfile } from '@/shared/types/profile.types'
 
 import styles from './Profile.module.scss'
 
-const ProfilePostList: FC<{ profile: IProfile }> = ({ profile }) => {
+const ProfilePostList: FC<{
+	profile: IProfile
+	refetchPosts: () => void
+}> = ({ profile, refetchPosts }) => {
 	const [postsType, setPostsType] = useState<'created' | 'saved'>('created')
 
 	return (
@@ -33,9 +36,9 @@ const ProfilePostList: FC<{ profile: IProfile }> = ({ profile }) => {
 
 			<div>
 				{postsType === 'created' ? (
-					<PostsList posts={profile.posts} />
+					<PostsList posts={profile.posts} refetchPosts={refetchPosts} />
 				) : (
-					<PostsList posts={profile.savedPosts} />
+					<PostsList posts={profile.savedPosts} refetchPosts={refetchPosts} />
 				)}
 			</div>
 		</>

@@ -4,20 +4,24 @@ import { FC } from 'react'
 
 import { IUser } from '@/shared/types/post.types'
 
-const ProfileItem: FC<{ profile: IUser }> = ({ profile }) => {
+const ProfileItem: FC<{ id: string; avatar: string; username: string }> = ({
+	id,
+	avatar,
+	username,
+}) => {
 	return (
 		<Link
-			href={`/user/${profile._id}`}
+			href={`/user/${id}`}
 			className="inline-flex gap-2 items-center mb-3 hover:bg-zinc-900 transition-colors py-2 pr-3 rounded-md"
 		>
 			<Image
 				alt="user avatar"
-				src={profile.avatar}
+				src={avatar}
 				width={30}
 				height={30}
 				className="rounded-full"
 			/>
-			<span className="font-bold">{profile.username}</span>
+			<span className="font-bold">{username}</span>
 		</Link>
 	)
 }

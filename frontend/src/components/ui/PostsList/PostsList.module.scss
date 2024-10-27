@@ -15,9 +15,14 @@
 		}
 
 		// Стиль для активного состояния
-		&.active {
+		&.activeLike {
 			> svg {
 				fill: red !important; // Красный цвет, когда кнопка активна
+			}
+		}
+		&.activeRetweet {
+			> svg {
+				fill: #2563eb !important; // Красный цвет, когда кнопка активна
 			}
 		}
 		&:disabled {
