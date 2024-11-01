@@ -1,7 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
 	poweredByHeader: false,
-	optimizeFonts: false,
 	env: {
 		SERVER_URL: process.env.SERVER_URL,
 	},

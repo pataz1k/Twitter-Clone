@@ -1,13 +1,20 @@
 import { FC } from 'react'
 
+import { IFollowUser } from '@/shared/types/profile.types'
+
 import UsersList from './UsersList'
 
 interface IFollowersModal {
 	isOpen: boolean
 	onClose: () => void
+	followers: IFollowUser[] | []
 }
 
-const FollowersModal: FC<IFollowersModal> = ({ isOpen, onClose }) => {
+const FollowersModal: FC<IFollowersModal> = ({
+	isOpen,
+	onClose,
+	followers,
+}) => {
 	if (!isOpen) return null
 
 	return (
@@ -19,10 +26,8 @@ const FollowersModal: FC<IFollowersModal> = ({ isOpen, onClose }) => {
 				>
 					&times;
 				</button>
-				<h2 className="text-lg font-bold text-white mt-[-13px]">
-					Модалка подписчиков
-				</h2>
-				<UsersList />
+				<h2 className="text-lg font-bold text-white mt-[-13px]">Users</h2>
+				<UsersList followers={followers} />
 			</div>
 		</div>
 	)

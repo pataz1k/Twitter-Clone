@@ -5,7 +5,7 @@ import { useMutation } from 'react-query'
 import TagsList from '@/components/layout/Sidebar/Search/TagsList/TagsList'
 import ImageGallery from '@/components/ui/ImageGallery'
 import MaterialIcon from '@/components/ui/MaterialIcons'
-import Profile from '@/components/ui/ProfileItem'
+import ProfileItem from '@/components/ui/ProfileItem'
 import TimeItem from '@/components/ui/TimeItem'
 
 import { AuthContext } from '@/providers/AuthProvider'
@@ -46,7 +46,7 @@ const PostItem: FC<{ post: IPost; refetchPosts: () => void }> = ({
 
 	return (
 		<div className="p-4 border border-gray-700 rounded-xl flex flex-col items-start">
-			<Profile
+			<ProfileItem
 				id={post.user._id}
 				avatar={post.user.avatar}
 				username={post.user.username}

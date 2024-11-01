@@ -55,10 +55,19 @@ exports.me = asyncHandler(async (req, res, next) => {
         select: "username avatar",
       },
     }) // Заполняем сохраненные посты
+    .populate({
+      path: "followers",
+      select: "username avatar _id",
+    }) // Заполняем подписки
+    .populate({
+      path: "following",
+      select: "username avatar _id",
+    }) // Заполняем подписчиков
+    .lean()
     .exec();
 
   res.status(200).json({
     success: true,
-    data: user, // Теперь user будет содержать объекты постов
+    data: user,
   });
 });

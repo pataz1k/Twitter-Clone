@@ -5,14 +5,20 @@ export interface IProfile {
 	avatar: string
 	bio: string
 	website: string
-	followers: string[]
+	followers: IFollowUser[]
 	followersCount: number
 	followingCount: number
-	following: string[]
+	following: IFollowUser[]
 	posts: IPost[]
 	postCount: number
 	savedPosts: IPost[]
 	_id: string
 	username: string
 	createdAt: string
+}
+
+export interface IFollowUser {
+	username: string
+	avatar: string
+	_id: string
 }

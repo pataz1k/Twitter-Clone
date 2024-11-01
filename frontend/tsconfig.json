@@ -22,14 +22,16 @@
 			"@/providers/*": ["./src/providers/*"],
 			"@/shared/*": ["./src/shared/*"]
 		},
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"target": "ES2017"
 	},
 	"include": [
 		"next-env.d.ts",
 		"**/*.ts",
 		"**/*.tsx",
 		"src/components/layout/Sidebar/Search/SearchList",
-		"src/components/layout/Sidebar/Users/UsersList"
+		"src/components/layout/Sidebar/Users/UsersList",
+		"next.config.ts"
 	],
 	"exclude": ["node_modules"]
 }

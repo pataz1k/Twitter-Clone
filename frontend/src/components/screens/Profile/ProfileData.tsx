@@ -13,12 +13,24 @@ const ProfileData: FC<{ profile: IProfile | undefined }> = ({ profile }) => {
 	}
 	console.log(profile)
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [modalType, setModalType] = useState<'followers' | 'following'>(
+		'followers'
+	)
 	const closeModal = () => setIsModalOpen(false)
-	const openModal = () => setIsModalOpen(true)
+	const openModal = (modalType: 'followers' | 'following') => {
+		setIsModalOpen(true)
+		setModalType(modalType)
+	}
 
 	return (
 		<>
-			<FollowersModal isOpen={isModalOpen} onClose={closeModal} />
+			<FollowersModal
+				isOpen={isModalOpen}
+				onClose={closeModal}
+				followers={
+					modalType === 'followers' ? profile?.followers! : profile?.following!
+				}
+			/>
 			<div className="border border-gray-800 rounded-lg mt-5">
 				<div className={styles.banner}></div>
 				<div className="ml-2">
@@ -37,12 +49,20 @@ const ProfileData: FC<{ profile: IProfile | undefined }> = ({ profile }) => {
 						{formatDate(profile?.createdAt)}
 					</p>
 					<div className="flex gap-3">
-						<button onClick={openModal}>
+						<button
+							onClick={() => {
+								openModal('following')
+							}}
+						>
 							<span className="font-bold">{profile?.followingCount}</span>{' '}
 							Following
 						</button>
-						<button onClick={openModal}>
-							<span className="font-bold">{profile?.followingCount}</span>{' '}
+						<button
+							onClick={() => {
+								openModal('followers')
+							}}
+						>
+							<span className="font-bold">{profile?.followersCount}</span>{' '}
 							Followers
 						</button>
 					</div>
