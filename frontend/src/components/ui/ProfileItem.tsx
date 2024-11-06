@@ -1,17 +1,24 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC } from 'react'
+import { FC, use } from 'react'
 
 import { IUser } from '@/shared/types/post.types'
+import { getUserPageUrl } from '@/config/url.config'
 
-const ProfileItem: FC<{ id: string; avatar: string; username: string }> = ({
+interface IProfileItem {
+	id: string
+	avatar: string
+	username: string
+}
+
+const ProfileItem: FC<IProfileItem> = ({
 	id,
 	avatar,
 	username,
 }) => {
 	return (
 		<Link
-			href={`/user/${id}`}
+			href={getUserPageUrl(username)}
 			className="flex gap-2 items-center mb-3 hover:bg-zinc-900 transition-colors py-2 pr-3 rounded-md"
 		>
 			<Image

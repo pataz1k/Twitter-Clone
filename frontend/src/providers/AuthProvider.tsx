@@ -13,10 +13,11 @@ interface IAuthContext {
 	isAuth: boolean
 	accessToken: string
 	updateAuthStatus: () => void
-	accountID: string
+	accountUsername: string
 }
 interface IDecodedToken {
 	id: string
+	username: string
 	iat: number
 	exp: number
 }
@@ -25,7 +26,7 @@ const initialValue = {
 	isAuth: false,
 	accessToken: '',
 	updateAuthStatus: () => {},
-	accountID: '',
+	accountUsername: '',
 }
 
 const AuthContext = createContext<IAuthContext>(initialValue)
@@ -58,6 +59,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 	}
 
 	const { decodedToken, isExpired } = useJwt<IDecodedToken>(accessToken)
+	console.log(decodedToken)
 
 	return (
 		<AuthContext.Provider
@@ -65,7 +67,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 				isAuth,
 				accessToken,
 				updateAuthStatus,
-				accountID: decodedToken?.id || '',
+				accountUsername: decodedToken?.username || '',
 			}}
 		>
 			{children}
