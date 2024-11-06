@@ -5,9 +5,10 @@ import { AuthContext } from '@/providers/AuthProvider'
 
 import { IProfile } from '@/shared/types/profile.types'
 
-import ProfileData from './ProfileData'
-import ProfilePostList from './ProfilePostList'
+import ProfileData from '../../ui/Profile/ProfileData'
+import ProfilePostList from '../../ui/Profile/ProfilePostList'
 import { AuthService } from '@/services/auth.service'
+import NotAuth from '@/components/ui/NotAuth'
 
 interface IProfileResponse {
 	success: boolean
@@ -32,7 +33,7 @@ const Profile: FC = () => {
 					<ProfilePostList profile={data?.data} refetchPosts={refetch} />
 				</>
 			) : (
-				<h1>You aren't auth.</h1>
+				<NotAuth/>
 			)}
 		</>
 	)
