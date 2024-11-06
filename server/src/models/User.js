@@ -73,9 +73,13 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+  return jwt.sign(
+    { id: this._id, username: this.username },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRE,
+    }
+  );
 };
 
 UserSchema.methods.checkPassword = async function (password) {
