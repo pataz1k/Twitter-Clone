@@ -22,4 +22,15 @@ export const PostService = {
 			},
 		})
 	},
+	async createPost(token: string, caption: string) {
+		return axiosClassic.post(
+			getPostsUrl(''),
+			{ caption: caption, files: [], tags: [] },
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
+	},
 }

@@ -14,6 +14,7 @@ interface IAuthContext {
 	accessToken: string
 	updateAuthStatus: () => void
 	accountUsername: string
+	accountID: string
 }
 interface IDecodedToken {
 	id: string
@@ -27,6 +28,7 @@ const initialValue = {
 	accessToken: '',
 	updateAuthStatus: () => {},
 	accountUsername: '',
+	accountID: '',
 }
 
 const AuthContext = createContext<IAuthContext>(initialValue)
@@ -67,6 +69,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 				accessToken,
 				updateAuthStatus,
 				accountUsername: decodedToken?.username || '',
+				accountID: decodedToken?.id || '',
 			}}
 		>
 			{children}

@@ -1,16 +1,30 @@
-import { FC, useContext } from 'react'
+import { FC, useContext, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import CreatePost from '@/components/ui/CreatePost/CreatePost'
+import ImageUpload from '@/components/ui/ImageUpload'
+import LinkButton from '@/components/ui/LinkButton'
 import PostsList from '@/components/ui/PostsList/PostsList'
 
 import { AuthContext } from '@/providers/AuthProvider'
 
-import LinkButton from '@/components/ui/LinkButton'
 import { PostService } from '@/services/post.service'
+
+interface FormData {
+	images: FileList
+}
 
 const Home: FC = () => {
 	const { isAuth } = useContext(AuthContext)
+
+	const [isOpenImageUpload, setIsOpenImageUpload] = useState(false)
+
+	const openModal = () => setIsOpenImageUpload(true)
+	const closeModal = () => setIsOpenImageUpload(false)
+
+	const handleSubmit = (data: FormData) => {
+		console.log('Form submitted:', data)
+	}
 
 	const { isSuccess, data, refetch } = useQuery(
 		['get all posts'],
@@ -20,12 +34,17 @@ const Home: FC = () => {
 
 	return (
 		<div>
+			<ImageUpload
+				isOpen={isOpenImageUpload}
+				onClose={closeModal}
+				onSubmit={handleSubmit}
+			/>
 			{isAuth ? (
-				<CreatePost />
+				<CreatePost refetchPosts={refetch} openImageUpload={openModal} />
 			) : (
 				<div className="flex justify-center gap-2 items-center p-5">
 					<h1>You need to be log in to create new post.</h1>
-					<LinkButton href={'/auth'} text='Login'/>
+					<LinkButton href={'/auth'} text="Login" />
 				</div>
 			)}
 			<div className="border-t border-gray-700 py-2">

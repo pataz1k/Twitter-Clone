@@ -12,6 +12,7 @@ import ProfileItem from '../ProfileItem'
 
 import classes from './CreatePost.module.scss'
 import { AuthService } from '@/services/auth.service'
+import { PostService } from '@/services/post.service'
 
 interface IProfileResponse {
 	success: boolean
@@ -22,7 +23,10 @@ type Inputs = {
 	caption: string
 }
 
-const CreatePost: FC = () => {
+const CreatePost: FC<{
+	refetchPosts: () => void
+	openImageUpload: () => void
+}> = ({ refetchPosts, openImageUpload }) => {
 	const [lettersCount, setLettersCount] = useState(0)
 	const { isAuth, accessToken } = useContext(AuthContext)
 
@@ -35,9 +39,18 @@ const CreatePost: FC = () => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm<Inputs>()
-	const onSubmit = (data) => console.log(data)
+	const onSubmit = (data) => {
+		PostService.createPost(accessToken, data.caption)
+			.then((res) => console.log(res))
+			.catch((err) => console.log(err))
+			.finally(() => {
+				refetchPosts()
+				reset()
+			})
+	}
 
 	const adjustHeight = (element) => {
 		element.style.height = 'auto'
@@ -67,7 +80,7 @@ const CreatePost: FC = () => {
 				/>
 				<div className={classes.info}>
 					<div className={classes.additionalButtons}>
-						<button>
+						<button onClick={openImageUpload}>
 							<MaterialIcon name="MdOutlineImage" />
 						</button>
 						<button>
