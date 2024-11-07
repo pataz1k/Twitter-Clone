@@ -8,6 +8,7 @@ import PostsList from '@/components/ui/PostsList/PostsList'
 
 import { AuthContext } from '@/providers/AuthProvider'
 
+import { ImagesService } from '@/services/images.service'
 import { PostService } from '@/services/post.service'
 
 interface FormData {
@@ -18,12 +19,16 @@ const Home: FC = () => {
 	const { isAuth } = useContext(AuthContext)
 
 	const [isOpenImageUpload, setIsOpenImageUpload] = useState(false)
+	const [imagePaths, setImagePaths] = useState<string[]>([])
 
 	const openModal = () => setIsOpenImageUpload(true)
 	const closeModal = () => setIsOpenImageUpload(false)
+	console.log(imagePaths)
 
 	const handleSubmit = (data: FormData) => {
-		console.log('Form submitted:', data)
+		ImagesService.uploadImage(data.images)
+			.then((res) => setImagePaths(res.data.paths))
+			.catch((err) => console.log(err))
 	}
 
 	const { isSuccess, data, refetch } = useQuery(

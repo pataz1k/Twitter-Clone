@@ -12,6 +12,17 @@ const path = require("path");
 
 const app = express();
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", true);
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  next();
+});
+
 connectToDb();
 app.use(express.json());
 app.use(express.static("public"));
@@ -25,6 +36,7 @@ app.use("/api/", apiLimiter);
 var corsOptions = {
   origin: process.env.URI || "http://localhost:3000",
   optionsSuccessStatus: 200,
+  credentials: true,
 };
 
 const storage = multer.diskStorage({
@@ -39,26 +51,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Роут для загрузки файла
-app.post("/api/v1/upload", upload.single("image"), (req, res) => {
-  // req.file содержит информацию о загруженном файле
-  // req.body будет содержать текстовые данные, отправленные вместе с файлом (если есть)
-
-  // Формируем путь к файлу на сервере
-  const imagePath = "/images/" + req.file.filename; // заменяем обратные слеши на прямые для Windows
+app.post("/api/v1/upload", upload.array("images", 10), (req, res) => {
+  // Создаем массив для хранения путей к изображениям
+  const imagePaths = req.files.map((file) => "/images/" + file.filename);
 
   // Формируем JSON ответ
   const jsonResponse = {
     status: "success",
-    path: imagePath,
+    paths: imagePaths,
   };
 
   // Отправляем JSON в ответ на запрос
-  res.status(200).json(jsonResponse);
+  try {
+    console.log(jsonResponse);
+    res.status(200).json(jsonResponse);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
 });
 
-app.use("/api/v1/auth", cors(corsOptions), auth);
-app.use("/api/v1/users", cors(corsOptions), user);
-app.use("/api/v1/posts", cors(corsOptions), post);
+app.use(cors(corsOptions));
+app.use("/api/v1/auth", auth);
+app.use("/api/v1/users", user);
+app.use("/api/v1/posts", post);
 
 app.use(errorHandler);
 
