@@ -2,6 +2,7 @@ import { IPost } from './post.types'
 
 export interface IProfile {
 	fullname: string
+	isFollowing?: boolean
 	avatar: string
 	bio: string
 	website: string

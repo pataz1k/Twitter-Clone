@@ -5,7 +5,7 @@ import { IFollowUser } from '@/shared/types/profile.types'
 import ProfileItem from '../ProfileItem'
 
 const UsersList: FC<{ followers: IFollowUser[] }> = ({ followers }) => {
-	console.log(followers)
+
 	return (
 		<div className="flex flex-col mt-2">
 			<div className="max-h-[400px] overflow-y-auto pr-2">

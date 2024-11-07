@@ -59,7 +59,6 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 	}
 
 	const { decodedToken, isExpired } = useJwt<IDecodedToken>(accessToken)
-	console.log(decodedToken)
 
 	return (
 		<AuthContext.Provider

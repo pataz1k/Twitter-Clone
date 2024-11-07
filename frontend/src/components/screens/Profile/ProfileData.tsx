@@ -11,7 +11,7 @@ const ProfileData: FC<{ profile: IProfile | undefined }> = ({ profile }) => {
 	const formatDate = (isoDate: string | undefined) => {
 		return isoDate ? new Date(isoDate).getUTCFullYear() : ''
 	}
-	console.log(profile)
+
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [modalType, setModalType] = useState<'followers' | 'following'>(
 		'followers'

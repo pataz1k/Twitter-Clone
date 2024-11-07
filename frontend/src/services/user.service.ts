@@ -11,9 +11,25 @@ export const UserService = {
 	},
 	async getUser(token:string, username: string) {
 		return axiosClassic.get(getUsersUrl(username), {
+
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
 		})
-	}
+	},
+
+	async followUser(token: string, id: string) {
+		return axiosClassic.get(getUsersUrl(`/${id}/follow`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			}
+		})
+	},
+	async unfollowUser(token: string, id: string) {
+		return axiosClassic.get(getUsersUrl(`/${id}/unfollow`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			}
+		})
+	},
 }

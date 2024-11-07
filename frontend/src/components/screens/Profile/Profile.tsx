@@ -23,13 +23,13 @@ const Profile: FC = () => {
 		() => AuthService.me(accessToken),
 		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
 	)
-	console.log(data)
+
 
 	return (
 		<>
 			{isSuccess ? (
 				<>
-					<ProfileData profile={data?.data} />
+					<ProfileData profile={data?.data} refetchProfile={refetch}/>
 					<ProfilePostList profile={data?.data} refetchPosts={refetch} />
 				</>
 			) : (
