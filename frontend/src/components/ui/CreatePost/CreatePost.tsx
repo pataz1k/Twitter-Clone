@@ -1,5 +1,6 @@
 import cn from 'classnames'
-import { FC, useContext, useState } from 'react'
+import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react'
+import { FC, useContext, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
 
@@ -19,16 +20,34 @@ interface IProfileResponse {
 	data: IProfile
 }
 
+interface ICreatePost {
+	refetchPosts: () => void
+	openImageUpload: () => void
+	images: string[]
+}
+
 type Inputs = {
 	caption: string
 }
 
-const CreatePost: FC<{
-	refetchPosts: () => void
-	openImageUpload: () => void
-}> = ({ refetchPosts, openImageUpload }) => {
+const CreatePost: FC<ICreatePost> = ({
+	refetchPosts,
+	openImageUpload,
+	images,
+}) => {
 	const [lettersCount, setLettersCount] = useState(0)
 	const { isAuth, accessToken } = useContext(AuthContext)
+	const [isEmojiOpen, setIsEmojiOpen] = useState(false)
+	const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 })
+
+	const buttonRef = useRef<HTMLButtonElement>(null)
+
+	useEffect(() => {
+		if (buttonRef.current) {
+			const rect = buttonRef.current.getBoundingClientRect()
+			setButtonPosition({ top: rect.bottom, left: rect.left })
+		}
+	}, [isEmojiOpen])
 
 	const { isSuccess, data } = useQuery(
 		['get user profile'],
@@ -43,7 +62,7 @@ const CreatePost: FC<{
 		formState: { errors },
 	} = useForm<Inputs>()
 	const onSubmit = (data) => {
-		PostService.createPost(accessToken, data.caption)
+		PostService.createPost(accessToken, data.caption, images)
 			.then((res) => console.log(res))
 			.catch((err) => console.log(err))
 			.finally(() => {
@@ -59,6 +78,15 @@ const CreatePost: FC<{
 
 	return (
 		<div className={classes.wrap}>
+			<div
+				className="fixed z-50"
+				style={{
+					top: `${buttonPosition.top}px`,
+					left: `${buttonPosition.left}px`,
+				}}
+			>
+				<EmojiPicker theme={Theme.DARK} open={isEmojiOpen} />
+			</div>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<ProfileItem
 					avatar={data?.data.avatar!}
@@ -86,7 +114,10 @@ const CreatePost: FC<{
 						<button>
 							<MaterialIcon name="MdOutlineGifBox" />
 						</button>
-						<button>
+						<button
+							ref={buttonRef}
+							onClick={() => setIsEmojiOpen(!isEmojiOpen)}
+						>
 							<MaterialIcon name="MdOutlineEmojiEmotions" />
 						</button>
 						<button>

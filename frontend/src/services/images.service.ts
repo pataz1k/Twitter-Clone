@@ -3,8 +3,12 @@ import { axiosClassic } from '@/api/interceptors'
 export const ImagesService = {
 	uploadImage: async (files: FileList) => {
 		const formData = new FormData()
-		Array.from(files).forEach((file, index) => {
-			formData.append(`images`, file)
+		for (let i = 0; i < files.length; i++) {
+			console.log(files[i].name)
+			formData.append('images', files[i])
+		}
+		Array.from(formData.entries()).map((entry, index) => {
+			console.log(entry)
 		})
 		return axiosClassic.post('upload', formData, {
 			headers: {

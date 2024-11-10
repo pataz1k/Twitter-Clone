@@ -52,7 +52,7 @@ const upload = multer({ storage: storage });
 
 // Роут для загрузки файла
 app.post("/api/v1/upload", upload.array("images", 10), (req, res) => {
-  // Создаем массив для хранения путей к изображениям
+  console.log(req.files);
   const imagePaths = req.files.map((file) => "/images/" + file.filename);
 
   // Формируем JSON ответ

@@ -45,7 +45,11 @@ const Home: FC = () => {
 				onSubmit={handleSubmit}
 			/>
 			{isAuth ? (
-				<CreatePost refetchPosts={refetch} openImageUpload={openModal} />
+				<CreatePost
+					refetchPosts={refetch}
+					openImageUpload={openModal}
+					images={imagePaths}
+				/>
 			) : (
 				<div className="flex justify-center gap-2 items-center p-5">
 					<h1>You need to be log in to create new post.</h1>
