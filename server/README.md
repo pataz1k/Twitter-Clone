@@ -1,9 +1,6 @@
 ## Twitter Clone Frontend
- - Live: https://twitter-frontend.vercel.app/
 
-Twitter clone using MERN stack (Mongo, Express, React, Node).
-
-This is the backend repository. If you are looking for the frontend repository, [click here](https://github.com/scozdev/twitter-frontend)
+- Twitter clone using MERN stack (Mongo, Express, React, Node).
 
 ## :rocket: Tech Stack
 
@@ -41,36 +38,6 @@ MONGOURI=<YOUR_DB_CONNECTION_URI>
 ```
 
 ```
-- npm install  
+- npm install
 - npm run start
 ```
-
-## UI
-
-### Home
-
-![Home](screenshots/home.png)
-
-![Home](screenshots/mobile-home.png)
-
-### Explore
-
-![Explore](screenshots/explore.png)
-
-![Explore](screenshots/mobile-explore.png)
-
-### Lists
-
-![Lists](screenshots/lists.png)
-
-![Lists](screenshots/mobile-lists.png)
-
-### More
-
-![More](screenshots/more.png)
-
-### Profile
-
-![Profile](screenshots/profile.png)
-
-![Profile](screenshots/mobile-profile.png)
