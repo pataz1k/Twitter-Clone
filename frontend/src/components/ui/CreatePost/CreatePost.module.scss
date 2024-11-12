@@ -1,6 +1,6 @@
 .wrap {
 	.input {
-		@apply mb-3 text-white placeholder:text-gray-600 block bg-transparent resize-none p-2 rounded-xl w-full border border-gray-700 border-solid outline-none overflow-y-hidden h-auto max-h-28;
+		@apply mb-3 text-white placeholder:text-gray-600 block bg-transparent resize-none p-2 rounded-xl w-full border border-gray-700 border-solid outline-none overflow-y-hidden h-auto max-h-28 focus:border-blue-500 shadow-sm focus:shadow-blue-500/50 focus:shadow-md transition-all duration-200;
 	}
 
 	.info {

@@ -5,7 +5,7 @@ import { useMutation } from 'react-query'
 import TagsList from '@/components/layout/Sidebar/Search/TagsList/TagsList'
 import ImageGallery from '@/components/ui/ImageGallery'
 import MaterialIcon from '@/components/ui/MaterialIcons'
-import ProfileItem from '@/components/ui/ProfileItem'
+import ProfileItem from '@/components/ui/ProfileItem/ProfileItem'
 import TimeItem from '@/components/ui/TimeItem'
 
 import { AuthContext } from '@/providers/AuthProvider'

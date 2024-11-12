@@ -2,7 +2,7 @@ import cn from 'classnames'
 import { FC, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 
-import PostSkeleton from '../PostSkeleton'
+import PostListSkeleton from '../PostsList/PostListSkeleton'
 
 import styles from './ProfileSkeleton.module.scss'
 
@@ -42,8 +42,7 @@ const ProfileSkeleton: FC = () => {
 					Saved Posts
 				</span>
 			</div>
-			<PostSkeleton />
-			<PostSkeleton />
+			<PostListSkeleton />
 		</>
 	)
 }

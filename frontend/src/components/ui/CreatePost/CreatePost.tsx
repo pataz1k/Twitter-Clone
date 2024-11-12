@@ -1,5 +1,8 @@
-import cn from 'classnames'
-import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react'
+import EmojiPicker, {
+	EmojiClickData,
+	EmojiStyle,
+	Theme,
+} from 'emoji-picker-react'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
@@ -9,7 +12,8 @@ import { AuthContext } from '@/providers/AuthProvider'
 import { IProfile } from '@/shared/types/profile.types'
 
 import MaterialIcon from '../MaterialIcons'
-import ProfileItem from '../ProfileItem'
+import ProfileItem from '../ProfileItem/ProfileItem'
+import ProfileItemSkeleton from '../ProfileItem/ProfileItemSkeleton'
 
 import classes from './CreatePost.module.scss'
 import { AuthService } from '@/services/auth.service'
@@ -35,11 +39,16 @@ const CreatePost: FC<ICreatePost> = ({
 	openImageUpload,
 	images,
 }) => {
-	const [lettersCount, setLettersCount] = useState(0)
 	const { isAuth, accessToken } = useContext(AuthContext)
 	const [isEmojiOpen, setIsEmojiOpen] = useState(false)
 	const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 })
 
+	let previousScrollY = window.scrollY
+
+	const { register, handleSubmit, reset, watch, setValue, trigger } =
+		useForm<Inputs>()
+
+	const caption = watch('caption', '')
 	const buttonRef = useRef<HTMLButtonElement>(null)
 
 	useEffect(() => {
@@ -49,19 +58,13 @@ const CreatePost: FC<ICreatePost> = ({
 		}
 	}, [isEmojiOpen])
 
-	const { isSuccess, data } = useQuery(
+	const { isSuccess, isLoading, data } = useQuery(
 		['get user profile'],
 		() => AuthService.me(accessToken),
 		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
 	)
 
-	const {
-		register,
-		handleSubmit,
-		reset,
-		formState: { errors },
-	} = useForm<Inputs>()
-	const onSubmit = (data) => {
+	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		PostService.createPost(accessToken, data.caption, images)
 			.then((res) => console.log(res))
 			.catch((err) => console.log(err))
@@ -71,9 +74,27 @@ const CreatePost: FC<ICreatePost> = ({
 			})
 	}
 
-	const adjustHeight = (element) => {
+	const adjustHeight = (element: HTMLTextAreaElement) => {
 		element.style.height = 'auto'
 		element.style.height = `${element.scrollHeight}px`
+	}
+
+	window.addEventListener('scroll', () => {
+		if (window.scrollY !== previousScrollY) {
+			if (isEmojiOpen) {
+				setIsEmojiOpen(false)
+			}
+			previousScrollY = window.scrollY
+		}
+	})
+
+	const addEmoji = (emoji: EmojiClickData) => {
+		setValue('caption', `${caption}${emoji.emoji}`, {
+			shouldValidate: true,
+			shouldDirty: true,
+			shouldTouch: true,
+		})
+		trigger('caption')
 	}
 
 	return (
@@ -85,55 +106,55 @@ const CreatePost: FC<ICreatePost> = ({
 					left: `${buttonPosition.left}px`,
 				}}
 			>
-				<EmojiPicker theme={Theme.DARK} open={isEmojiOpen} />
+				<EmojiPicker
+					theme={Theme.DARK}
+					open={isEmojiOpen}
+					onEmojiClick={addEmoji}
+					emojiStyle={EmojiStyle.NATIVE}
+					skinTonesDisabled={true}
+				/>
 			</div>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<ProfileItem
-					avatar={data?.data.avatar!}
-					username={data?.data.username!}
-					id={data?.data._id!}
-				/>
+				{isLoading && <ProfileItemSkeleton />}
+				{isSuccess && (
+					<ProfileItem
+						avatar={data?.data.avatar!}
+						username={data?.data.username!}
+						id={data?.data._id!}
+					/>
+				)}
 				<textarea
 					className={classes.input}
 					draggable="false"
 					placeholder="What's happening?"
-					maxLength={240}
+					maxLength={480}
 					{...register('caption', {
 						required: { value: true, message: 'Caption is required' },
 						onChange: (event) => {
-							setLettersCount(event.target.value.length)
 							adjustHeight(event.target)
 						},
 					})}
 				/>
 				<div className={classes.info}>
 					<div className={classes.additionalButtons}>
-						<button onClick={openImageUpload}>
+						<button onClick={openImageUpload} type="button">
 							<MaterialIcon name="MdOutlineImage" />
 						</button>
-						<button>
+						<button type="button">
 							<MaterialIcon name="MdOutlineGifBox" />
 						</button>
 						<button
+							type="button"
 							ref={buttonRef}
 							onClick={() => setIsEmojiOpen(!isEmojiOpen)}
 						>
 							<MaterialIcon name="MdOutlineEmojiEmotions" />
 						</button>
-						<button>
+						<button type="button">
 							<MaterialIcon name="MdOutlineLocationOn" />
 						</button>
 					</div>
 					<div className="flex gap-3 items-center">
-						<p
-							className={cn('p-2 px-4 rounded-2xl transition-colors', {
-								'bg-blue-500': lettersCount <= 180,
-								'bg-red-500': lettersCount === 240,
-								'bg-orange-500': lettersCount >= 180,
-							})}
-						>
-							{lettersCount} / 240
-						</p>
 						<button
 							type="submit"
 							className="bg-blue-500 p-2 px-4 rounded-2xl hover:bg-blue-700 transition-colors"
@@ -146,4 +167,5 @@ const CreatePost: FC<ICreatePost> = ({
 		</div>
 	)
 }
+
 export default CreatePost

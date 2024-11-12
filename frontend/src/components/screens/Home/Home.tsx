@@ -4,6 +4,7 @@ import { useQuery } from 'react-query'
 import CreatePost from '@/components/ui/CreatePost/CreatePost'
 import ImageUpload from '@/components/ui/ImageUpload'
 import LinkButton from '@/components/ui/LinkButton'
+import PostListSkeleton from '@/components/ui/PostsList/PostListSkeleton'
 import PostsList from '@/components/ui/PostsList/PostsList'
 
 import { AuthContext } from '@/providers/AuthProvider'
@@ -31,7 +32,7 @@ const Home: FC = () => {
 			.catch((err) => console.log(err))
 	}
 
-	const { isSuccess, data, refetch } = useQuery(
+	const { isSuccess, isLoading, data, refetch } = useQuery(
 		['get all posts'],
 		() => PostService.getAll(),
 		{ select: ({ data }) => data }
@@ -57,6 +58,7 @@ const Home: FC = () => {
 				</div>
 			)}
 			<div className="border-t border-gray-700 py-2">
+				{isLoading && <PostListSkeleton />}
 				{isSuccess && <PostsList posts={data.data} refetchPosts={refetch} />}
 			</div>
 		</div>

@@ -6,6 +6,7 @@ const post = require("./routes/post");
 const connectToDb = require("./utils/db");
 const errorHandler = require("./middlewares/errorHandler");
 const rateLimit = require("express-rate-limit");
+const { v4: uuidv4 } = require("uuid");
 
 const multer = require("multer");
 const path = require("path");
@@ -44,7 +45,8 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "../public/images")); // указываем папку, куда сохранять файлы
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // генерируем уникальное имя файла
+    const uniqueName = uuidv4(); // Генерируем уникальный идентификатор
+    cb(null, uniqueName + path.extname(file.originalname)); // Генерируем уникальное имя файла
   },
 });
 
@@ -52,7 +54,6 @@ const upload = multer({ storage: storage });
 
 // Роут для загрузки файла
 app.post("/api/v1/upload", upload.array("images", 10), (req, res) => {
-  console.log(req.files);
   const imagePaths = req.files.map((file) => "/images/" + file.filename);
 
   // Формируем JSON ответ
@@ -63,10 +64,8 @@ app.post("/api/v1/upload", upload.array("images", 10), (req, res) => {
 
   // Отправляем JSON в ответ на запрос
   try {
-    console.log(jsonResponse);
     res.status(200).json(jsonResponse);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
 });
