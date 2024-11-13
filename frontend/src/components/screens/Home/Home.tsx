@@ -11,6 +11,7 @@ import { AuthContext } from '@/providers/AuthProvider'
 
 import { ImagesService } from '@/services/images.service'
 import { PostService } from '@/services/post.service'
+import Meta from '@/utils/meta/Meta'
 
 interface FormData {
 	images: FileList
@@ -39,29 +40,31 @@ const Home: FC = () => {
 	)
 
 	return (
-		<div>
-			<ImageUpload
-				isOpen={isOpenImageUpload}
-				onClose={closeModal}
-				onSubmit={handleSubmit}
-			/>
-			{isAuth ? (
-				<CreatePost
-					refetchPosts={refetch}
-					openImageUpload={openModal}
-					images={imagePaths}
+		<Meta title="Home">
+			<div>
+				<ImageUpload
+					isOpen={isOpenImageUpload}
+					onClose={closeModal}
+					onSubmit={handleSubmit}
 				/>
-			) : (
-				<div className="flex justify-center gap-2 items-center p-5">
-					<h1>You need to be log in to create new post.</h1>
-					<LinkButton href={'/auth'} text="Login" />
+				{isAuth ? (
+					<CreatePost
+						refetchPosts={refetch}
+						openImageUpload={openModal}
+						images={imagePaths}
+					/>
+				) : (
+					<div className="flex justify-center gap-2 items-center p-5">
+						<h1>You need to be log in to create new post.</h1>
+						<LinkButton href={'/auth'} text="Login" />
+					</div>
+				)}
+				<div className="border-t border-gray-700 py-2">
+					{isLoading && <PostListSkeleton />}
+					{isSuccess && <PostsList posts={data.data} refetchPosts={refetch} />}
 				</div>
-			)}
-			<div className="border-t border-gray-700 py-2">
-				{isLoading && <PostListSkeleton />}
-				{isSuccess && <PostsList posts={data.data} refetchPosts={refetch} />}
 			</div>
-		</div>
+		</Meta>
 	)
 }
 export default Home

@@ -11,6 +11,7 @@ import ProfileData from '../../ui/Profile/ProfileData'
 import ProfilePostList from '../../ui/Profile/ProfilePostList'
 
 import { AuthService } from '@/services/auth.service'
+import Meta from '@/utils/meta/Meta'
 
 interface IProfileResponse {
 	success: boolean
@@ -29,10 +30,12 @@ const Profile: FC = () => {
 	return (
 		<>
 			{isSuccess ? (
-				<>
-					<ProfileData profile={data?.data} refetchProfile={refetch} />
-					<ProfilePostList profile={data?.data} refetchPosts={refetch} />
-				</>
+				<Meta title={`Profile ${data?.data.username}`}>
+					<>
+						<ProfileData profile={data?.data} refetchProfile={refetch} />
+						<ProfilePostList profile={data?.data} refetchPosts={refetch} />
+					</>
+				</Meta>
 			) : (
 				<NotAuth />
 			)}

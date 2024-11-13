@@ -13,6 +13,7 @@ import { AuthContext } from '@/providers/AuthProvider'
 import { IProfile } from '@/shared/types/profile.types'
 
 import { UserService } from '@/services/user.service'
+import Meta from '@/utils/meta/Meta'
 
 interface IProfileResponse {
 	success: boolean
@@ -66,15 +67,20 @@ const UserPage: FC = () => {
 				<NotAuth />
 			) : (
 				isSuccess && (
-					<>
-						<ProfileData
-							profile={data?.data}
-							canFollow={true}
-							refetchProfile={refetch}
-							token={accessToken}
-						/>
-						<ProfilePostList profile={data?.data!} refetchPosts={refetch} />
-					</>
+					<Meta
+						title={`Profile ${data?.data.username}`}
+						description={`Profile ${data?.data.username} ,Followers: ${data?.data.followersCount}, Following: ${data?.data.followingCount}`}
+					>
+						<>
+							<ProfileData
+								profile={data?.data}
+								canFollow={true}
+								refetchProfile={refetch}
+								token={accessToken}
+							/>
+							<ProfilePostList profile={data?.data!} refetchPosts={refetch} />
+						</>
+					</Meta>
 				)
 			)}
 		</>
