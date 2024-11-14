@@ -9,9 +9,8 @@ export const UserService = {
 			},
 		})
 	},
-	async getUser(token:string, username: string) {
+	async getUser(token: string, username: string) {
 		return axiosClassic.get(getUsersUrl(username), {
-
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -22,14 +21,21 @@ export const UserService = {
 		return axiosClassic.get(getUsersUrl(`/${id}/follow`), {
 			headers: {
 				Authorization: `Bearer ${token}`,
-			}
+			},
 		})
 	},
 	async unfollowUser(token: string, id: string) {
 		return axiosClassic.get(getUsersUrl(`/${id}/unfollow`), {
 			headers: {
 				Authorization: `Bearer ${token}`,
-			}
+			},
+		})
+	},
+	async findByUsername(username: string, token: string) {
+		return axiosClassic.get(getUsersUrl(`search?username=${username}`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
 		})
 	},
 }

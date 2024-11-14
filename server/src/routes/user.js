@@ -7,10 +7,12 @@ const {
   unfollow,
   feed,
   editUser,
+  searchUsers,
 } = require("../controllers/user");
 const { protect } = require("../middlewares/auth");
 
 router.route("/").get(protect, getUsers);
+router.route("/search").get(protect, searchUsers);
 router.route("/feed").get(protect, feed);
 router.route("/").put(protect, editUser);
 router.route("/:username").get(protect, getUser);

@@ -5,18 +5,18 @@ import { IPost } from '@/shared/types/post.types'
 
 import TagsList from '../TagsList/TagsList'
 
-import styles from './SearchList.module.scss'
+import styles from './PostsList.module.scss'
 import { getPostUrl } from '@/config/url.config'
 
-const SearchList: FC<{ posts: IPost[] }> = ({ posts }) => {
+const PostsList: FC<{ posts: IPost[] }> = ({ posts }) => {
 	return (
-		<div className={styles.container}>
+		<>
 			{posts.length ? (
 				posts.map((post) => (
 					<Link
 						key={post._id}
 						href={getPostUrl(post._id)}
-						className={styles.item}
+						className={styles.postItem}
 					>
 						<span>{post.caption}</span>
 						<TagsList tags={post.tags} />
@@ -25,7 +25,7 @@ const SearchList: FC<{ posts: IPost[] }> = ({ posts }) => {
 			) : (
 				<div>Posts Not Found</div>
 			)}
-		</div>
+		</>
 	)
 }
-export default SearchList
+export default PostsList

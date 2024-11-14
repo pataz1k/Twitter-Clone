@@ -23,3 +23,10 @@ export interface IFollowUser {
 	avatar: string
 	_id: string
 }
+
+export interface IUser {
+	username: string
+	avatar: string
+	_id: string
+	followersCount: number
+}

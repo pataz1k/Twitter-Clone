@@ -22,9 +22,10 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ username: req.params.username })
     .select("-password")
     .populate({
-      path: "posts", select: "files tags user retweets retweetCount isLiked likes likesCount comments createdAt caption commentsCount likesCount",
-      populate: { path: "user", select: "avatar fullname username" }
-
+      path: "posts",
+      select:
+        "files tags user retweets retweetCount isLiked likes likesCount comments createdAt caption commentsCount likesCount",
+      populate: { path: "user", select: "avatar fullname username" },
     })
     .populate({ path: "savedPosts", select: "files commentsCount likesCount" })
     .populate({ path: "followers", select: "avatar username fullname" })
@@ -39,7 +40,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     });
   }
 
-  user.posts.username = req.params.username
+  user.posts.username = req.params.username;
 
   user.posts.forEach((post) => {
     post.isLiked = false;
@@ -49,15 +50,12 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     }
 
     post.isRetweeted = false;
-    const retweets = post.retweets && post.retweets.map((retweet) => retweet.toString());
+    const retweets =
+      post.retweets && post.retweets.map((retweet) => retweet.toString());
     if (retweets && retweets.includes(req.user.id)) {
       post.isRetweeted = true;
     }
-
-
-
-  })
-
+  });
 
   user.isFollowing = false;
   const followers = user.followers.map((follower) => follower._id.toString());
@@ -177,7 +175,8 @@ exports.feed = asyncHandler(async (req, res, next) => {
     }
 
     post.isRetweeted = false;
-    const retweets = post.retweets && post.retweets.map((retweet) => retweet.toString());
+    const retweets =
+      post.retweets && post.retweets.map((retweet) => retweet.toString());
     if (retweets && retweets.includes(req.user.id)) {
       post.isRetweeted = true;
     }
@@ -222,4 +221,24 @@ exports.editUser = asyncHandler(async (req, res, next) => {
   );
 
   res.status(200).json({ success: true, data: user });
+});
+
+exports.searchUsers = asyncHandler(async (req, res, next) => {
+  if (!req.query.username) {
+    return next({
+      message: "Please enter either username to search for",
+      statusCode: 400,
+    });
+  }
+
+  let users = [];
+
+  if (req.query.username) {
+    const regex = new RegExp(req.query.username, "i");
+    users = await User.find({ username: regex }).select(
+      "username avatar _id followersCount"
+    );
+  }
+
+  res.status(200).json({ success: true, data: users });
 });

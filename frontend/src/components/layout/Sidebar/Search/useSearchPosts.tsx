@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 
 import { PostService } from '@/services/post.service'
 
-export const useSearch = () => {
+export const useSearchPosts = () => {
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const debouncedSearch = useDebounce(searchTerm, 500)
@@ -22,5 +22,10 @@ export const useSearch = () => {
 		setSearchTerm(e.target.value)
 	}
 
-	return { isSuccess, data, handleSearch, searchTerm }
+	return {
+		isSuccessPosts: isSuccess,
+		dataPosts: data,
+		handleSearchPosts: handleSearch,
+		searchTermPosts: searchTerm,
+	}
 }
