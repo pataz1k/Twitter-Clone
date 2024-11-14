@@ -3,7 +3,7 @@ import { FC } from 'react'
 import SearchField from '@/components/ui/search-filed/SearchField'
 
 import PostsList from './PostsList/PostsList'
-import UsersList from './Users/UsersList/UsersList'
+import UsersList from './UsersList/UsersList'
 import { useSearch } from './useSearch'
 
 const Search: FC = () => {

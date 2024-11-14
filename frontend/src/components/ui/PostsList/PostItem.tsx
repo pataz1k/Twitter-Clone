@@ -2,10 +2,10 @@ import cn from 'classnames'
 import { FC, useContext, useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
 
-import TagsList from '@/components/layout/Sidebar/Search/TagsList/TagsList'
 import ImageGallery from '@/components/ui/ImageGallery'
 import MaterialIcon from '@/components/ui/MaterialIcons'
 import ProfileItem from '@/components/ui/ProfileItem/ProfileItem'
+import TagsList from '@/components/ui/TagsList/TagsList'
 import TimeItem from '@/components/ui/TimeItem'
 
 import { AuthContext } from '@/providers/AuthProvider'

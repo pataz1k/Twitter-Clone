@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 import { IPost } from '@/shared/types/post.types'
 
-import TagsList from '../TagsList/TagsList'
+import TagsList from '../../../../ui/TagsList/TagsList'
 
 import styles from './PostsList.module.scss'
 import { getPostUrl } from '@/config/url.config'

@@ -30,7 +30,7 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"src/components/layout/Sidebar/Search/PostsList",
-		"src/components/layout/Sidebar/Search/Users/UsersList",
+		"src/components/layout/Sidebar/Search/UsersList",
 		"next.config.ts"
 	],
 	"exclude": ["node_modules"]
