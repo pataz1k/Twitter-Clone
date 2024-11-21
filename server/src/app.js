@@ -1,80 +1,96 @@
-const express = require("express");
-const cors = require("cors");
-const auth = require("./routes/auth");
-const user = require("./routes/user");
-const post = require("./routes/post");
-const connectToDb = require("./utils/db");
-const errorHandler = require("./middlewares/errorHandler");
-const rateLimit = require("express-rate-limit");
-const { v4: uuidv4 } = require("uuid");
+const express = require('express');
+const cors = require('cors');
+const auth = require('./routes/auth');
+const user = require('./routes/user');
+const post = require('./routes/post');
+const upload = require('./routes/upload');
+const message = require('./routes/message');
+const connectToDb = require('./utils/db');
+const errorHandler = require('./middlewares/errorHandler');
+const rateLimit = require('express-rate-limit');
+const Message = require('./models/Message');
 
-const multer = require("multer");
-const path = require("path");
+const { Server } = require('socket.io');
+const http = require('http');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
 
+//! Cors Headers
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Headers", true);
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Headers', true);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   next();
 });
 
 connectToDb();
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static('public'));
 
+//! Cors Options and Rate Limiter
 const apiLimiter = new rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minute
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
-app.use("/api/", apiLimiter);
-
 var corsOptions = {
-  origin: process.env.URI || "http://localhost:3000",
+  origin: process.env.URI || 'http://localhost:3000',
   optionsSuccessStatus: 200,
   credentials: true,
 };
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/images")); // указываем папку, куда сохранять файлы
-  },
-  filename: function (req, file, cb) {
-    const uniqueName = uuidv4(); // Генерируем уникальный идентификатор
-    cb(null, uniqueName + path.extname(file.originalname)); // Генерируем уникальное имя файла
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// Роут для загрузки файла
-app.post("/api/v1/upload", upload.array("images", 10), (req, res) => {
-  const imagePaths = req.files.map((file) => "/images/" + file.filename);
-
-  // Формируем JSON ответ
-  const jsonResponse = {
-    status: "success",
-    paths: imagePaths,
-  };
-
-  // Отправляем JSON в ответ на запрос
-  try {
-    res.status(200).json(jsonResponse);
-  } catch (err) {
-    res.status(500).json({ status: "error", message: "Internal Server Error" });
-  }
-});
-
+//! All app uses
+app.use('/api/', apiLimiter);
 app.use(cors(corsOptions));
-app.use("/api/v1/auth", auth);
-app.use("/api/v1/users", user);
-app.use("/api/v1/posts", post);
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/users', user);
+app.use('/api/v1/posts', post);
+app.use('/api/v1/upload', upload);
+app.use('/api/v1/messages', message);
 
 app.use(errorHandler);
+
+//! Socket.io
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on('join', (username) => {
+    console.log('user joined room', username);
+    socket.join(username);
+  });
+
+  socket.on('message', async (message) => {
+    console.log('message received', message.message);
+    console.log('user', message.sender);
+
+    try {
+      // Save message to database
+      const newMessage = new Message({
+        sender: message.sender,
+        receiver: message.receiver,
+        message: message.message,
+      });
+      await newMessage.save();
+
+      // Emit message to sender and receiver
+      io.to(message.sender).to(message.receiver).emit('message', newMessage);
+    } catch (err) {
+      console.error('Error saving message:', err);
+    }
+  });
+});
+
+const PORT = 8080;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app };
