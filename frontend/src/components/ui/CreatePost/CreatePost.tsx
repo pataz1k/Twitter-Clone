@@ -39,7 +39,7 @@ const CreatePost: FC<ICreatePost> = ({
 	openImageUpload,
 	images,
 }) => {
-	const { isAuth, accessToken } = useContext(AuthContext)
+	const { isAuth, accessToken, expireAuthStatus } = useContext(AuthContext)
 	const [isEmojiOpen, setIsEmojiOpen] = useState(false)
 	const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 })
 
@@ -58,11 +58,14 @@ const CreatePost: FC<ICreatePost> = ({
 		}
 	}, [isEmojiOpen])
 
-	const { isSuccess, isLoading, data } = useQuery(
+	const { isSuccess, isLoading, isError, data } = useQuery(
 		['get user profile'],
 		() => AuthService.me(accessToken),
 		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
 	)
+	if (isError) {
+		expireAuthStatus()
+	}
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		PostService.createPost(accessToken, data.caption, images)

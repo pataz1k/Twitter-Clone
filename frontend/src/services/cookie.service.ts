@@ -7,4 +7,7 @@ export const CookieService = {
 	async setAccessToken(accessToken: string) {
 		Cookies.set('accessToken', accessToken, { expires: 30 })
 	},
+	async removeAccessToken() {
+		Cookies.remove('accessToken')
+	},
 }

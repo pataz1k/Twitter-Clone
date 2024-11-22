@@ -13,6 +13,7 @@ interface IAuthContext {
 	isAuth: boolean
 	accessToken: string
 	updateAuthStatus: () => void
+	expireAuthStatus: () => void
 	accountUsername: string
 	accountID: string
 }
@@ -27,6 +28,7 @@ const initialValue = {
 	isAuth: false,
 	accessToken: '',
 	updateAuthStatus: () => {},
+	expireAuthStatus: () => {},
 	accountUsername: '',
 	accountID: '',
 }
@@ -60,6 +62,12 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 		})
 	}
 
+	const expireAuthStatus = () => {
+		CookieService.removeAccessToken()
+		setIsAuth(false)
+		setAccessToken('')
+	}
+
 	const { decodedToken, isExpired } = useJwt<IDecodedToken>(accessToken)
 
 	return (
@@ -68,6 +76,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 				isAuth,
 				accessToken,
 				updateAuthStatus,
+				expireAuthStatus,
 				accountUsername: decodedToken?.username || '',
 				accountID: decodedToken?.id || '',
 			}}
