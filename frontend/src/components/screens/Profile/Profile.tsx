@@ -29,7 +29,7 @@ const Profile: FC = () => {
 
 	return (
 		<>
-			{isSuccess ? (
+			{isSuccess && data ? (
 				<Meta title={`Profile ${data?.data.username}`}>
 					<>
 						<ProfileData profile={data?.data} refetchProfile={refetch} />
