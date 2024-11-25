@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { FC, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 import { Socket, io } from 'socket.io-client'
 
 import MaterialIcon from '@/components/ui/MaterialIcons'
@@ -86,6 +87,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 	}, [fetchMessages])
 
 	const handleSend = useCallback(() => {
+		toast.success('Message send!')
 		if (newMessage.trim() && socket) {
 			const messageData = {
 				sender: accountID,
