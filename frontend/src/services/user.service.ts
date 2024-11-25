@@ -16,6 +16,13 @@ export const UserService = {
 			},
 		})
 	},
+	async getUserById(token: string, id: string) {
+		return axiosClassic.get(getUsersUrl(`id/${id}`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	},
 
 	async followUser(token: string, id: string) {
 		return axiosClassic.get(getUsersUrl(`/${id}/follow`), {

@@ -43,7 +43,7 @@ const Dialogs: FC = () => {
 		<Meta title={`Chats`}>
 			<div className="flex flex-col gap-4 p-4 text-gray-200">
 				<h1 className="text-2xl font-bold mb-4">Chats</h1>
-				{data.map((dialog, index) => (
+				{data.map((dialog) => (
 					<ChatRoomItem
 						key={dialog.chatMember._id}
 						_id={dialog.chatMember._id}

@@ -1,4 +1,5 @@
-import { FC } from 'react'
+import { useClickAway } from '@uidotdev/usehooks'
+import { FC, useRef } from 'react'
 
 import { IFollowUser } from '@/shared/types/profile.types'
 
@@ -15,11 +16,18 @@ const FollowersModal: FC<IFollowersModal> = ({
 	onClose,
 	followers,
 }) => {
+	const modalRef = useClickAway<HTMLDivElement>(() => {
+		onClose()
+	})
+
 	if (!isOpen) return null
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-[2px]">
-			<div className="relative bg-black rounded-lg p-6 shadow-lg max-w-md w-full border border-gray-800">
+			<div
+				ref={modalRef}
+				className="relative bg-black rounded-lg p-6 shadow-lg max-w-md w-full border border-gray-800"
+			>
 				<button
 					className="absolute top-2 right-2 text-xl text-white"
 					onClick={onClose}
