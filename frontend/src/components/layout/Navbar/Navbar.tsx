@@ -1,20 +1,46 @@
-import { FC } from 'react'
+import { useRouter } from 'next/router'
+import { FC, useContext } from 'react'
+import { toast } from 'react-toastify'
+
+import MaterialIcon from '@/components/ui/MaterialIcons'
 
 import Logo from '@/ui/Logo'
 
+import { AuthContext } from '@/providers/AuthProvider'
+
 import { NavbarData } from './Navbar.data'
+import styles from './Navbar.module.scss'
 import NavbarItem from './NavbarItem'
 
 const Navbar: FC = () => {
+	const { isAuth, expireAuthStatus } = useContext(AuthContext)
+
+	const router = useRouter()
+
+	const logout = () => {
+		expireAuthStatus()
+		toast.success('Logged out successfully')
+		router.push('/')
+	}
+
 	return (
-		<div className="p-5">
-			<ul className="list-none">
-				<Logo />
-				{NavbarData.items.map((item) => (
-					<NavbarItem key={item.title} item={item} />
-				))}
-			</ul>
+		<div className="flex flex-col h-screen p-5">
+			<div className="flex-grow">
+				<ul className="list-none">
+					<Logo />
+					{NavbarData.items.map((item) => (
+						<NavbarItem key={item.title} item={item} />
+					))}
+				</ul>
+			</div>
+			{isAuth && (
+				<button onClick={logout} className={styles.logoutButton}>
+					<MaterialIcon name="MdLogout" />
+					Logout
+				</button>
+			)}
 		</div>
 	)
 }
+
 export default Navbar

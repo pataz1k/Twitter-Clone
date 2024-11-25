@@ -1,5 +1,7 @@
+import { useRouter } from 'next/router'
 import { FC, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import { AuthContext } from '@/providers/AuthProvider'
 
@@ -24,6 +26,8 @@ interface IAuthRespose {
 const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 	const { updateAuthStatus } = useContext(AuthContext)
 
+	const router = useRouter()
+
 	const registerPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
 
 	const {
@@ -33,15 +37,31 @@ const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 	} = useForm<Inputs>()
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
+		const loginToastId = toast.loading('Logging in...')
 		AuthService.auth(authType, data)
 			.then((res: IAuthRespose) => {
 				if (res.data.success) {
 					CookieService.setAccessToken(res.data.token).then(() =>
 						updateAuthStatus()
 					)
+					router.push('/profile')
+
+					toast.update(loginToastId, {
+						render: 'Logged in successfully',
+						type: 'success',
+						isLoading: false,
+						autoClose: 3000,
+					})
 				}
 			})
-			.catch((err) => console.log(err))
+			.catch((err) => {
+				toast.update(loginToastId, {
+					render: err.response.data.message,
+					type: 'error',
+					isLoading: false,
+					autoClose: 3000,
+				})
+			})
 	}
 	return (
 		<>
