@@ -1,12 +1,18 @@
 import cn from 'classnames'
+import { get } from 'http'
 import Image from 'next/image'
+import Link from 'next/link'
 import { FC, useState } from 'react'
+import { toast } from 'react-toastify'
 
 import FollowersModal from '@/components/ui/FollowersModal/FollowersModal'
 
 import { IProfile } from '@/shared/types/profile.types'
 
+import MaterialIcon from '../MaterialIcons'
+
 import styles from './Profile.module.scss'
+import { getDMPageUrl } from '@/config/url.config'
 import { UserService } from '@/services/user.service'
 
 interface IProfileData {
@@ -40,12 +46,18 @@ const ProfileData: FC<IProfileData> = ({
 	const followClick = () => {
 		if (profile?.isFollowing) {
 			UserService.unfollowUser(token!, profile._id)
-				.then((res) => console.log(res))
+				.then((res) => {
+					console.log(res)
+					toast.success(`Unfollowed ${profile?.username}`)
+				})
 				.catch((err) => console.log(err))
 				.finally(refetchProfile)
 		} else {
 			UserService.followUser(token!, profile!._id)
-				.then((res) => console.log(res))
+				.then((res) => {
+					console.log(res)
+					toast.success(`Followed ${profile?.username}`)
+				})
 				.catch((err) => console.log(err))
 				.finally(refetchProfile)
 		}
@@ -100,18 +112,26 @@ const ProfileData: FC<IProfileData> = ({
 							</div>
 						</div>
 						{canFollow && (
-							<button
-								onClick={followClick}
-								className={cn(
-									'p-2 px-4 rounded-2xl transition-colors mr-5 mb-7 max-h-11',
-									{
-										'bg-blue-500  hover:bg-blue-700': !profile?.isFollowing,
-										'bg-slate-600  hover:bg-slate-700': profile?.isFollowing,
-									}
-								)}
-							>
-								{profile?.isFollowing ? 'Following' : 'Follow'}
-							</button>
+							<div className="flex items-center mr-2 gap-2">
+								<Link
+									href={getDMPageUrl(profile?._id!)}
+									className={`${styles.messageButton} p-2 px-4 rounded-2xl transition-colors h-11 flex items-center justify-center bg-slate-600 hover:bg-slate-700`}
+								>
+									<MaterialIcon name="MdMail" />
+								</Link>
+								<button
+									onClick={followClick}
+									className={cn(
+										'p-2 px-4 rounded-2xl transition-colors h-11 flex items-center justify-center',
+										{
+											'bg-blue-500 hover:bg-blue-700': !profile?.isFollowing,
+											'bg-slate-600 hover:bg-slate-700': profile?.isFollowing,
+										}
+									)}
+								>
+									{profile?.isFollowing ? 'Following' : 'Follow'}
+								</button>
+							</div>
 						)}
 					</div>
 				</div>

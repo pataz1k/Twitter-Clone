@@ -7,8 +7,13 @@ import logo from '@/public/logo.svg'
 const Logo: FC = () => {
 	return (
 		<li className="p-3">
-			<Link href={'/'}>
-				<Image src={logo} width={32} height={32} alt="logo" draggable={false} />
+			<Link href="/">
+				<Image
+					src={logo}
+					alt="logo"
+					draggable={false}
+					style={{ width: '32px', height: '32px' }}
+				/>
 			</Link>
 		</li>
 	)

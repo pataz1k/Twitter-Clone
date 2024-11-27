@@ -87,7 +87,6 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 	}, [fetchMessages])
 
 	const handleSend = useCallback(() => {
-		toast.success('Message send!')
 		if (newMessage.trim() && socket) {
 			const messageData = {
 				sender: accountID,
