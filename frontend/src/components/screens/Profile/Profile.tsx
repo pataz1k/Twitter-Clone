@@ -33,6 +33,7 @@ const Profile: FC = () => {
 	if (!isSuccess || !data) {
 		return null
 	}
+	console.log(data.data)
 
 	return (
 		<Meta title={`Profile ${data.data.username}`}>

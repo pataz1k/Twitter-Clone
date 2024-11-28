@@ -1,16 +1,9 @@
 import { motion } from 'motion/react'
 import { FC } from 'react'
 
-const GradientBanner: FC = () => {
-	const gradients = {
-		first:
-			'linear-gradient(90deg, rgba(98,135,179,1) 0%, rgba(50,130,189,1) 51%, rgba(0,212,255,1) 100%)',
-		second:
-			'linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(98,135,179,1) 51%, rgba(50,130,189,1) 100%)',
-		third:
-			'linear-gradient(90deg, rgba(50,130,189,1) 0%, rgba(0,212,255,1) 51%, rgba(98,135,179,1) 100%)',
-	}
+import { IProfileBanner } from '@/shared/types/profile.types'
 
+const GradientBanner: FC<{ banner: IProfileBanner }> = ({ banner }) => {
 	return (
 		<div className="relative">
 			<motion.div
@@ -20,15 +13,10 @@ const GradientBanner: FC = () => {
 						'0 0 10px 1px rgba(0,212,255,0.2), 0 0 20px 1px rgba(50,130,189,0.2)',
 				}}
 				initial={{
-					background: gradients.first,
+					background: banner.first,
 				}}
 				animate={{
-					background: [
-						gradients.first,
-						gradients.second,
-						gradients.third,
-						gradients.first,
-					],
+					background: [banner.first, banner.second, banner.third, banner.first],
 				}}
 				transition={{
 					duration: 8,

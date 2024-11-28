@@ -13,6 +13,7 @@ export interface IProfile {
 	posts: IPost[]
 	postCount: number
 	savedPosts: IPost[]
+	settings: IProfileSettings
 	_id: string
 	username: string
 	createdAt: string
@@ -29,4 +30,14 @@ export interface IUser {
 	avatar: string
 	_id: string
 	followersCount: number
+}
+
+export interface IProfileSettings {
+	banner: IProfileBanner
+}
+
+export interface IProfileBanner {
+	first: string
+	second: string
+	third: string
 }

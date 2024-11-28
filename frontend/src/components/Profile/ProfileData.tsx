@@ -76,7 +76,7 @@ const ProfileData: FC<IProfileData> = ({
 				}
 			/>
 			<div className="border border-gray-800 rounded-lg mt-5">
-				<GradientBanner />
+				<GradientBanner banner={profile?.settings?.banner!} />
 				<div className="ml-2 relative">
 					<Image
 						alt="pfp"

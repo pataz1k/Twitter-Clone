@@ -9,6 +9,7 @@ const connectToDb = require('./utils/db');
 const errorHandler = require('./middlewares/errorHandler');
 const rateLimit = require('express-rate-limit');
 const Message = require('./models/Message');
+const User = require('./models/User');
 
 const { Server } = require('socket.io');
 const http = require('http');
@@ -33,7 +34,7 @@ app.use(function (req, res, next) {
 connectToDb();
 app.use(express.json());
 app.use(express.static('public'));
-
+User.updateMany();
 //! Cors Options and Rate Limiter
 const apiLimiter = new rateLimit({
   windowMs: 15 * 60 * 1000,
