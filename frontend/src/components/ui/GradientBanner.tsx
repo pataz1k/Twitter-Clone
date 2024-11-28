@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { motion } from 'framer-motion'
 import { FC } from 'react'
 
 import { IProfileBanner } from '@/shared/types/profile.types'
@@ -9,8 +9,7 @@ const GradientBanner: FC<{ banner: IProfileBanner }> = ({ banner }) => {
 			<motion.div
 				className="h-[200px] w-full relative rounded-lg rounded-br-sm rounded-bl-sm"
 				style={{
-					boxShadow:
-						'0 0 10px 1px rgba(0,212,255,0.2), 0 0 20px 1px rgba(50,130,189,0.2)',
+					boxShadow: `0 0 10px 1px ${banner.first}, 0 0 20px 1px ${banner.second}`,
 				}}
 				initial={{
 					background: banner.first,

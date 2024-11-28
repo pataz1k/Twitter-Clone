@@ -142,9 +142,6 @@ const CreatePost: FC<ICreatePost> = ({
 					maxLength={480}
 					{...register('caption', {
 						required: { value: true, message: 'Caption is required' },
-						onChange: (event) => {
-							adjustHeight(event.target)
-						},
 					})}
 				/>
 				<div className={classes.info}>

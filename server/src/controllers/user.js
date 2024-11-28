@@ -273,12 +273,12 @@ exports.feed = asyncHandler(async (req, res, next) => {
 });
 
 exports.editUser = asyncHandler(async (req, res, next) => {
-  const { fullname, bio } = req.body;
+  const { fullname, bio, settings } = req.body;
 
   const user = await User.findByIdAndUpdate(
     req.user.id,
     {
-      $set: { fullname, bio },
+      $set: { fullname, bio, settings },
     },
     {
       new: true,
