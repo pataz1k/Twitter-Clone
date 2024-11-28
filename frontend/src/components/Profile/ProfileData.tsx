@@ -1,18 +1,21 @@
 import cn from 'classnames'
-import { get } from 'http'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 
 import FollowersModal from '@/components/ui/FollowersModal/FollowersModal'
 
 import { IProfile } from '@/shared/types/profile.types'
 
-import MaterialIcon from '../MaterialIcons'
+import GradientBanner from '../ui/GradientBanner'
+import LinkButton from '../ui/LinkButton'
+import MaterialIcon from '../ui/MaterialIcons'
 
 import styles from './Profile.module.scss'
 import { getDMPageUrl } from '@/config/url.config'
+import { ButtonColor } from '@/constants/buttonColor.enum'
+import { modalTypeEnum } from '@/constants/modalType.enum'
 import { UserService } from '@/services/user.service'
 
 interface IProfileData {
@@ -29,8 +32,8 @@ const ProfileData: FC<IProfileData> = ({
 	refetchProfile,
 }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [modalType, setModalType] = useState<'followers' | 'following'>(
-		'followers'
+	const [modalType, setModalType] = useState<modalTypeEnum>(
+		modalTypeEnum.FOLLOWERS
 	)
 
 	const formatDate = (isoDate: string | undefined) => {
@@ -38,7 +41,7 @@ const ProfileData: FC<IProfileData> = ({
 	}
 
 	const closeModal = () => setIsModalOpen(false)
-	const openModal = (modalType: 'followers' | 'following') => {
+	const openModal = (modalType: modalTypeEnum) => {
 		setIsModalOpen(true)
 		setModalType(modalType)
 	}
@@ -47,7 +50,6 @@ const ProfileData: FC<IProfileData> = ({
 		if (profile?.isFollowing) {
 			UserService.unfollowUser(token!, profile._id)
 				.then((res) => {
-					console.log(res)
 					toast.success(`Unfollowed ${profile?.username}`)
 				})
 				.catch((err) => console.log(err))
@@ -55,7 +57,6 @@ const ProfileData: FC<IProfileData> = ({
 		} else {
 			UserService.followUser(token!, profile!._id)
 				.then((res) => {
-					console.log(res)
 					toast.success(`Followed ${profile?.username}`)
 				})
 				.catch((err) => console.log(err))
@@ -69,12 +70,14 @@ const ProfileData: FC<IProfileData> = ({
 				isOpen={isModalOpen}
 				onClose={closeModal}
 				followers={
-					modalType === 'followers' ? profile?.followers! : profile?.following!
+					modalType === modalTypeEnum.FOLLOWERS
+						? profile?.followers!
+						: profile?.following!
 				}
 			/>
 			<div className="border border-gray-800 rounded-lg mt-5">
-				<div className={styles.banner}></div>
-				<div className="ml-2">
+				<GradientBanner />
+				<div className="ml-2 relative">
 					<Image
 						alt="pfp"
 						src={profile?.avatar!}
@@ -95,7 +98,7 @@ const ProfileData: FC<IProfileData> = ({
 							<div className="flex gap-3">
 								<button
 									onClick={() => {
-										openModal('following')
+										openModal(modalTypeEnum.FOLLOWING)
 									}}
 								>
 									<span className="font-bold">{profile?.followingCount}</span>{' '}
@@ -103,7 +106,7 @@ const ProfileData: FC<IProfileData> = ({
 								</button>
 								<button
 									onClick={() => {
-										openModal('followers')
+										openModal(modalTypeEnum.FOLLOWERS)
 									}}
 								>
 									<span className="font-bold">{profile?.followersCount}</span>{' '}
@@ -111,7 +114,7 @@ const ProfileData: FC<IProfileData> = ({
 								</button>
 							</div>
 						</div>
-						{canFollow && (
+						{canFollow ? (
 							<div className="flex items-center mr-2 gap-2">
 								<Link
 									href={getDMPageUrl(profile?._id!)}
@@ -131,6 +134,14 @@ const ProfileData: FC<IProfileData> = ({
 								>
 									{profile?.isFollowing ? 'Following' : 'Follow'}
 								</button>
+							</div>
+						) : (
+							<div className="flex items-center mr-2">
+								<LinkButton
+									color={ButtonColor.SECONDARY}
+									href="/profile/settings"
+									text="Edit Profile"
+								/>
 							</div>
 						)}
 					</div>

@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import { FC, useState } from 'react'
 
-import PostsList from '@/components/ui/PostsList/PostsList'
+import PostsList from '@/components/PostsList/PostsList'
 
 import { IProfile } from '@/shared/types/profile.types'
 

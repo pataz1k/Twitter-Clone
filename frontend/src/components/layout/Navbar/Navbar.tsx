@@ -1,6 +1,7 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, useContext } from 'react'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 
 import MaterialIcon from '@/components/ui/MaterialIcons'
 
@@ -33,11 +34,16 @@ const Navbar: FC = () => {
 					))}
 				</ul>
 			</div>
-			{isAuth && (
+			{isAuth ? (
 				<button onClick={logout} className={styles.logoutButton}>
 					<MaterialIcon name="MdLogout" />
 					Logout
 				</button>
+			) : (
+				<Link href="/auth" className={styles.logoutButton}>
+					<MaterialIcon name="MdLogin" />
+					Login
+				</Link>
 			)}
 		</div>
 	)

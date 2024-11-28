@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -128,7 +129,7 @@ export default function ImageUpload({
 							<div className="grid grid-cols-3 gap-4 mt-4">
 								{previews.map((preview, index) => (
 									<div key={index} className="relative">
-										<img
+										<Image
 											src={preview}
 											alt={`Preview ${index + 1}`}
 											className="w-full h-24 object-cover rounded"

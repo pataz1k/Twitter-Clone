@@ -2,7 +2,7 @@ import cn from 'classnames'
 import { FC, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 
-import PostListSkeleton from '../PostsList/PostListSkeleton'
+import PostListSkeleton from '../../PostsList/PostListSkeleton'
 
 import styles from './ProfileSkeleton.module.scss'
 

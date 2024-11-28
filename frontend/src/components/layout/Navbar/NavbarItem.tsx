@@ -1,4 +1,5 @@
 import cn from 'classnames'
+import { motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FC } from 'react'
@@ -12,12 +13,16 @@ const NavbarItem: FC<{ item: INavbarItem }> = ({ item }) => {
 	const pathname = usePathname()
 
 	return (
-		<li className={cn({ [styles.active]: pathname === item.link })}>
+		<motion.li
+			initial={{ scale: 1 }}
+			whileHover={{ scale: 1.1 }}
+			className={cn({ [styles.active]: pathname === item.link })}
+		>
 			<Link href={item.link} className={styles.navbarItem}>
 				<MaterialIcon name={item.icon} />
 				<p>{item.title}</p>
 			</Link>
-		</li>
+		</motion.li>
 	)
 }
 export default NavbarItem

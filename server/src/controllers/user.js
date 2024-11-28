@@ -27,7 +27,12 @@ exports.getUser = asyncHandler(async (req, res, next) => {
         'files tags user retweets retweetCount isLiked likes likesCount comments createdAt caption commentsCount likesCount',
       populate: { path: 'user', select: 'avatar fullname username' },
     })
-    .populate({ path: 'savedPosts', select: 'files commentsCount likesCount' })
+    .populate({
+      path: 'savedPosts',
+      select:
+        'files tags user retweets retweetCount isLiked likes likesCount comments createdAt caption commentsCount likesCount',
+      populate: { path: 'user', select: 'avatar fullname username' },
+    })
     .populate({ path: 'followers', select: 'avatar username fullname' })
     .populate({ path: 'following', select: 'avatar username fullname' })
     .lean()

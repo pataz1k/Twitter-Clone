@@ -12,6 +12,8 @@ const Logo: FC = () => {
 					src={logo}
 					alt="logo"
 					draggable={false}
+					width={32}
+					height={32}
 					style={{ width: '32px', height: '32px' }}
 				/>
 			</Link>

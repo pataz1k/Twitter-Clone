@@ -2,6 +2,7 @@ import { FC, useContext } from 'react'
 import { useQuery } from 'react-query'
 
 import ChatRoomItem from '@/components/ui/ChatRoomItem'
+import NotAuth from '@/components/ui/NotAuth'
 
 import { AuthContext } from '@/providers/AuthProvider'
 
@@ -34,6 +35,10 @@ const Dialogs: FC = () => {
 			enabled: isAuth,
 		}
 	)
+
+	if (!isAuth) {
+		return <NotAuth />
+	}
 
 	if (!isSuccess || !data || data.length === 0) {
 		return null

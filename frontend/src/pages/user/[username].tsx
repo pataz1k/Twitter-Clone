@@ -2,16 +2,17 @@ import { useRouter } from 'next/router'
 import { FC, useContext, useEffect } from 'react'
 import { UseQueryResult, useQuery } from 'react-query'
 
+import ProfileData from '@/components/Profile/ProfileData'
+import ProfilePostList from '@/components/Profile/ProfilePostList'
 import LinkButton from '@/components/ui/LinkButton'
 import NotAuth from '@/components/ui/NotAuth'
-import ProfileData from '@/components/ui/Profile/ProfileData'
-import ProfilePostList from '@/components/ui/Profile/ProfilePostList'
 import ProfileSkeleton from '@/components/ui/ProfileSkeleton/ProfileSkeleton'
 
 import { AuthContext } from '@/providers/AuthProvider'
 
 import { IProfile } from '@/shared/types/profile.types'
 
+import { ButtonColor } from '@/constants/buttonColor.enum'
 import { UserService } from '@/services/user.service'
 import Meta from '@/utils/meta/Meta'
 
@@ -52,38 +53,45 @@ const UserPage: FC = () => {
 			retry: false,
 		}
 	)
+
+	if (!isAuth) {
+		return <NotAuth />
+	}
+
 	if (isLoading) return <ProfileSkeleton />
 
-	if (isError && error?.response?.status === 404)
+	if (isError && error?.response?.status === 404) {
 		return (
 			<div className="flex flex-col items-center justify-center">
-				<p>User Not found</p> <LinkButton text="Go to Main Page" href="/" />
+				<p>User Not found</p>{' '}
+				<LinkButton
+					color={ButtonColor.PRIMARY}
+					text="Go to Main Page"
+					href="/"
+				/>
 			</div>
 		)
+	}
+
+	if (!isSuccess || !data) {
+		return null
+	}
 
 	return (
-		<>
-			{!isAuth ? (
-				<NotAuth />
-			) : (
-				isSuccess && (
-					<Meta
-						title={`Profile ${data?.data.username}`}
-						description={`Profile ${data?.data.username} ,Followers: ${data?.data.followersCount}, Following: ${data?.data.followingCount}`}
-					>
-						<>
-							<ProfileData
-								profile={data?.data}
-								canFollow={true}
-								refetchProfile={refetch}
-								token={accessToken}
-							/>
-							<ProfilePostList profile={data?.data!} refetchPosts={refetch} />
-						</>
-					</Meta>
-				)
-			)}
-		</>
+		<Meta
+			title={`Profile ${data?.data.username}`}
+			description={`Profile ${data?.data.username} ,Followers: ${data?.data.followersCount}, Following: ${data?.data.followingCount}`}
+		>
+			<>
+				<ProfileData
+					profile={data?.data}
+					canFollow={true}
+					refetchProfile={refetch}
+					token={accessToken}
+				/>
+				<ProfilePostList profile={data?.data!} refetchPosts={refetch} />
+			</>
+		</Meta>
 	)
 }
 export default UserPage

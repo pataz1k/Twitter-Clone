@@ -1,5 +1,5 @@
 .navbarItem {
-	@apply inline-flex gap-2 text-center items-center bg-transparent p-3 rounded-xl hover:bg-zinc-900 transition-colors text-xl;
+	@apply flex gap-2 text-center items-center bg-transparent p-3 rounded-xl hover:bg-zinc-900 transition-colors text-xl;
 	> svg {
 		@apply size-9;
 	}

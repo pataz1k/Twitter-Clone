@@ -38,3 +38,9 @@
 		}
 	}
 }
+
+.messageButton {
+	> svg {
+		@apply size-6;
+	}
+}

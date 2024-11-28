@@ -84,6 +84,10 @@ io.on('connection', (socket) => {
 
       // Emit message to sender and receiver
       io.to(message.sender).to(message.receiver).emit('message', newMessage);
+      io.to(message.receiver).emit('notification', {
+        text: `New message!`,
+        sender: message.sender,
+      });
     } catch (err) {
       console.error('Error saving message:', err);
     }

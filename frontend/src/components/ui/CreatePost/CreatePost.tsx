@@ -5,6 +5,7 @@ import EmojiPicker, {
 } from 'emoji-picker-react'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { useQuery } from 'react-query'
 
 import { AuthContext } from '@/providers/AuthProvider'
@@ -69,7 +70,11 @@ const CreatePost: FC<ICreatePost> = ({
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		PostService.createPost(accessToken, data.caption, images)
-			.then((res) => console.log(res))
+			.then((res) => {
+				if (res.data.success) {
+					toast.success('Post created successfully')
+				}
+			})
 			.catch((err) => console.log(err))
 			.finally(() => {
 				refetchPosts()
@@ -100,6 +105,10 @@ const CreatePost: FC<ICreatePost> = ({
 		trigger('caption')
 	}
 
+	if (!isSuccess || !data) {
+		return null
+	}
+
 	return (
 		<div className={classes.wrap}>
 			<div
@@ -121,9 +130,9 @@ const CreatePost: FC<ICreatePost> = ({
 				{isLoading && <ProfileItemSkeleton />}
 				{isSuccess && (
 					<ProfileItem
-						avatar={data?.data.avatar!}
-						username={data?.data.username!}
-						id={data?.data._id!}
+						avatar={data.data.avatar!}
+						username={data.data.username!}
+						id={data.data._id!}
 					/>
 				)}
 				<textarea

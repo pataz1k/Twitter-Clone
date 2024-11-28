@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { FC, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 
 import { AuthContext } from '@/providers/AuthProvider'
 
@@ -37,7 +37,8 @@ const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 	} = useForm<Inputs>()
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		const loginToastId = toast.loading('Logging in...')
+		const toastId = toast.loading('Logging in...')
+
 		AuthService.auth(authType, data)
 			.then((res: IAuthRespose) => {
 				if (res.data.success) {
@@ -46,20 +47,14 @@ const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 					)
 					router.push('/profile')
 
-					toast.update(loginToastId, {
-						render: 'Logged in successfully',
-						type: 'success',
-						isLoading: false,
-						autoClose: 3000,
+					toast.success('Logged in successfully', {
+						id: toastId,
 					})
 				}
 			})
 			.catch((err) => {
-				toast.update(loginToastId, {
-					render: err.response.data.message,
-					type: 'error',
-					isLoading: false,
-					autoClose: 3000,
+				toast.error(err.response.data.message, {
+					id: toastId,
 				})
 			})
 	}

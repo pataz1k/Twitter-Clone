@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import { FC, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { toast } from 'react-toastify'
 import { Socket, io } from 'socket.io-client'
 
 import MaterialIcon from '@/components/ui/MaterialIcons'
@@ -30,7 +29,6 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 	useEffect(() => {
 		if (accessToken && receiverAccountID) {
 			UserService.getUserById(accessToken, receiverAccountID).then((res) => {
-				console.log(res)
 				setReceiverUsername(res.data.data.username)
 			})
 		}
@@ -65,7 +63,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 	}, [socket])
 
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+		messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
 	}, [messages])
 
 	const fetchMessages = useCallback(async () => {
@@ -117,7 +115,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 								className={`flex ${message.sender === accountID ? 'justify-end' : 'justify-start'}`}
 							>
 								<div
-									className={`rounded-lg px-4 py-2 max-w-[80%] ${
+									className={`rounded-lg px-4 py-2 border border-transparent max-w-[80%] ${
 										message.sender === accountID
 											? 'bg-blue-600 text-white'
 											: 'bg-gray-700 text-gray-100'

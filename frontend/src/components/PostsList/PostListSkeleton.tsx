@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import PostSkeleton from '../PostSkeleton'
+import PostSkeleton from '../ui/PostSkeleton'
 
 const PostListSkeleton: FC = () => {
 	const postsList = [1, 2, 3, 4, 5]
