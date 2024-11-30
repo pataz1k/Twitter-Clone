@@ -47,6 +47,14 @@ export const BannerColors = {
 		third:
 			'linear-gradient(90deg, rgba(255,105,180,1) 0%, rgba(219,112,147,1) 51%, rgba(255,182,193,1) 100%)',
 	},
+	darkPurple: {
+		first:
+			'linear-gradient(90deg, rgba(68,29,120,1) 0%, rgba(129,36,141,1) 51%, rgba(192,44,198,1) 100%)',
+		second:
+			'linear-gradient(90deg, rgba(192,44,198,1) 0%, rgba(68,29,120,1) 51%, rgba(129,36,141,1) 100%)',
+		third:
+			'linear-gradient(90deg, rgba(129,36,141,1) 0%, rgba(192,44,198,1) 51%, rgba(68,29,120,1) 100%)',
+	},
 }
 
 export enum BannerColorsEnum {
@@ -56,4 +64,32 @@ export enum BannerColorsEnum {
 	GREEN = 'green',
 	RED = 'red',
 	PINK = 'pink',
+	DARK_PURPLE = 'darkPurple',
+}
+
+export const BannerColorsSelectOptions = [
+	{ value: BannerColorsEnum.DEFAULT, label: 'Default' },
+	{ value: BannerColorsEnum.PURPLE, label: 'Purple' },
+	{ value: BannerColorsEnum.DARK_PURPLE, label: 'Dark Purple' },
+	{ value: BannerColorsEnum.ORANGE, label: 'Orange' },
+	{ value: BannerColorsEnum.GREEN, label: 'Green' },
+	{ value: BannerColorsEnum.RED, label: 'Red' },
+	{ value: BannerColorsEnum.PINK, label: 'Pink' },
+]
+
+export function getBannerColorEnum(serverColor: {
+	first: string
+	second: string
+	third: string
+}): BannerColorsEnum {
+	for (const [key, value] of Object.entries(BannerColors)) {
+		if (
+			value.first === serverColor.first &&
+			value.second === serverColor.second &&
+			value.third === serverColor.third
+		) {
+			return key as BannerColorsEnum
+		}
+	}
+	return BannerColorsEnum.DEFAULT
 }

@@ -78,3 +78,62 @@ exports.checkToken = asyncHandler(async (req, res, next) => {
     message: 'Token is valid',
   });
 });
+
+exports.getUserSettings = asyncHandler(async (req, res, next) => {
+  try {
+    // req.user уже доступен благодаря middleware protect
+    const userSettings = req.user.settings;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        settings: userSettings,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving user settings',
+      error: error.message,
+    });
+  }
+});
+exports.updateUserSettings = asyncHandler(async (req, res, next) => {
+  try {
+    const { settings } = req.body;
+
+    if (!settings || typeof settings !== 'object') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid settings object',
+      });
+    }
+
+    // Обновляем только те поля, которые присутствуют в запросе
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: { settings: settings } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        settings: updatedUser.settings,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error updating user settings',
+      error: error.message,
+    });
+  }
+});

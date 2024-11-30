@@ -1,30 +1,49 @@
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 
 import GradientBanner from '@/components/ui/GradientBanner'
 
-import { BannerColors, BannerColorsEnum } from './BannerColors'
+import {
+	BannerColors,
+	BannerColorsEnum,
+	BannerColorsSelectOptions,
+	getBannerColorEnum,
+} from './BannerColors'
+import useSettingsStore from '@/stores/settings.store'
 
 const BannerSettings: FC = () => {
+	const { banner, setBannerColor } = useSettingsStore()
 	const [selectedColor, setSelectedColor] = useState<BannerColorsEnum>(
 		BannerColorsEnum.DEFAULT
 	)
+
+	useEffect(() => {
+		if (banner.first && banner.second && banner.third) {
+			const colorEnum = getBannerColorEnum(banner)
+			setSelectedColor(colorEnum)
+		}
+	}, [banner])
+
+	const changeColorHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+		setSelectedColor(e.target.value as BannerColorsEnum)
+		setBannerColor(BannerColors[e.target.value as BannerColorsEnum])
+	}
+
 	return (
 		<div className="mt-3">
 			<GradientBanner banner={BannerColors[selectedColor]} />
 			<select
 				value={selectedColor}
-				onChange={(e) => setSelectedColor(e.target.value as BannerColorsEnum)}
+				onChange={changeColorHandler}
 				className="mt-3 bg-gray-700 text-white border-none outline-none p-2 rounded w-full"
 			>
 				<option value="" disabled hidden>
 					Pick Color
 				</option>
-				<option value={BannerColorsEnum.DEFAULT}>Default</option>
-				<option value={BannerColorsEnum.PURPLE}>Purple</option>
-				<option value={BannerColorsEnum.ORANGE}>Orange</option>
-				<option value={BannerColorsEnum.GREEN}>Green</option>
-				<option value={BannerColorsEnum.RED}>Red</option>
-				<option value={BannerColorsEnum.PINK}>Pink</option>
+				{BannerColorsSelectOptions.map((option) => (
+					<option key={option.value} value={option.value}>
+						{option.label}
+					</option>
+				))}
 			</select>
 		</div>
 	)

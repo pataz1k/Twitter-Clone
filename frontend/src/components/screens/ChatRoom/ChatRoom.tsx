@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Socket, io } from 'socket.io-client'
 
+import BackButton from '@/components/ui/BackButton/BackButton'
 import MaterialIcon from '@/components/ui/MaterialIcons'
 
 import { IMessage } from '@/shared/types/message.types'
@@ -99,9 +100,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 		<Meta title={`Chat with ${receiverUsername}`}>
 			<div className="flex flex-col h-screen w-full bg-transparent text-gray-100">
 				<div className="bg-gray-800 p-4 border-b border-gray-700 flex gap-2">
-					<button onClick={router.back} className={styles.backButton}>
-						<MaterialIcon name="MdArrowBack" />
-					</button>
+					<BackButton />
 					<h2 className="text-xl font-semibold">
 						Chat with {receiverUsername}
 					</h2>

@@ -9,7 +9,7 @@ const Appearance: FC = () => {
 		<div>
 			<Heading
 				title="Appearance"
-				className="border-b-[1px] border-gray-700 pb-4 text-xl"
+				className="border-b border-gray-700 pb-4 text-xl"
 			/>
 			<BannerSettings />
 		</div>

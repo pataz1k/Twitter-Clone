@@ -3,19 +3,10 @@ import { devtools, persist } from 'zustand/middleware'
 
 import { AuthService } from '@/services/auth.service'
 
-interface IUserSettings {
-	banner: {
-		first: string
-		second: string
-		third: string
-	}
-}
-
 interface IUserStore {
 	username: string
 	accountID: string
 	accessToken: string
-	userSettings: IUserSettings
 	isAuth: boolean
 	expireAuthStatus: () => void
 	setUsername: (username: string) => void
@@ -28,13 +19,6 @@ const useUserStore = create<IUserStore>()(
 		devtools((set, get) => ({
 			username: '',
 			accessToken: '',
-			userSettings: {
-				banner: {
-					first: '',
-					second: '',
-					third: '',
-				},
-			},
 			isAuth: false,
 			accountID: '',
 			expireAuthStatus: () => {
@@ -54,7 +38,6 @@ const useUserStore = create<IUserStore>()(
 						const meRes = await AuthService.me(accessToken)
 						set({
 							isAuth: true,
-							userSettings: meRes.data.data.settings,
 							username: meRes.data.data.username,
 							accountID: meRes.data.data._id,
 						})

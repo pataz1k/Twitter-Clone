@@ -4,17 +4,24 @@ import { useEffect } from 'react'
 
 import MainProvider from '@/providers/MainProvider'
 
+import useSettingsStore from '@/stores/settings.store'
 import useUserStore from '@/stores/user.store'
 import '@/styles/globals.scss'
 
 export default function App({ Component, pageProps }: AppProps) {
-	const { verifyToken, accessToken } = useUserStore()
+	const { verifyToken, accessToken, isAuth } = useUserStore()
+	const { getUserSettings } = useSettingsStore()
 	useEffect(() => {
 		if (accessToken) {
 			verifyToken()
 		}
 	}, [verifyToken, accessToken])
 
+	useEffect(() => {
+		if (isAuth) {
+			getUserSettings(isAuth, accessToken)
+		}
+	}, [getUserSettings, isAuth, accessToken])
 	return (
 		<MainProvider>
 			<div className={GeistSans.className}>
