@@ -8,7 +8,7 @@ import useSettingsStore from '@/stores/settings.store'
 import useUserStore from '@/stores/user.store'
 
 const ProfileSettings: FC = () => {
-	const { applySettings } = useSettingsStore()
+	const { applySettings, isChanged } = useSettingsStore()
 	const { accessToken } = useUserStore()
 	return (
 		<div className="flex flex-col min-h-screen">
@@ -21,10 +21,15 @@ const ProfileSettings: FC = () => {
 			</div>
 			<div className="sticky bottom-0 right-0 p-4 bg-background border-t border-gray-700">
 				<button
+					disabled={!isChanged}
 					onClick={() => {
 						applySettings(accessToken)
 					}}
-					className="bg-blue-500 hover:bg-blue-700 p-2 px-6 rounded-2xl transition-colors h-11 flex items-center justify-center ml-auto"
+					className={`p-2 px-6 rounded-2xl transition-colors h-11 flex items-center justify-center ml-auto ${
+						isChanged
+							? 'bg-blue-500 hover:bg-blue-700 text-white'
+							: 'bg-gray-400 cursor-not-allowed text-gray-600'
+					}`}
 				>
 					Apply
 				</button>
