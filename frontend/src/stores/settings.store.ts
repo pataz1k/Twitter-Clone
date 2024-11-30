@@ -10,6 +10,9 @@ interface ISettingsStore {
 	isDarkMode: boolean
 	isChanged: boolean
 	banner: IBannerColor
+	username: string
+	avatar: string
+	bio: string
 	setBannerColor: (banner: IBannerColor) => void
 	getUserSettings: (isAuth: boolean, accessToken: string) => Promise<void>
 	setIsDarkMode: (isDarkMode: boolean) => void
@@ -21,6 +24,9 @@ const useSettingsStore = create<ISettingsStore>()(
 		devtools((set, get) => ({
 			isDarkMode: false,
 			isChanged: false,
+			username: '',
+			avatar: '',
+			bio: '',
 			banner: {
 				first: '',
 				second: '',
@@ -32,7 +38,13 @@ const useSettingsStore = create<ISettingsStore>()(
 				if (isAuth) {
 					try {
 						const res = await AuthService.getSettings(accessToken)
-						set({ banner: res.data.data.settings.banner, isChanged: false })
+						set({
+							banner: res.data.data.settings.banner,
+							username: res.data.data.username,
+							avatar: res.data.data.avatar,
+							bio: res.data.data.bio,
+							isChanged: false,
+						})
 					} catch (err) {
 						console.log(err)
 					}
@@ -41,6 +53,9 @@ const useSettingsStore = create<ISettingsStore>()(
 			setIsDarkMode: (isDarkMode: boolean) => set({ isDarkMode }),
 			applySettings: async (token: string) => {
 				const settings: IUserSettings = {
+					username: get().username,
+					avatar: get().avatar,
+					bio: get().bio,
 					settings: {
 						banner: get().banner,
 					},
@@ -55,7 +70,7 @@ const useSettingsStore = create<ISettingsStore>()(
 					})
 			},
 		})),
-		{ name: 'settings-store', version: 2 }
+		{ name: 'settings-store', version: 3 }
 	)
 )
 

@@ -82,13 +82,16 @@ exports.checkToken = asyncHandler(async (req, res, next) => {
 exports.getUserSettings = asyncHandler(async (req, res, next) => {
   try {
     // req.user уже доступен благодаря middleware protect
-    const userSettings = req.user.settings;
+    const data = {
+      username: req.user.username,
+      avatar: req.user.avatar,
+      bio: req.user.bio,
+      settings: req.user.settings,
+    };
 
     res.status(200).json({
       success: true,
-      data: {
-        settings: userSettings,
-      },
+      data: data,
     });
   } catch (error) {
     res.status(500).json({
@@ -100,7 +103,7 @@ exports.getUserSettings = asyncHandler(async (req, res, next) => {
 });
 exports.updateUserSettings = asyncHandler(async (req, res, next) => {
   try {
-    const { settings } = req.body;
+    const { settings, username, avatar, bio } = req.body;
 
     if (!settings || typeof settings !== 'object') {
       return res.status(400).json({
@@ -112,7 +115,7 @@ exports.updateUserSettings = asyncHandler(async (req, res, next) => {
     // Обновляем только те поля, которые присутствуют в запросе
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { $set: { settings: settings } },
+      { $set: { settings: settings, username: username, avatar: avatar, bio: bio } },
       { new: true, runValidators: true }
     );
 
@@ -126,6 +129,9 @@ exports.updateUserSettings = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: {
+        username: updatedUser.username,
+        avatar: updatedUser.avatar,
+        bio: updatedUser.bio,
         settings: updatedUser.settings,
       },
     });
