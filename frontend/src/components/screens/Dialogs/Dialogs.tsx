@@ -1,12 +1,12 @@
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { useQuery } from 'react-query'
 
 import ChatRoomItem from '@/components/ui/ChatRoomItem'
+import Heading from '@/components/ui/Heading'
 import NotAuth from '@/components/ui/NotAuth'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import { MessageService } from '@/services/message.service'
+import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 interface IDialog {
@@ -25,7 +25,7 @@ interface IDialog {
 }
 
 const Dialogs: FC = () => {
-	const { isAuth, accessToken } = useContext(AuthContext)
+	const { isAuth, accessToken } = useUserStore()
 
 	const { isSuccess, data } = useQuery(
 		['get user dialogs'],
@@ -47,7 +47,7 @@ const Dialogs: FC = () => {
 	return (
 		<Meta title={`Chats`}>
 			<div className="flex flex-col gap-4 p-4 text-gray-200">
-				<h1 className="text-2xl font-bold mb-4">Chats</h1>
+				<Heading title="Chats" />
 				{data.map((dialog) => (
 					<ChatRoomItem
 						key={dialog.chatMember._id}

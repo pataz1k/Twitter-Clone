@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import { FC, useContext, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
 
 import ImageGallery from '@/components/ui/ImageGallery'
@@ -8,18 +8,17 @@ import ProfileItem from '@/components/ui/ProfileItem/ProfileItem'
 import TagsList from '@/components/ui/TagsList/TagsList'
 import TimeItem from '@/components/ui/TimeItem'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import { IPost } from '@/shared/types/post.types'
 
 import styles from './PostsList.module.scss'
 import { PostService } from '@/services/post.service'
+import useUserStore from '@/stores/user.store'
 
 const PostItem: FC<{ post: IPost; refetchPosts: () => void }> = ({
 	post,
 	refetchPosts,
 }) => {
-	const { accountID, isAuth, accessToken } = useContext(AuthContext)
+	const { accountID, isAuth, accessToken } = useUserStore()
 	const [isLiked, setIsLiked] = useState(post.likes.includes(accountID))
 	const [isRetweeted, setIsRetweeted] = useState(
 		post.retweets.includes(accountID)

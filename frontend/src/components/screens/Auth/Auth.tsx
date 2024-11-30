@@ -1,15 +1,14 @@
 import { useRouter } from 'next/router'
-import { FC, useContext, useState } from 'react'
-
-import { AuthContext } from '@/providers/AuthProvider'
+import { FC, useState } from 'react'
 
 import AuthForm from './AuthForm'
+import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 const Auth: FC = () => {
 	const [authType, setAuthType] = useState<'login' | 'signup'>('login')
 
-	const { isAuth } = useContext(AuthContext)
+	const { isAuth } = useUserStore()
 	const router = useRouter()
 
 	if (isAuth) {

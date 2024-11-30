@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react'
+import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import PostListSkeleton from '@/components/PostsList/PostListSkeleton'
@@ -7,11 +7,10 @@ import CreatePost from '@/components/ui/CreatePost/CreatePost'
 import ImageUpload from '@/components/ui/ImageUpload'
 import LinkButton from '@/components/ui/LinkButton'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import { ButtonColor } from '@/constants/buttonColor.enum'
 import { ImagesService } from '@/services/images.service'
 import { PostService } from '@/services/post.service'
+import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 interface FormData {
@@ -19,7 +18,7 @@ interface FormData {
 }
 
 const Home: FC = () => {
-	const { isAuth } = useContext(AuthContext)
+	const { isAuth } = useUserStore()
 
 	const [isOpenImageUpload, setIsOpenImageUpload] = useState(false)
 	const [imagePaths, setImagePaths] = useState<string[]>([])

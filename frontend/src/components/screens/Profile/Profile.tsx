@@ -1,15 +1,14 @@
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { useQuery } from 'react-query'
 
 import ProfileData from '@/components/Profile/ProfileData'
 import ProfilePostList from '@/components/Profile/ProfilePostList'
 import NotAuth from '@/components/ui/NotAuth'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import { IProfile } from '@/shared/types/profile.types'
 
 import { AuthService } from '@/services/auth.service'
+import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 interface IProfileResponse {
@@ -18,7 +17,7 @@ interface IProfileResponse {
 }
 
 const Profile: FC = () => {
-	const { isAuth, accessToken } = useContext(AuthContext)
+	const { isAuth, accessToken } = useUserStore()
 
 	const { isSuccess, data, refetch } = useQuery(
 		['get user profile'],

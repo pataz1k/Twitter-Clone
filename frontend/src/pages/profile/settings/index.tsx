@@ -1,6 +1,8 @@
 import { FC } from 'react'
 
-const ProfileSettings: FC = () => {
-	return <div>ProfileSettings</div>
+import ProfileSettings from '@/components/screens/ProfileSettings/ProfileSettings'
+
+const index: FC = () => {
+	return <ProfileSettings />
 }
-export default ProfileSettings
+export default index

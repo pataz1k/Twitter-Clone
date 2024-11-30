@@ -1,20 +1,19 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import toast from 'react-hot-toast'
 
 import MaterialIcon from '@/components/ui/MaterialIcons'
 
 import Logo from '@/ui/Logo'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import { NavbarData } from './Navbar.data'
 import styles from './Navbar.module.scss'
 import NavbarItem from './NavbarItem'
+import useUserStore from '@/stores/user.store'
 
 const Navbar: FC = () => {
-	const { isAuth, expireAuthStatus } = useContext(AuthContext)
+	const { isAuth, expireAuthStatus } = useUserStore()
 
 	const router = useRouter()
 

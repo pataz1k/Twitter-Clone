@@ -12,4 +12,11 @@ export const AuthService = {
 			},
 		})
 	},
+	async checkToken(token: string) {
+		return axiosClassic.get(getAuthUrl('check-token'), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	},
 }

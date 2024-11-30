@@ -1,14 +1,13 @@
+import { useClickAway } from '@uidotdev/usehooks'
 import EmojiPicker, {
 	EmojiClickData,
 	EmojiStyle,
 	Theme,
 } from 'emoji-picker-react'
-import { FC, useContext, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useQuery } from 'react-query'
-
-import { AuthContext } from '@/providers/AuthProvider'
 
 import { IProfile } from '@/shared/types/profile.types'
 
@@ -19,6 +18,7 @@ import ProfileItemSkeleton from '../ProfileItem/ProfileItemSkeleton'
 import classes from './CreatePost.module.scss'
 import { AuthService } from '@/services/auth.service'
 import { PostService } from '@/services/post.service'
+import useUserStore from '@/stores/user.store'
 
 interface IProfileResponse {
 	success: boolean
@@ -40,17 +40,19 @@ const CreatePost: FC<ICreatePost> = ({
 	openImageUpload,
 	images,
 }) => {
-	const { isAuth, accessToken, expireAuthStatus } = useContext(AuthContext)
+	const { isAuth, accessToken } = useUserStore()
 	const [isEmojiOpen, setIsEmojiOpen] = useState(false)
 	const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 })
-
-	let previousScrollY = window.scrollY
-
 	const { register, handleSubmit, reset, watch, setValue, trigger } =
 		useForm<Inputs>()
+	const buttonRef = useRef<HTMLButtonElement>(null)
+
+	const emojiOutsideRef = useClickAway<HTMLDivElement>(() =>
+		setIsEmojiOpen(false)
+	)
 
 	const caption = watch('caption', '')
-	const buttonRef = useRef<HTMLButtonElement>(null)
+	let previousScrollY = window.scrollY
 
 	useEffect(() => {
 		if (buttonRef.current) {
@@ -59,14 +61,11 @@ const CreatePost: FC<ICreatePost> = ({
 		}
 	}, [isEmojiOpen])
 
-	const { isSuccess, isLoading, isError, data } = useQuery(
+	const { isSuccess, isLoading, data } = useQuery(
 		['get user profile'],
 		() => AuthService.me(accessToken),
 		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
 	)
-	if (isError) {
-		expireAuthStatus()
-	}
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		PostService.createPost(accessToken, data.caption, images)
@@ -80,11 +79,6 @@ const CreatePost: FC<ICreatePost> = ({
 				refetchPosts()
 				reset()
 			})
-	}
-
-	const adjustHeight = (element: HTMLTextAreaElement) => {
-		element.style.height = 'auto'
-		element.style.height = `${element.scrollHeight}px`
 	}
 
 	window.addEventListener('scroll', () => {
@@ -112,6 +106,7 @@ const CreatePost: FC<ICreatePost> = ({
 	return (
 		<div className={classes.wrap}>
 			<div
+				ref={emojiOutsideRef}
 				className="fixed z-50"
 				style={{
 					top: `${buttonPosition.top}px`,

@@ -1,13 +1,11 @@
 import { useRouter } from 'next/router'
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import styles from './Auth.module.scss'
 import { AuthService } from '@/services/auth.service'
-import { CookieService } from '@/services/cookie.service'
+import useUserStore from '@/stores/user.store'
 
 type Inputs = {
 	username: string
@@ -24,7 +22,7 @@ interface IAuthRespose {
 }
 
 const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
-	const { updateAuthStatus } = useContext(AuthContext)
+	const { setAccessToken } = useUserStore()
 
 	const router = useRouter()
 
@@ -42,9 +40,7 @@ const AuthForm: FC<{ authType: 'login' | 'signup' }> = ({ authType }) => {
 		AuthService.auth(authType, data)
 			.then((res: IAuthRespose) => {
 				if (res.data.success) {
-					CookieService.setAccessToken(res.data.token).then(() =>
-						updateAuthStatus()
-					)
+					setAccessToken(res.data.token)
 					router.push('/profile')
 
 					toast.success('Logged in successfully', {

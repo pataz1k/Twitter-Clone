@@ -1,26 +1,28 @@
-import { useRouter } from 'next/router'
 import { FC } from 'react'
-import toast, { Toast } from 'react-hot-toast'
+
+import useUserStore from '@/stores/user.store'
 
 const Notifications: FC = () => {
-	const router = useRouter()
-
-	const notify = () => {
-		toast((t: Toast) => (
-			<span onClick={() => router.push('/messages	')}>
-				<h1>Test</h1>
-				<button onClick={() => toast.dismiss(t.id)}>Dismiss</button>
-			</span>
-		))
+	const { setAccessToken, isAuth, expireAuthStatus } = useUserStore()
+	const token =
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDdiNTRhM2ViNWU0M2U4NDA2YTBmNiIsInVzZXJuYW1lIjoicGF0YXoxayIsImlhdCI6MTczMjc5NTQ0MSwiZXhwIjoxNzM1Mzg3NDQxfQ.3hbIRMSximr3YW4RP2U7i0EL71Ts_ew8Vn7ShGvBHSY'
+	const addToken = () => {
+		setAccessToken(token)
 	}
-
 	return (
 		<div>
+			<h1>isAuth: {isAuth ? 'true' : 'false'}</h1>
 			<button
 				className="rounded-2xl bg-slate-500 p-2 text-white"
-				onClick={notify}
+				onClick={addToken}
 			>
-				TEST NOTIFY
+				ADD TOKEN TEST
+			</button>
+			<button
+				className="rounded-2xl bg-slate-500 p-2 text-white"
+				onClick={expireAuthStatus}
+			>
+				EXPIRE AUTH STATE
 			</button>
 		</div>
 	)

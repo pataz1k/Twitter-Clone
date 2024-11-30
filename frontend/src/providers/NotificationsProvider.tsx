@@ -3,14 +3,13 @@ import {
 	FC,
 	PropsWithChildren,
 	createContext,
-	useContext,
 	useEffect,
 	useState,
 } from 'react'
 import { Socket, io } from 'socket.io-client'
 
-import { AuthContext } from './AuthProvider'
 import { getDMPageUrl } from '@/config/url.config'
+import useUserStore from '@/stores/user.store'
 
 interface INotificationsContext {
 	notifications: string[]
@@ -25,7 +24,7 @@ const initialValue = {
 const NotificationsContext = createContext<INotificationsContext>(initialValue)
 
 const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
-	const { accountID, accessToken } = useContext(AuthContext)
+	const { accountID, accessToken } = useUserStore()
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const [notifications, setNotifications] = useState<string[]>([])
 	const router = useRouter()

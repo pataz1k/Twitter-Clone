@@ -1,16 +1,15 @@
 import { useRouter } from 'next/router'
-import { FC, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Socket, io } from 'socket.io-client'
 
 import MaterialIcon from '@/components/ui/MaterialIcons'
-
-import { AuthContext } from '@/providers/AuthProvider'
 
 import { IMessage } from '@/shared/types/message.types'
 
 import styles from './ChatRoom.module.scss'
 import { MessageService } from '@/services/message.service'
 import { UserService } from '@/services/user.service'
+import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 interface IChatRoom {
@@ -18,7 +17,7 @@ interface IChatRoom {
 }
 
 const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
-	const { accountUsername, accountID, accessToken } = useContext(AuthContext)
+	const { username, accountID, accessToken } = useUserStore()
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const [messages, setMessages] = useState<IMessage[]>([])
 	const [newMessage, setNewMessage] = useState('')
@@ -46,7 +45,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 		return () => {
 			newSocket.disconnect()
 		}
-	}, [accountUsername, accountID])
+	}, [username, accountID])
 
 	useEffect(() => {
 		if (!socket) return

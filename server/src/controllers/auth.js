@@ -71,3 +71,10 @@ exports.me = asyncHandler(async (req, res, next) => {
     data: user,
   });
 });
+
+exports.checkToken = asyncHandler(async (req, res, next) => {
+  res.status(200).json({
+    success: true,
+    message: 'Token is valid',
+  });
+});

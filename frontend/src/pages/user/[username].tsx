@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { FC, useContext, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { UseQueryResult, useQuery } from 'react-query'
 
 import ProfileData from '@/components/Profile/ProfileData'
@@ -8,12 +8,11 @@ import LinkButton from '@/components/ui/LinkButton'
 import NotAuth from '@/components/ui/NotAuth'
 import ProfileSkeleton from '@/components/ui/ProfileSkeleton/ProfileSkeleton'
 
-import { AuthContext } from '@/providers/AuthProvider'
-
 import { IProfile } from '@/shared/types/profile.types'
 
 import { ButtonColor } from '@/constants/buttonColor.enum'
 import { UserService } from '@/services/user.service'
+import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 interface IProfileResponse {
@@ -29,13 +28,13 @@ interface ApiError {
 const UserPage: FC = () => {
 	const router = useRouter()
 
-	const { isAuth, accessToken, accountUsername } = useContext(AuthContext)
+	const { isAuth, accessToken, username } = useUserStore()
 
 	useEffect(() => {
-		if (isAuth && accountUsername === router.query.username) {
+		if (isAuth && username === router.query.username) {
 			router.replace('/profile')
 		}
-	}, [accountUsername, router.query.username, isAuth])
+	}, [username, router.query.username, isAuth])
 
 	const {
 		isSuccess,

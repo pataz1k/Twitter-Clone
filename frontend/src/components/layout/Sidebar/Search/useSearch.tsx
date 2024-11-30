@@ -1,16 +1,14 @@
 import { useDebounce } from '@uidotdev/usehooks'
-import { ChangeEvent, FC, useContext, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useQuery } from 'react-query'
-
-import { AuthContext } from '@/providers/AuthProvider'
 
 import { PostService } from '@/services/post.service'
 import { UserService } from '@/services/user.service'
+import useUserStore from '@/stores/user.store'
 
 export const useSearch = () => {
+	const { isAuth, accessToken } = useUserStore()
 	const [searchTerm, setSearchTerm] = useState('')
-	const { isAuth, accessToken } = useContext(AuthContext)
-
 	const debouncedSearch = useDebounce(searchTerm, 500)
 
 	const { isSuccess: isSuccessPosts, data: dataPosts } = useQuery(
