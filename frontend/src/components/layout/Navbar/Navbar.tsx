@@ -24,7 +24,7 @@ const Navbar: FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-screen p-5">
+		<div className="flex flex-col h-screen p-5 ">
 			<div className="flex-grow">
 				<ul className="list-none">
 					<Logo />

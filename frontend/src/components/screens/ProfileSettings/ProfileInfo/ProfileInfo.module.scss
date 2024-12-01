@@ -1,0 +1,31 @@
+.profileInfo {
+	@apply py-2;
+	> label {
+		@apply block px-1 my-2;
+	}
+	> input {
+		@apply border border-gray-700 p-2 bg-transparent rounded-xl text-white focus:border-blue-500 shadow-sm focus:shadow-blue-500/50 focus:shadow-md transition-all duration-200 outline-none;
+	}
+	> textarea {
+		field-sizing: content;
+		@apply mb-3 text-white placeholder:text-gray-600 block bg-transparent resize-none p-2 rounded-xl min-h-16 w-1/2 border border-gray-700 border-solid outline-none overflow-y-hidden h-auto max-h-32 focus:border-blue-500 shadow-sm focus:shadow-blue-500/50 focus:shadow-md transition-all duration-200;
+	}
+}
+.avatarUpload {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 1rem;
+
+	img {
+		margin-bottom: 0.5rem;
+	}
+
+	label {
+		cursor: pointer;
+		color: #3b82f6;
+		&:hover {
+			color: #2563eb;
+		}
+	}
+}

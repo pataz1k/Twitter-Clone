@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	}, [getUserSettings, isAuth, accessToken])
 	return (
 		<MainProvider>
-			<div className={GeistSans.className}>
+			<div className={GeistSans.className} data-theme="dark">
 				<Component {...pageProps} />
 			</div>
 		</MainProvider>

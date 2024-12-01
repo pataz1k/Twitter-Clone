@@ -11,20 +11,26 @@ interface ISettingsStore {
 	isChanged: boolean
 	banner: IBannerColor
 	username: string
+	fullname: string
 	avatar: string
 	bio: string
 	setBannerColor: (banner: IBannerColor) => void
+	setUsername: (username: string) => void
+	setFullname: (fullname: string) => void
+	setAvatar: (avatar: string) => void
+	setBio: (bio: string) => void
 	getUserSettings: (isAuth: boolean, accessToken: string) => Promise<void>
-	setIsDarkMode: (isDarkMode: boolean) => void
+	toggleTheme: () => void
 	applySettings: (token: string) => void
 }
 
 const useSettingsStore = create<ISettingsStore>()(
 	persist(
 		devtools((set, get) => ({
-			isDarkMode: false,
+			isDarkMode: true,
 			isChanged: false,
 			username: '',
+			fullname: '',
 			avatar: '',
 			bio: '',
 			banner: {
@@ -41,6 +47,7 @@ const useSettingsStore = create<ISettingsStore>()(
 						set({
 							banner: res.data.data.settings.banner,
 							username: res.data.data.username,
+							fullname: res.data.data.fullname,
 							avatar: res.data.data.avatar,
 							bio: res.data.data.bio,
 							isChanged: false,
@@ -50,10 +57,11 @@ const useSettingsStore = create<ISettingsStore>()(
 					}
 				}
 			},
-			setIsDarkMode: (isDarkMode: boolean) => set({ isDarkMode }),
+			toggleTheme: () => set({ isDarkMode: !get().isDarkMode }),
 			applySettings: async (token: string) => {
 				const settings: IUserSettings = {
 					username: get().username,
+					fullname: get().fullname,
 					avatar: get().avatar,
 					bio: get().bio,
 					settings: {
@@ -69,6 +77,12 @@ const useSettingsStore = create<ISettingsStore>()(
 						toast.error(err.response.data.message)
 					})
 			},
+			setUsername: (username: string) =>
+				set({ username: username, isChanged: true }),
+			setFullname: (fullname: string) =>
+				set({ fullname: fullname, isChanged: true }),
+			setAvatar: (avatar: string) => set({ avatar: avatar, isChanged: true }),
+			setBio: (bio: string) => set({ bio: bio, isChanged: true }),
 		})),
 		{ name: 'settings-store', version: 3 }
 	)

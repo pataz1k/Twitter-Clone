@@ -4,6 +4,7 @@ import BackButton from '@/components/ui/BackButton/BackButton'
 import Heading from '@/components/ui/Heading'
 
 import Appearance from './Appearance/Appearance'
+import ProfileInfo from './ProfileInfo/ProfileInfo'
 import useSettingsStore from '@/stores/settings.store'
 import useUserStore from '@/stores/user.store'
 
@@ -17,6 +18,7 @@ const ProfileSettings: FC = () => {
 					<BackButton />
 					<Heading title="Profile Settings" />
 				</div>
+				<ProfileInfo />
 				<Appearance />
 			</div>
 			<div className="sticky bottom-0 right-0 p-4 bg-background border-t border-gray-700">

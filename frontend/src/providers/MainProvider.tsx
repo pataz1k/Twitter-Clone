@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import Layout from '../components/layout/Layout'
 
 import { NotificationsProvider } from './NotificationsProvider'
+import ThemeProvider from './ThemeProvider'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -19,19 +20,21 @@ const queryClient = new QueryClient({
 const MainProvider: FC<PropsWithChildren> = ({ children }) => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<NotificationsProvider>
-				<SkeletonTheme baseColor="#4d4646" highlightColor="#fff">
-					<Layout>{children}</Layout>
-					<Toaster
-						toastOptions={{
-							style: {
-								background: '#202020',
-								color: '#fff',
-							},
-						}}
-					/>
-				</SkeletonTheme>
-			</NotificationsProvider>
+			<ThemeProvider>
+				<NotificationsProvider>
+					<SkeletonTheme baseColor="#4d4646" highlightColor="#fff">
+						<Layout>{children}</Layout>
+						<Toaster
+							toastOptions={{
+								style: {
+									background: '#202020',
+									color: '#fff',
+								},
+							}}
+						/>
+					</SkeletonTheme>
+				</NotificationsProvider>
+			</ThemeProvider>
 		</QueryClientProvider>
 	)
 }

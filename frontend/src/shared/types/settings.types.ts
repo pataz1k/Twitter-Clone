@@ -5,6 +5,7 @@ export interface IBannerColor {
 }
 export interface IUserSettings {
 	username: string
+	fullname: string
 	avatar: string
 	bio: string
 	settings: {
