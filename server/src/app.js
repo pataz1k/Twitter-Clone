@@ -59,21 +59,13 @@ app.use(errorHandler);
 
 //! Socket.io
 io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+  socket.on('disconnect', () => {});
 
   socket.on('join', (username) => {
-    console.log('user joined room', username);
     socket.join(username);
   });
 
   socket.on('message', async (message) => {
-    console.log('message received', message.message);
-    console.log('user', message.sender);
-
     try {
       // Save message to database
       const newMessage = new Message({

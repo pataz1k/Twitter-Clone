@@ -39,7 +39,6 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 		setSocket(newSocket)
 
 		newSocket.on('connect', () => {
-			console.log('connected to socket')
 			newSocket.emit('join', accountID)
 		})
 

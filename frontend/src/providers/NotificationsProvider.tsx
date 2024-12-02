@@ -34,7 +34,6 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		setSocket(newSocket)
 
 		newSocket.on('connect', () => {
-			console.log('connected to socket')
 			newSocket.emit('join', accountID)
 		})
 
@@ -47,8 +46,6 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		if (!socket) return
 
 		const notificationsHandler = (notify: any) => {
-			console.log(notify)
-			console.log(router.pathname)
 			if (getDMPageUrl(notify.sender) !== router.asPath) {
 				// toast.info(notify.text, {
 				// 	onClick: () => {
