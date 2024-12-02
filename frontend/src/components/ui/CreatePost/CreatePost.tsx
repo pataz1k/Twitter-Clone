@@ -1,21 +1,17 @@
-import { useClickAway } from '@uidotdev/usehooks'
-import EmojiPicker, {
-	EmojiClickData,
-	EmojiStyle,
-	Theme,
-} from 'emoji-picker-react'
-import { FC, useEffect, useRef, useState } from 'react'
+import { EmojiClickData } from 'emoji-picker-react'
+import { FC, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useQuery } from 'react-query'
 
 import { IProfile } from '@/shared/types/profile.types'
 
+import EmojiModal from '../EmojiModal'
 import MaterialIcon from '../MaterialIcons'
 import ProfileItem from '../ProfileItem/ProfileItem'
 import ProfileItemSkeleton from '../ProfileItem/ProfileItemSkeleton'
 
-import classes from './CreatePost.module.scss'
+import styles from './CreatePost.module.scss'
 import { AuthService } from '@/services/auth.service'
 import { PostService } from '@/services/post.service'
 import useUserStore from '@/stores/user.store'
@@ -42,24 +38,12 @@ const CreatePost: FC<ICreatePost> = ({
 }) => {
 	const { isAuth, accessToken } = useUserStore()
 	const [isEmojiOpen, setIsEmojiOpen] = useState(false)
-	const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 })
 	const { register, handleSubmit, reset, watch, setValue, trigger } =
 		useForm<Inputs>()
 	const buttonRef = useRef<HTMLButtonElement>(null)
-
-	const emojiOutsideRef = useClickAway<HTMLDivElement>(() =>
-		setIsEmojiOpen(false)
-	)
+	const closeEmojiModal = () => setIsEmojiOpen(false)
 
 	const caption = watch('caption', '')
-	let previousScrollY = window.scrollY
-
-	useEffect(() => {
-		if (buttonRef.current) {
-			const rect = buttonRef.current.getBoundingClientRect()
-			setButtonPosition({ top: rect.bottom, left: rect.left })
-		}
-	}, [isEmojiOpen])
 
 	const { isSuccess, isLoading, data } = useQuery(
 		['get user profile'],
@@ -81,15 +65,6 @@ const CreatePost: FC<ICreatePost> = ({
 			})
 	}
 
-	window.addEventListener('scroll', () => {
-		if (window.scrollY !== previousScrollY) {
-			if (isEmojiOpen) {
-				setIsEmojiOpen(false)
-			}
-			previousScrollY = window.scrollY
-		}
-	})
-
 	const addEmoji = (emoji: EmojiClickData) => {
 		setValue('caption', `${caption}${emoji.emoji}`, {
 			shouldValidate: true,
@@ -104,23 +79,13 @@ const CreatePost: FC<ICreatePost> = ({
 	}
 
 	return (
-		<div className={classes.wrap}>
-			<div
-				ref={emojiOutsideRef}
-				className="fixed z-50"
-				style={{
-					top: `${buttonPosition.top}px`,
-					left: `${buttonPosition.left}px`,
-				}}
-			>
-				<EmojiPicker
-					theme={Theme.DARK}
-					open={isEmojiOpen}
-					onEmojiClick={addEmoji}
-					emojiStyle={EmojiStyle.NATIVE}
-					skinTonesDisabled={true}
-				/>
-			</div>
+		<div className={styles.wrap}>
+			<EmojiModal
+				isOpen={isEmojiOpen}
+				onClose={closeEmojiModal}
+				buttonRef={buttonRef}
+				onAddEmoji={addEmoji}
+			/>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				{isLoading && <ProfileItemSkeleton />}
 				{isSuccess && (
@@ -131,7 +96,7 @@ const CreatePost: FC<ICreatePost> = ({
 					/>
 				)}
 				<textarea
-					className={classes.input}
+					className={styles.input}
 					draggable="false"
 					placeholder="What's happening?"
 					maxLength={480}
@@ -139,24 +104,28 @@ const CreatePost: FC<ICreatePost> = ({
 						required: { value: true, message: 'Caption is required' },
 					})}
 				/>
-				<div className={classes.info}>
-					<div className={classes.additionalButtons}>
+				<div className={styles.info}>
+					<div className={styles.additionalButtons}>
 						<button onClick={openImageUpload} type="button">
 							<MaterialIcon name="MdOutlineImage" />
 						</button>
-						<button type="button">
+						{/* <button type="button">
 							<MaterialIcon name="MdOutlineGifBox" />
-						</button>
+						</button> */}
 						<button
 							type="button"
 							ref={buttonRef}
-							onClick={() => setIsEmojiOpen(!isEmojiOpen)}
+							onClick={() => {
+								if (!isEmojiOpen) {
+									setIsEmojiOpen(true)
+								}
+							}}
 						>
 							<MaterialIcon name="MdOutlineEmojiEmotions" />
 						</button>
-						<button type="button">
+						{/* <button type="button">
 							<MaterialIcon name="MdOutlineLocationOn" />
-						</button>
+						</button> */}
 					</div>
 					<div className="flex gap-3 items-center">
 						<button

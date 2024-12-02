@@ -36,7 +36,7 @@ const Meta: FC<ISeo> = ({ title, description, image, children }) => {
 						/>
 					</>
 				) : (
-					<meta name="robots" content="noindex, nofollow" />
+					<meta name="robots" content="index, follow" />
 				)}
 			</Head>
 			{children}

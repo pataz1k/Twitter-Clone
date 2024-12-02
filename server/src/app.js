@@ -24,7 +24,7 @@ const io = new Server(server, {
 
 //! Cors Headers
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', process.env.APP_URL);
   res.header('Access-Control-Allow-Headers', true);
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -41,7 +41,7 @@ const apiLimiter = new rateLimit({
   max: 100,
 });
 var corsOptions = {
-  origin: process.env.URI || 'http://localhost:3000',
+  origin: process.env.APP_URL,
   optionsSuccessStatus: 200,
   credentials: true,
 };
