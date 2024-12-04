@@ -33,4 +33,20 @@ export const PostService = {
 			}
 		)
 	},
+	async getPostById(id: string, token:string) {
+		return axiosClassic.get(getPostsUrl(id), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			}
+		})
+	},
+	async addComment(postId:string, text: string,token: string) {
+		return axiosClassic.post(getPostsUrl(`${postId}/comments`),{
+			text: text
+		}, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			}
+		})
+	}
 }

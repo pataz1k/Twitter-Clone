@@ -4,7 +4,7 @@
 .buttonWrap {
 	@apply flex gap-4;
 
-	> button {
+	> button,a {
 		// Базовые стили для кнопки
 		@apply bg-transparent border-none flex gap-2 cursor-default;
 

@@ -1,3 +1,5 @@
+import { IComment } from "./comment.types"
+
 export interface IPost {
 	tags: string[]
 	files: string[]
@@ -5,7 +7,7 @@ export interface IPost {
 	retweets: string[]
 	likesCount: number
 	retweetCount: number
-	comments: string[]
+	comments: IComment[]
 	commentsCount: number
 	_id: string
 	caption: string
