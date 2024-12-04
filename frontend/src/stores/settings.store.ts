@@ -7,6 +7,7 @@ import { IBannerColor, IUserSettings } from '@/shared/types/settings.types'
 import { AuthService } from '@/services/auth.service'
 
 interface ISettingsStore {
+	isLoading: boolean
 	isDarkMode: boolean
 	isChanged: boolean
 	banner: IBannerColor
@@ -27,6 +28,7 @@ interface ISettingsStore {
 const useSettingsStore = create<ISettingsStore>()(
 	persist(
 		devtools((set, get) => ({
+			isLoading: true,
 			isDarkMode: true,
 			isChanged: false,
 			username: '',
@@ -51,8 +53,10 @@ const useSettingsStore = create<ISettingsStore>()(
 							avatar: res.data.data.avatar,
 							bio: res.data.data.bio,
 							isChanged: false,
+							isLoading: false,
 						})
 					} catch (err) {
+						set({ isLoading: false })
 						console.log(err)
 					}
 				}
@@ -84,7 +88,7 @@ const useSettingsStore = create<ISettingsStore>()(
 			setAvatar: (avatar: string) => set({ avatar: avatar, isChanged: true }),
 			setBio: (bio: string) => set({ bio: bio, isChanged: true }),
 		})),
-		{ name: 'settings-store', version: 3 }
+		{ name: 'settings-store', version: 4 }
 	)
 )
 

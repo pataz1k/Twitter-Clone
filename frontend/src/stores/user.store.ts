@@ -4,6 +4,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { AuthService } from '@/services/auth.service'
 
 interface IUserStore {
+	isLoading: boolean
 	username: string
 	accountID: string
 	accessToken: string
@@ -17,6 +18,7 @@ interface IUserStore {
 const useUserStore = create<IUserStore>()(
 	persist(
 		devtools((set, get) => ({
+			isLoading: true,
 			username: '',
 			accessToken: '',
 			isAuth: false,
@@ -28,7 +30,7 @@ const useUserStore = create<IUserStore>()(
 			verifyToken: async () => {
 				const { accessToken } = get()
 				if (!accessToken) {
-					set({ isAuth: false })
+					set({ isAuth: false, isLoading: false })
 					return
 				}
 
@@ -38,14 +40,15 @@ const useUserStore = create<IUserStore>()(
 						const meRes = await AuthService.me(accessToken)
 						set({
 							isAuth: true,
+							isLoading: false,
 							username: meRes.data.data.username,
 							accountID: meRes.data.data._id,
 						})
 					} else {
-						set({ isAuth: false })
+						set({ isAuth: false, isLoading: false })
 					}
 				} catch (err) {
-					set({ isAuth: false })
+					set({ isAuth: false, isLoading: false })
 				}
 			},
 			setAccessToken: async (accessToken: string) => {
@@ -53,7 +56,7 @@ const useUserStore = create<IUserStore>()(
 				await get().verifyToken()
 			},
 		})),
-		{ name: 'user-store', version: 1 }
+		{ name: 'user-store', version: 2 }
 	)
 )
 

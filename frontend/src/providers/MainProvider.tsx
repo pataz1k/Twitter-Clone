@@ -4,6 +4,9 @@ import { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
+import LoadingScreen from '@/components/LoadingScreen/LoadingScreen'
+import LoadingWrapper from '@/components/LoadingScreen/LoadingWrapper'
+
 import Layout from '../components/layout/Layout'
 
 import { NotificationsProvider } from './NotificationsProvider'
@@ -23,15 +26,17 @@ const MainProvider: FC<PropsWithChildren> = ({ children }) => {
 			<ThemeProvider>
 				<NotificationsProvider>
 					<SkeletonTheme baseColor="#4d4646" highlightColor="#fff">
-						<Layout>{children}</Layout>
-						<Toaster
-							toastOptions={{
-								style: {
-									background: '#202020',
-									color: '#fff',
-								},
-							}}
-						/>
+						<LoadingWrapper>
+							<Layout>{children}</Layout>
+							<Toaster
+								toastOptions={{
+									style: {
+										background: '#202020',
+										color: '#fff',
+									},
+								}}
+							/>
+						</LoadingWrapper>
 					</SkeletonTheme>
 				</NotificationsProvider>
 			</ThemeProvider>

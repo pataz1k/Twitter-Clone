@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { FC } from 'react'
 
 import SearchField from '@/components/ui/search-filed/SearchField'
@@ -18,29 +19,36 @@ const Search: FC = () => {
 
 	const displayBorder = isSuccessPosts || isSuccessUsers
 	return (
-		<div className="relative">
+		<div className="relative ">
 			<SearchField searchTerm={searchTerm} handleSearch={handleSearch} />
-			{displayBorder && (
-				<div className="border rounded-xl border-zinc-700 p-5">
-					{isSuccessPosts && (
-						<>
-							<h1 className="border-b-[1px] border-zinc-700 pb-2 mb-2 text-center font-bold">
-								Posts
-							</h1>
-							<PostsList posts={dataPosts.data} />
-						</>
-					)}
+			<AnimatePresence>
+				{displayBorder && (
+					<motion.div
+						initial={{ opacity: 0, transform: 'translateY(10px)' }}
+						animate={{ opacity: 1, transform: 'translateY(0)' }}
+						exit={{ transform: 'translateY(10px)', opacity: 0 }}
+						className="border rounded-xl border-zinc-700 p-5 mt-2"
+					>
+						{isSuccessPosts && (
+							<>
+								<h1 className="border-b-[1px] border-zinc-700 pb-2 mb-2 text-center font-bold">
+									Posts
+								</h1>
+								<PostsList posts={dataPosts.data} />
+							</>
+						)}
 
-					{isSuccessUsers && (
-						<>
-							<h1 className="border-b-[1px] border-zinc-700 pb-2 mb-2 text-center font-bold">
-								Users
-							</h1>
-							<UsersList users={dataUsers.data} />
-						</>
-					)}
-				</div>
-			)}
+						{isSuccessUsers && (
+							<>
+								<h1 className="border-b-[1px] border-zinc-700 pb-2 mb-2 text-center font-bold">
+									Users
+								</h1>
+								<UsersList users={dataUsers.data} />
+							</>
+						)}
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</div>
 	)
 }

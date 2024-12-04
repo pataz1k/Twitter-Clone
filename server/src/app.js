@@ -23,13 +23,6 @@ const io = new Server(server, {
 });
 
 //! Cors Headers
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', process.env.APP_URL);
-  res.header('Access-Control-Allow-Headers', true);
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  next();
-});
 
 connectToDb();
 app.use(express.json());
@@ -48,7 +41,7 @@ var corsOptions = {
 
 //! All app uses
 app.use('/api/', apiLimiter);
-app.use(cors(corsOptions));
+app.use(cors());
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
 app.use('/api/v1/posts', post);
