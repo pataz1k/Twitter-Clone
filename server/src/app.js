@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const { initializeSocket } = require('./socketManager');
 const auth = require('./routes/auth');
 const user = require('./routes/user');
 const post = require('./routes/post');
@@ -8,19 +10,11 @@ const message = require('./routes/message');
 const connectToDb = require('./utils/db');
 const errorHandler = require('./middlewares/errorHandler');
 const rateLimit = require('express-rate-limit');
-const Message = require('./models/Message');
 const User = require('./models/User');
-
-const { Server } = require('socket.io');
-const http = require('http');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: '*',
-  },
-});
+initializeSocket(server);
 
 //! Cors Headers
 
@@ -50,37 +44,8 @@ app.use('/api/v1/messages', message);
 
 app.use(errorHandler);
 
-//! Socket.io
-io.on('connection', (socket) => {
-  socket.on('disconnect', () => {});
-
-  socket.on('join', (username) => {
-    socket.join(username);
-  });
-
-  socket.on('message', async (message) => {
-    try {
-      // Save message to database
-      const newMessage = new Message({
-        sender: message.sender,
-        receiver: message.receiver,
-        message: message.message,
-      });
-      await newMessage.save();
-
-      // Emit message to sender and receiver
-      io.to(message.sender).to(message.receiver).emit('message', newMessage);
-      io.to(message.receiver).emit('notification', {
-        text: `New message!`,
-        sender: message.sender,
-      });
-    } catch (err) {
-      console.error('Error saving message:', err);
-    }
-  });
-});
-
 const PORT = 8080;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app };
+

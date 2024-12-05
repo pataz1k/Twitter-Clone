@@ -3,6 +3,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
 const asyncHandler = require("../middlewares/asyncHandler");
+const { sendNotification } = require("./notification");
 
 exports.getTags = asyncHandler(async (req, res, next) => {
   const tags = await Post.find().distinct("tags");
@@ -73,11 +74,11 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     $push: { posts: post._id },
     $inc: { postCount: 1 },
   });
-
   post = await post
-    .populate({ path: "user", select: "avatar username fullname" })
-    .execPopulate();
-
+  .populate({ path: "user", select: "avatar username fullname" })
+  .execPopulate();
+  
+  await sendNotification(req.user.followers,`New post from ${req.user.username}`,req.user._id)
   res.status(200).json({ success: true, data: post });
 });
 
@@ -102,6 +103,8 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
     post.likesCount = post.likesCount + 1;
     await post.save();
   }
+  const user = User.fin
+  sendNotification(post.user._id,"New like to your post", req.user.id)
 
   res.status(200).json({ success: true, data: {} });
 });
