@@ -12,14 +12,14 @@ export default function App({ Component, pageProps }: AppProps) {
 	const { verifyToken, accessToken, isAuth } = useUserStore()
 	const { getUserSettings } = useSettingsStore()
 	useEffect(() => {
-		if (accessToken) {
-			verifyToken()
-		}
+		verifyToken()
 	}, [verifyToken, accessToken])
 
 	useEffect(() => {
 		if (isAuth) {
 			getUserSettings(isAuth, accessToken)
+		} else {
+			getUserSettings()
 		}
 	}, [getUserSettings, isAuth, accessToken])
 	return (

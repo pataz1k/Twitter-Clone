@@ -7,16 +7,21 @@ import useUserStore from '@/stores/user.store'
 
 const LoadingWrapper: FC<PropsWithChildren> = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(true)
-	const isSettingsLoading = useSettingsStore((state) => state.isLoading)
-	const isUserLoading = useUserStore((state) => state.isLoading)
+
+	// const {isLoading:isSettingsLoading} = useSettingsStore()
+	// const {isLoading:isUserLoading,isAuth} = useUserStore()
 
 	// useEffect(() => {
-	// 	setIsLoading(isSettingsLoading || isUserLoading)
-	// }, [isSettingsLoading, isUserLoading])
+	// 	if (isAuth) {
+	// 		setIsLoading(isSettingsLoading || isUserLoading)
+	// 	}
+	// }, [isSettingsLoading, isUserLoading,isAuth])
+
 
 	setTimeout(() => {
 		setIsLoading(false)
-	}, 5000)
+	}, 2000)
+
 
 	return (
 		<>

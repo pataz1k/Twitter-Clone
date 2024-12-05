@@ -10,10 +10,21 @@ import { Socket, io } from 'socket.io-client'
 
 import { getDMPageUrl } from '@/config/url.config'
 import useUserStore from '@/stores/user.store'
+import toast from 'react-hot-toast'
+import Link from 'next/link'
+import Notification from '@/components/ui/Notification'
 
 interface INotificationsContext {
 	notifications: string[]
 	readAllNotifications: () => void
+}
+interface INotify {
+	text: string
+	sender: {
+		_id: string;
+		username: string;
+		avatar: string;
+	  }
 }
 
 const initialValue = {
@@ -24,34 +35,45 @@ const initialValue = {
 const NotificationsContext = createContext<INotificationsContext>(initialValue)
 
 const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
-	const { accountID, accessToken } = useUserStore()
+	const { accountID, isAuth } = useUserStore()
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const [notifications, setNotifications] = useState<string[]>([])
-	const router = useRouter()
+	const {asPath} = useRouter()
+	
 
 	useEffect(() => {
-		const newSocket = io(process.env.SOCKET_URL)
-		setSocket(newSocket)
-
-		newSocket.on('connect', () => {
-			newSocket.emit('join', accountID)
-		})
-
-		return () => {
-			newSocket.disconnect()
+		if (isAuth && accountID) {
+			const newSocket = io(process.env.SOCKET_URL)
+			setSocket(newSocket)
+	
+			newSocket.on('connect', () => {
+				newSocket.emit('join', accountID)
+				console.log(`Join with id - ${accountID}`)
+			})
+	
+			return () => {
+				newSocket.disconnect()
+			}
 		}
-	}, [accountID, accessToken])
+	}, [accountID, isAuth])
 
 	useEffect(() => {
 		if (!socket) return
 
-		const notificationsHandler = (notify: any) => {
-			if (getDMPageUrl(notify.sender) !== router.asPath) {
-				// toast.info(notify.text, {
-				// 	onClick: () => {
-				// 		router.push(getDMPageUrl(notify.sender))
-				// 	},
-				// })
+		const notificationsHandler = (notify: INotify) => {
+			console.log(notify)
+			if (getDMPageUrl(notify.sender._id) !== asPath) {
+				toast((t) => (
+					<Notification 
+					  notify={notify} 
+					  onClose={() => toast.dismiss(t.id)} 
+					/>
+				  ), {
+					style: {
+						backgroundColor: 'transparent',
+					},
+					duration: 2000
+				  })
 			}
 		}
 
@@ -60,7 +82,7 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		return () => {
 			socket.off('notification', notificationsHandler)
 		}
-	}, [socket])
+	}, [socket,asPath])
 
 	const readAllNotifications = () => {
 		setNotifications([])

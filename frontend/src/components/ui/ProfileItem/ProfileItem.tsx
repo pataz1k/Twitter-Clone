@@ -19,7 +19,7 @@ const ProfileItem: FC<IProfileItem> = ({
 	return (
 		<Link
 			href={getUserPageUrl(username)}
-			className="flex gap-2 items-center mb-3 hover:bg-zinc-900 transition-colors py-2 pr-3 rounded-md"
+			className="flex gap-2 items-center mb-3 hover:bg-gray-900 transition-colors py-2 pr-3 rounded-md"
 		>
 			<Image
 				alt="user avatar"
