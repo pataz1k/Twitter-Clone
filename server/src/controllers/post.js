@@ -1,19 +1,19 @@
-const mongoose = require("mongoose");
-const Post = require("../models/Post");
-const User = require("../models/User");
-const Comment = require("../models/Comment");
-const asyncHandler = require("../middlewares/asyncHandler");
-const { sendNotification } = require("./notification");
+const mongoose = require('mongoose');
+const Post = require('../models/Post');
+const User = require('../models/User');
+const Comment = require('../models/Comment');
+const asyncHandler = require('../middlewares/asyncHandler');
+const { sendNotification } = require('./notification');
 
 exports.getTags = asyncHandler(async (req, res, next) => {
-  const tags = await Post.find().distinct("tags");
+  const tags = await Post.find().distinct('tags');
   res.status(200).json({ success: true, data: tags });
 });
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
   const posts = await Post.find().populate({
-    path: "user",
-    select: "username avatar",
+    path: 'user',
+    select: 'username avatar',
   });
 
   res.status(200).json({ success: true, data: posts });
@@ -22,16 +22,16 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 exports.getPost = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id)
     .populate({
-      path: "comments",
-      select: "text createdAt",
+      path: 'comments',
+      select: 'text createdAt',
       populate: {
-        path: "user",
-        select: "username avatar",
+        path: 'user',
+        select: 'username avatar',
       },
     })
     .populate({
-      path: "user",
-      select: "username avatar createdAt",
+      path: 'user',
+      select: 'username avatar createdAt',
     })
     .lean()
     .exec();
@@ -48,8 +48,7 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   const likes = post.likes.map((like) => like.toString());
   post.isLiked = likes.includes(req.user.id);
 
-  const retweets =
-    post.retweets && post.retweets.map((retweet) => retweet.toString());
+  const retweets = post.retweets && post.retweets.map((retweet) => retweet.toString());
   post.isRetweeted = retweets && retweets.includes(req.user.id);
 
   post.comments.forEach((comment) => {
@@ -74,16 +73,13 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     $push: { posts: post._id },
     $inc: { postCount: 1 },
   });
-  post = await post
-  .populate({ path: "user", select: "avatar username fullname" })
-  .execPopulate();
-  
-  await sendNotification(req.user.followers,`New post from ${req.user.username}`,req.user._id)
+  post = await post.populate({ path: 'user', select: 'avatar username fullname' }).execPopulate();
+
+  await sendNotification(req.user.followers, `New post from ${req.user.username}`, req.user._id);
   res.status(200).json({ success: true, data: post });
 });
 
 exports.toggleLike = asyncHandler(async (req, res, next) => {
-  // make sure that the post exists
   const post = await Post.findById(req.params.id);
 
   if (!post) {
@@ -102,9 +98,15 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
     post.likes.push(req.user.id);
     post.likesCount = post.likesCount + 1;
     await post.save();
+
+    // Отправляем уведомление только при добавлении лайка
+    const postOwner = await User.findById(post.user);
+    await sendNotification(
+      postOwner._id.toString(),
+      `${req.user.username} liked your post`,
+      req.user.id
+    );
   }
-  const user = User.fin
-  sendNotification(post.user._id,"New like to your post", req.user.id)
 
   res.status(200).json({ success: true, data: {} });
 });
@@ -164,7 +166,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   await post.save();
 
   comment = await comment
-    .populate({ path: "user", select: "avatar username fullname" })
+    .populate({ path: 'user', select: 'avatar username fullname' })
     .execPopulate();
 
   res.status(200).json({ success: true, data: comment });
@@ -173,7 +175,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
 exports.searchPost = asyncHandler(async (req, res, next) => {
   if (!req.query.caption && !req.query.tag) {
     return next({
-      message: "Please enter either caption or tag to search for",
+      message: 'Please enter either caption or tag to search for',
       statusCode: 400,
     });
   }
@@ -181,7 +183,7 @@ exports.searchPost = asyncHandler(async (req, res, next) => {
   let posts = [];
 
   if (req.query.caption) {
-    const regex = new RegExp(req.query.caption, "i");
+    const regex = new RegExp(req.query.caption, 'i');
     posts = await Post.find({ caption: regex });
   }
 

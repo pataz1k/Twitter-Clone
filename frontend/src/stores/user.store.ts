@@ -6,6 +6,7 @@ import { AuthService } from '@/services/auth.service'
 interface IUserStore {
 	isLoading: boolean
 	username: string
+	avatar: string
 	accountID: string
 	accessToken: string
 	isAuth: boolean
@@ -20,6 +21,7 @@ const useUserStore = create<IUserStore>()(
 		devtools((set, get) => ({
 			isLoading: true,
 			username: '',
+			avatar: '',
 			accessToken: '',
 			isAuth: false,
 			accountID: '',
@@ -43,6 +45,7 @@ const useUserStore = create<IUserStore>()(
 							isLoading: false,
 							username: meRes.data.data.username,
 							accountID: meRes.data.data._id,
+							avatar: meRes.data.data.avatar,
 						})
 					} else {
 						set({ isAuth: false, isLoading: false })
@@ -56,7 +59,7 @@ const useUserStore = create<IUserStore>()(
 				await get().verifyToken()
 			},
 		})),
-		{ name: 'user-store', version: 2 }
+		{ name: 'user-store', version: 3 }
 	)
 )
 

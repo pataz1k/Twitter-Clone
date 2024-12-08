@@ -10,11 +10,11 @@ function initializeSocket(server) {
       origin: '*',
     },
   });
-  io.engine.on("connection_error", (err) => {
-    console.log(err.req);      // the request object
-    console.log(err.code);     // the error code, for example 1
-    console.log(err.message);  // the error message, for example "Session ID unknown"
-    console.log(err.context);  // some additional error context
+  io.engine.on('connection_error', (err) => {
+    console.log(err.req); // the request object
+    console.log(err.code); // the error code, for example 1
+    console.log(err.message); // the error message, for example "Session ID unknown"
+    console.log(err.context); // some additional error context
   });
 
   io.on('connection', (socket) => {
@@ -49,6 +49,17 @@ function initializeSocket(server) {
         console.error('Error handling message:', err);
       }
     });
+
+    // Add a new event listener for 'notification' events
+    socket.on('notification', async (notificationData) => {
+      try {
+        // Emit the notification to the appropriate user
+        io.to(notificationData.receiver).emit('notification', notificationData);
+        console.log(`Notification sent to ${notificationData.receiver}`);
+      } catch (err) {
+        console.error('Error handling notification:', err);
+      }
+    });
   });
 
   return io;
@@ -62,4 +73,3 @@ function getIO() {
 }
 
 module.exports = { initializeSocket, getIO };
-

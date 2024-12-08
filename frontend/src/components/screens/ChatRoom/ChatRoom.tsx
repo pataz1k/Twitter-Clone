@@ -7,7 +7,6 @@ import MaterialIcon from '@/components/ui/MaterialIcons'
 
 import { IMessage } from '@/shared/types/message.types'
 
-import styles from './ChatRoom.module.scss'
 import { MessageService } from '@/services/message.service'
 import { UserService } from '@/services/user.service'
 import useUserStore from '@/stores/user.store'
@@ -97,57 +96,63 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 
 	return (
 		<Meta title={`Chat with ${receiverUsername}`}>
-			<div className="flex flex-col h-screen w-full bg-transparent text-gray-100">
-				<div className="bg-gray-800 p-4 border-b border-gray-700 flex gap-2">
+			<div className="flex flex-col h-screen bg-gray-900 text-gray-100">
+				<header className="bg-gray-800 p-4 flex items-center gap-4 border-b border-gray-700">
 					<BackButton />
-					<h2 className="text-xl font-semibold">
+					<h2 className="text-xl font-semibold flex-grow">
 						Chat with {receiverUsername}
 					</h2>
-				</div>
-				<div className="flex-grow overflow-y-auto p-4">
-					<div className="flex flex-col gap-4">
-						{messages.map((message) => (
-							<div
-								key={message._id}
-								className={`flex ${message.sender === accountID ? 'justify-end' : 'justify-start'}`}
-							>
-								<div
-									className={`rounded-lg px-4 py-2 border border-transparent max-w-[80%] ${
-										message.sender === accountID
-											? 'bg-blue-600 text-white'
-											: 'bg-gray-700 text-gray-100'
-									}`}
-								>
-									<p>{message.message}</p>
-									<p className="text-xs mt-1 opacity-75">
-										{new Date(message.timestamp).toLocaleString()}
-									</p>
-								</div>
-							</div>
-						))}
-						<div ref={messagesEndRef} />
-					</div>
-				</div>
-				<div className="bg-gray-800 p-4 flex gap-2">
-					<input
-						type="text"
-						placeholder="Type a message..."
-						value={newMessage}
-						onChange={(e) => setNewMessage(e.target.value)}
-						onKeyDown={(e) => {
-							if (e.key === 'Enter') {
-								handleSend()
-							}
-						}}
-						className="flex-1 rounded-full px-4 py-2 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-					/>
-					<button
-						onClick={handleSend}
-						className="bg-blue-600 text-white rounded-full px-6 py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-					>
-						Send
+					<button disabled className="text-gray-400 hover:text-gray-200">
+						<MaterialIcon name="MdMoreVert" />
 					</button>
-				</div>
+				</header>
+				<main className="flex-grow overflow-y-auto p-4 space-y-4">
+					{messages.map((message) => (
+						<div
+							key={message._id}
+							className={`flex ${message.sender === accountID ? 'justify-end' : 'justify-start'}`}
+						>
+							<div
+								className={`rounded-lg px-4 py-2 max-w-[70%] ${
+									message.sender === accountID
+										? 'bg-blue-600 text-white'
+										: 'bg-gray-700 text-gray-100'
+								}`}
+							>
+								<p className="break-words">{message.message}</p>
+								<p className="text-xs mt-1 opacity-75">
+									{new Date(message.timestamp).toLocaleString()}
+								</p>
+							</div>
+						</div>
+					))}
+					<div ref={messagesEndRef} />
+				</main>
+				<footer className="bg-gray-800 p-4">
+					<div className="flex items-center gap-2 bg-gray-700 rounded-full p-2">
+						<button disabled className="text-gray-400 hover:text-gray-200 p-2">
+							<MaterialIcon name="MdAttachFile" />
+						</button>
+						<input
+							type="text"
+							placeholder="Type a message..."
+							value={newMessage}
+							onChange={(e) => setNewMessage(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									handleSend()
+								}
+							}}
+							className="flex-grow bg-transparent text-gray-100 focus:outline-none"
+						/>
+						<button
+							onClick={handleSend}
+							className="bg-blue-600 text-white rounded-full p-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						>
+							<MaterialIcon name="MdSend" />
+						</button>
+					</div>
+				</footer>
 			</div>
 		</Meta>
 	)

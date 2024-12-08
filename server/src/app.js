@@ -34,7 +34,7 @@ var corsOptions = {
 };
 
 //! All app uses
-app.use('/api/', apiLimiter);
+// app.use('/api/', apiLimiter);
 app.use(cors());
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
@@ -48,4 +48,3 @@ const PORT = 8080;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app };
-

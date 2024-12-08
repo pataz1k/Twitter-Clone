@@ -1,30 +1,35 @@
 .wrap {
-	@apply flex  flex-col gap-5;
+	@apply flex flex-col gap-5;
 }
+
 .buttonWrap {
 	@apply flex gap-4;
 
-	> button,a {
-		// Базовые стили для кнопки
-		@apply bg-transparent border-none flex gap-2 cursor-default;
+	> button,
+	a {
+		@apply bg-transparent border-none flex items-center gap-2 cursor-default;
 
-		// Стиль для svg по умолчанию
 		> svg {
-			@apply fill-white size-6 cursor-pointer; // Белый цвет по умолчанию
-			transition: fill 0.3s ease; // Плавный переход цвета
+			@apply fill-white size-6 cursor-pointer;
+			transition: fill 0.3s ease;
 		}
 
-		// Стиль для активного состояния
+		> span {
+			@apply text-zinc-400;
+		}
+
 		&.activeLike {
 			> svg {
-				fill: red !important; // Красный цвет, когда кнопка активна
+				fill: red !important;
 			}
 		}
+
 		&.activeRetweet {
 			> svg {
-				fill: #2563eb !important; // Красный цвет, когда кнопка активна
+				fill: #2563eb !important;
 			}
 		}
+
 		&:disabled {
 			@apply cursor-not-allowed;
 			> svg {
