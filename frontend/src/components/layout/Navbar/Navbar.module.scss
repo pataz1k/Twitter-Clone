@@ -1,15 +1,28 @@
+.navbar {
+	height: 100%;
+}
+
+.navbarContent {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+	padding: 1rem;
+}
+
 .navbarItem {
 	@apply flex gap-2 text-center text-white items-center bg-transparent p-3 rounded-xl hover:bg-gray-800 transition-colors text-xl;
 	> svg {
 		@apply size-9;
 	}
 }
+
 .active {
 	@apply font-bold;
 }
 
 .logoutButton {
-	@apply mt-auto py-2 px-4 bg-blue-500  hover:bg-blue-700 text-white rounded transition-colors flex items-center gap-2 justify-center;
+	@apply py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded transition-colors flex items-center gap-2 justify-center;
 
 	> svg {
 		@apply size-5;

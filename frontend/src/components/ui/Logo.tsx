@@ -6,7 +6,7 @@ import logo from '@/public/logo.svg'
 
 const Logo: FC = () => {
 	return (
-		<li className="p-3">
+		<li className="p-3 list-none">
 			<Link href="/">
 				<Image
 					src={logo}

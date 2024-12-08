@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
 	FC,
@@ -6,13 +7,13 @@ import {
 	useEffect,
 	useState,
 } from 'react'
+import toast from 'react-hot-toast'
 import { Socket, io } from 'socket.io-client'
+
+import Notification from '@/components/ui/Notification'
 
 import { getDMPageUrl } from '@/config/url.config'
 import useUserStore from '@/stores/user.store'
-import toast from 'react-hot-toast'
-import Link from 'next/link'
-import Notification from '@/components/ui/Notification'
 
 interface INotificationsContext {
 	notifications: string[]
@@ -21,10 +22,10 @@ interface INotificationsContext {
 interface INotify {
 	text: string
 	sender: {
-		_id: string;
-		username: string;
-		avatar: string;
-	  }
+		_id: string
+		username: string
+		avatar: string
+	}
 }
 
 const initialValue = {
@@ -38,19 +39,18 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 	const { accountID, isAuth } = useUserStore()
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const [notifications, setNotifications] = useState<string[]>([])
-	const {asPath} = useRouter()
-	
+	const { asPath } = useRouter()
 
 	useEffect(() => {
 		if (isAuth && accountID) {
 			const newSocket = io(process.env.SOCKET_URL)
 			setSocket(newSocket)
-	
+
 			newSocket.on('connect', () => {
 				newSocket.emit('join', accountID)
 				console.log(`Join with id - ${accountID}`)
 			})
-	
+
 			return () => {
 				newSocket.disconnect()
 			}
@@ -63,17 +63,22 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		const notificationsHandler = (notify: INotify) => {
 			console.log(notify)
 			if (getDMPageUrl(notify.sender._id) !== asPath) {
-				toast((t) => (
-					<Notification 
-					  notify={notify} 
-					  onClose={() => toast.dismiss(t.id)} 
-					/>
-				  ), {
-					style: {
-						backgroundColor: 'transparent',
-					},
-					duration: 2000
-				  })
+				toast(
+					(t) => (
+						<Notification notify={notify} onClose={() => toast.dismiss(t.id)} />
+					),
+					{
+						style: {
+							backgroundColor: 'transparent',
+							border: 'none',
+							boxShadow: 'none',
+							padding: '0',
+							margin: '0',
+							borderRadius: '0',
+						},
+						duration: 2000,
+					}
+				)
 			}
 		}
 
@@ -82,7 +87,7 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		return () => {
 			socket.off('notification', notificationsHandler)
 		}
-	}, [socket,asPath])
+	}, [socket, asPath])
 
 	const readAllNotifications = () => {
 		setNotifications([])

@@ -15,7 +15,7 @@ const NavbarItem: FC<{ item: INavbarItem }> = ({ item }) => {
 	return (
 		<motion.li
 			initial={{ scale: 1 }}
-			whileHover={{ scale: 1.1 }}
+			whileHover={{ scale: 1.05 }}
 			className={cn({ [styles.active]: pathname === item.link })}
 		>
 			<Link href={item.link} className={styles.navbarItem}>

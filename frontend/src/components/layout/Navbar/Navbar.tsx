@@ -24,27 +24,29 @@ const Navbar: FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-screen p-5 ">
-			<div className="flex-grow">
-				<ul className="list-none">
+		<nav className={styles.navbar}>
+			<div className={styles.navbarContent}>
+				<div>
 					<Logo />
-					{NavbarData.items.map((item) => (
-						<NavbarItem key={item.title} item={item} />
-					))}
-				</ul>
+					<ul className="list-none">
+						{NavbarData.items.map((item) => (
+							<NavbarItem key={item.title} item={item} />
+						))}
+					</ul>
+				</div>
+				{isAuth ? (
+					<button onClick={logout} className={styles.logoutButton}>
+						<MaterialIcon name="MdLogout" />
+						Logout
+					</button>
+				) : (
+					<Link href="/auth" className={styles.logoutButton}>
+						<MaterialIcon name="MdLogin" />
+						Login
+					</Link>
+				)}
 			</div>
-			{isAuth ? (
-				<button onClick={logout} className={styles.logoutButton}>
-					<MaterialIcon name="MdLogout" />
-					Logout
-				</button>
-			) : (
-				<Link href="/auth" className={styles.logoutButton}>
-					<MaterialIcon name="MdLogin" />
-					Login
-				</Link>
-			)}
-		</div>
+		</nav>
 	)
 }
 
