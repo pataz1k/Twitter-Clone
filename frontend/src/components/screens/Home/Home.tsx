@@ -7,7 +7,7 @@ import CreatePost from '@/components/ui/CreatePost/CreatePost'
 import ImageUpload from '@/components/ui/ImageUpload'
 import LinkButton from '@/components/ui/LinkButton'
 
-import { ButtonColor } from '@/constants/buttonColor.enum'
+import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 import { ImagesService } from '@/services/images.service'
 import { PostService } from '@/services/post.service'
 import useUserStore from '@/stores/user.store'
@@ -56,7 +56,7 @@ const Home: FC = () => {
 					<div className="flex justify-center gap-2 items-center p-5">
 						<h1>You need to be log in to create new post.</h1>
 						<LinkButton
-							color={ButtonColor.PRIMARY}
+							color={LinkButtonColor.PRIMARY}
 							href={'/auth'}
 							text="Login"
 						/>

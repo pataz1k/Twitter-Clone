@@ -1,4 +1,4 @@
-export enum ButtonColor {
+export enum LinkButtonColor {
 	PRIMARY = 'primary',
 	SECONDARY = 'secondary',
 }

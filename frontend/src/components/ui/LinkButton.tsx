@@ -2,12 +2,12 @@ import cn from 'classnames'
 import Link from 'next/link'
 import { FC } from 'react'
 
-import { ButtonColor } from '@/constants/buttonColor.enum'
+import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 
 interface ILinkButton {
 	text: string
 	href: string
-	color: ButtonColor
+	color: LinkButtonColor
 }
 
 const LinkButton: FC<ILinkButton> = ({ text, href, color }) => {
@@ -16,8 +16,9 @@ const LinkButton: FC<ILinkButton> = ({ text, href, color }) => {
 			className={cn(
 				'p-2 px-4 rounded-2xl transition-colors h-11 flex items-center justify-center',
 				{
-					'bg-slate-600 hover:bg-slate-700': color === ButtonColor.SECONDARY,
-					'bg-blue-500 hover:bg-blue-700': color === ButtonColor.PRIMARY,
+					'bg-slate-600 hover:bg-slate-700':
+						color === LinkButtonColor.SECONDARY,
+					'bg-blue-500 hover:bg-blue-700': color === LinkButtonColor.PRIMARY,
 				}
 			)}
 			href={href}

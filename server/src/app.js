@@ -7,6 +7,7 @@ const user = require('./routes/user');
 const post = require('./routes/post');
 const upload = require('./routes/upload');
 const message = require('./routes/message');
+const notification = require('./routes/notification'); // Added notification route
 const connectToDb = require('./utils/db');
 const errorHandler = require('./middlewares/errorHandler');
 const rateLimit = require('express-rate-limit');
@@ -41,6 +42,7 @@ app.use('/api/v1/users', user);
 app.use('/api/v1/posts', post);
 app.use('/api/v1/upload', upload);
 app.use('/api/v1/messages', message);
+app.use('/api/v1/notifications', notification); // Added notification route
 
 app.use(errorHandler);
 

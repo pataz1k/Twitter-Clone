@@ -10,7 +10,7 @@ import ProfileSkeleton from '@/components/ui/ProfileSkeleton/ProfileSkeleton'
 
 import { IProfile } from '@/shared/types/profile.types'
 
-import { ButtonColor } from '@/constants/buttonColor.enum'
+import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 import { UserService } from '@/services/user.service'
 import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
@@ -64,7 +64,7 @@ const UserPage: FC = () => {
 			<div className="flex flex-col items-center justify-center">
 				<p>User Not found</p>{' '}
 				<LinkButton
-					color={ButtonColor.PRIMARY}
+					color={LinkButtonColor.PRIMARY}
 					text="Go to Main Page"
 					href="/"
 				/>

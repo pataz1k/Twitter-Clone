@@ -14,7 +14,7 @@ import MaterialIcon from '../ui/MaterialIcons'
 
 import styles from './Profile.module.scss'
 import { getDMPageUrl } from '@/config/url.config'
-import { ButtonColor } from '@/constants/buttonColor.enum'
+import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 import { modalTypeEnum } from '@/constants/modalType.enum'
 import { UserService } from '@/services/user.service'
 
@@ -138,7 +138,7 @@ const ProfileData: FC<IProfileData> = ({
 						) : (
 							<div className="flex items-center mr-2">
 								<LinkButton
-									color={ButtonColor.SECONDARY}
+									color={LinkButtonColor.SECONDARY}
 									href="/profile/settings"
 									text="Edit Profile"
 								/>

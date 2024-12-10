@@ -1,6 +1,7 @@
 const { Server } = require('socket.io');
 const Message = require('./models/Message');
 const User = require('./models/User');
+const Notification = require('./models/Notification');
 
 let io;
 
@@ -41,10 +42,6 @@ function initializeSocket(server) {
 
         // Emit message to sender and receiver
         io.to(message.sender).to(message.receiver).emit('message', newMessage);
-
-        // Send notification
-        const { sendNotification } = require('./controllers/notification');
-        await sendNotification(message.receiver, message.message, message.sender);
       } catch (err) {
         console.error('Error handling message:', err);
       }
@@ -53,6 +50,14 @@ function initializeSocket(server) {
     // Add a new event listener for 'notification' events
     socket.on('notification', async (notificationData) => {
       try {
+        // Save the notification to the database
+        const notification = new Notification({
+          receiver: notificationData.receiver,
+          sender: notificationData.sender._id,
+          message: notificationData.text,
+        });
+        await notification.save();
+
         // Emit the notification to the appropriate user
         io.to(notificationData.receiver).emit('notification', notificationData);
         console.log(`Notification sent to ${notificationData.receiver}`);

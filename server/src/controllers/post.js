@@ -75,8 +75,21 @@ exports.addPost = asyncHandler(async (req, res, next) => {
   });
   post = await post.populate({ path: 'user', select: 'avatar username fullname' }).execPopulate();
 
-  await sendNotification(req.user.followers, `New post from ${req.user.username}`, req.user._id);
-  res.status(200).json({ success: true, data: post });
+  // Fetch the user's followers
+  const userWithFollowers = await User.findById(req.user.id).select('followers');
+
+  // Send notification to all followers
+  if (userWithFollowers.followers.length > 0) {
+    await sendNotification(
+      userWithFollowers.followers,
+      `${req.user.username} has created a new post`,
+      req.user.id
+    );
+  }
+
+  res
+    .status(200)
+    .json({ success: true, data: post, notificationSent: userWithFollowers.followers.length > 0 });
 });
 
 exports.toggleLike = asyncHandler(async (req, res, next) => {
@@ -101,11 +114,13 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
 
     // Отправляем уведомление только при добавлении лайка
     const postOwner = await User.findById(post.user);
-    await sendNotification(
-      postOwner._id.toString(),
-      `${req.user.username} liked your post`,
-      req.user.id
-    );
+    if (postOwner._id.toString() !== req.user.id) {
+      await sendNotification(
+        postOwner._id.toString(),
+        `${req.user.username} liked your post`,
+        req.user.id
+      );
+    }
   }
 
   res.status(200).json({ success: true, data: {} });

@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import LinkButton from '@/components/ui/LinkButton'
 
-import { ButtonColor } from '@/constants/buttonColor.enum'
+import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 import Meta from '@/utils/meta/Meta'
 
 const NotFound: FC = () => {
@@ -13,7 +13,7 @@ const NotFound: FC = () => {
 					Page what you looking for is not found!
 				</h1>
 				<LinkButton
-					color={ButtonColor.PRIMARY}
+					color={LinkButtonColor.PRIMARY}
 					text="Go to main page"
 					href="/"
 				/>
