@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FC, use } from 'react'
 
 import { IUser } from '@/shared/types/post.types'
+
 import { getUserPageUrl } from '@/config/url.config'
 
 interface IProfileItem {
@@ -11,11 +12,7 @@ interface IProfileItem {
 	username: string
 }
 
-const ProfileItem: FC<IProfileItem> = ({
-	id,
-	avatar,
-	username,
-}) => {
+const ProfileItem: FC<IProfileItem> = ({ id, avatar, username }) => {
 	return (
 		<Link
 			href={getUserPageUrl(username)}
@@ -24,9 +21,10 @@ const ProfileItem: FC<IProfileItem> = ({
 			<Image
 				alt="user avatar"
 				src={avatar}
-				width={30}
-				height={30}
-				className="rounded-full"
+				width={32}
+				height={32}
+				quality={100}
+				className="rounded-full w-8 h-8 object-cover"
 			/>
 			<span className="font-bold">{username}</span>
 		</Link>

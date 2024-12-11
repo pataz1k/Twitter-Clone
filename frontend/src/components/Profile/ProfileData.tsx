@@ -84,7 +84,7 @@ const ProfileData: FC<IProfileData> = ({
 						width={130}
 						height={130}
 						priority
-						className="rounded-full w-32 h-32 mt-[-65px] border-[6px] border-black"
+						className="rounded-full w-32 h-32 mt-[-65px] border-[6px] border-black object-cover"
 					/>
 					<div className="flex justify-between">
 						<div>
