@@ -17,10 +17,17 @@ export const NotificationService = {
 		})
 	},
 	async markNotificationsAsRead(token: string) {
-		return axiosClassic.post(getNotificationsUrl('mark-all-read'), {
+		return axiosClassic.get(getNotificationsUrl('mark-all-read'), {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
 		})
 	},
+	async markNotificationAsReadById(token:string, id:string) {
+		return axiosClassic.get(getNotificationsUrl(`mark-as-read/${id}`), {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	}
 }

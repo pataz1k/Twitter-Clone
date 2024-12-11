@@ -13,51 +13,57 @@ import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
 
 interface IPostResponse {
-	success: boolean
-	data: IPost
+  success: boolean
+  data: IPost
 }
 
-// PostService.addComment(router.query.id as string,"1 more comment",accessToken).then(res => console.log(res)).catch(err => console.log(err))
-
 const DetailPostPage: FC = () => {
-	const router = useRouter()
-	const { accessToken, isAuth } = useUserStore()
+  const router = useRouter()
+  const { accessToken, isAuth } = useUserStore()
 
-	const { isSuccess, isLoading, data, refetch } = useQuery(
-		['get detail post'],
-		() => PostService.getPostById(router.query.id as string, accessToken),
-		{
-			select: ({ data }: { data: IPostResponse }) => data,
-			enabled: isAuth && router.query.id !== undefined,
-		}
-	)
+  const { isSuccess, isLoading, data, refetch } = useQuery(
+    ['get detail post', router.query.id],
+    () => PostService.getPostById(router.query.id as string, accessToken),
+    {
+      select: ({ data }: { data: IPostResponse }) => data,
+      enabled: isAuth && router.query.id !== undefined,
+    }
+  )
 
-	console.log(data?.data)
+  console.log('API Response:', data)
 
-	if (!isSuccess || isLoading) {
-		return <h1>Loading...</h1>
-	}
+  if (!isAuth) {
+    return <h1>Please log in to view this post</h1>
+  }
 
-	if (!data?.data) {
-		return null
-	}
+  if (isLoading) {
+    return <h1>Loading...</h1>
+  }
 
-	return (
-		<div>
-			<Meta title={`Post from ${data.data.user.username}`}>
-				<Heading
-					title={`Post from ${data.data.user.username}`}
-					className="mb-4"
-				/>
-				<PostItem post={data?.data!} refetchPosts={refetch} />
-				<CommentsList
-					comments={data.data.comments}
-					postId={data.data._id}
-					refetchPosts={refetch}
-				/>
-			</Meta>
-		</div>
-	)
+  if (!isSuccess || !data?.data) {
+    return <h1>Error loading post. Please try again later.</h1>
+  }
+
+  const post = data.data
+  const username = post.user?.username || 'Unknown User'
+
+  return (
+    <div>
+      <Meta title={`Post from ${username}`}>
+        <Heading
+          title={`Post from ${username}`}
+          className="mb-4"
+        />
+        <PostItem post={post} refetchPosts={refetch} />
+        <CommentsList
+          comments={post.comments || []}
+          postId={post._id}
+          refetchPosts={refetch}
+        />
+      </Meta>
+    </div>
+  )
 }
 
 export default DetailPostPage
+

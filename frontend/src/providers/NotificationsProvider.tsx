@@ -10,22 +10,15 @@ import {
 import toast from 'react-hot-toast'
 import { Socket, io } from 'socket.io-client'
 
-import Notification from '@/components/ui/Notification'
+import Notification, { INotify } from '@/components/ui/Notification'
 
 import { getDMPageUrl } from '@/config/url.config'
 import useUserStore from '@/stores/user.store'
+import useNotificationStore from '@/stores/notification.store'
 
 interface INotificationsContext {
 	notifications: string[]
 	readAllNotifications: () => void
-}
-interface INotify {
-	text: string
-	sender: {
-		_id: string
-		username: string
-		avatar: string
-	}
 }
 
 const initialValue = {
@@ -36,7 +29,8 @@ const initialValue = {
 const NotificationsContext = createContext<INotificationsContext>(initialValue)
 
 const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
-	const { accountID, isAuth } = useUserStore()
+	const { accountID, isAuth, accessToken } = useUserStore()
+	const {updateNotificationsCount} = useNotificationStore()
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const [notifications, setNotifications] = useState<string[]>([])
 	const { asPath } = useRouter()
@@ -62,24 +56,23 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 
 		const notificationsHandler = (notify: INotify) => {
 			console.log(notify)
-			if (getDMPageUrl(notify.sender._id) !== asPath) {
-				toast(
-					(t) => (
-						<Notification notify={notify} onClose={() => toast.dismiss(t.id)} />
-					),
-					{
-						style: {
-							backgroundColor: 'transparent',
-							border: 'none',
-							boxShadow: 'none',
-							padding: '0',
-							margin: '0',
-							borderRadius: '0',
-						},
-						duration: 2000,
-					}
-				)
-			}
+			updateNotificationsCount(accessToken)
+			toast(
+				(t) => (
+					<Notification notify={notify} onClose={() => toast.dismiss(t.id)} />
+				),
+				{
+					style: {
+						backgroundColor: 'transparent',
+						border: 'none',
+						boxShadow: 'none',
+						padding: '0',
+						margin: '0',
+						borderRadius: '0',
+					},
+					duration: 2000,
+				}
+			)
 		}
 
 		socket.on('notification', notificationsHandler)
@@ -87,7 +80,7 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		return () => {
 			socket.off('notification', notificationsHandler)
 		}
-	}, [socket, asPath])
+	}, [socket, asPath,accessToken,updateNotificationsCount])
 
 	const readAllNotifications = () => {
 		setNotifications([])

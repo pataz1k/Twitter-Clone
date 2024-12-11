@@ -1,15 +1,15 @@
 import Link from 'next/link'
 import { FC } from 'react'
 
-import { getUserPageUrl } from '@/config/url.config'
 
-interface INotify {
+export interface INotify {
 	text: string
 	sender: {
 		_id: string
 		username: string
 		avatar: string
 	}
+	link:string
 }
 
 interface NotificationProps {
@@ -48,7 +48,7 @@ const Notification: FC<NotificationProps> = ({ notify, onClose }) => {
 				</svg>
 			</div>
 			<div className="mt-4 flex justify-end">
-				<Link href={getUserPageUrl(notify.sender.username)} passHref>
+				<Link href={notify.link} passHref>
 					<button
 						onClick={onClose}
 						className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
