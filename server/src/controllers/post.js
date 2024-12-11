@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Comment = require('../models/Comment');
 const asyncHandler = require('../middlewares/asyncHandler');
 const { sendNotification } = require('./notification');
+const {getPostLink} = require('../utils/link')
 
 exports.getTags = asyncHandler(async (req, res, next) => {
   const tags = await Post.find().distinct('tags');
@@ -83,7 +84,8 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     await sendNotification(
       userWithFollowers.followers,
       `${req.user.username} has created a new post`,
-      req.user.id
+      req.user.id,
+      getPostLink(post._id)
     );
   }
 
@@ -118,7 +120,8 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
       await sendNotification(
         postOwner._id.toString(),
         `${req.user.username} liked your post`,
-        req.user.id
+        req.user.id,
+        getPostLink(post._id)
       );
     }
   }

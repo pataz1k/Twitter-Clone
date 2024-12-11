@@ -2,7 +2,7 @@ const { getIO } = require('../socketManager');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 
-exports.sendNotification = async (receivers, message, senderId) => {
+exports.sendNotification = async (receivers, message, senderId, link) => {
   try {
     const io = getIO();
     const user = await User.findOne({ _id: senderId });
@@ -17,16 +17,17 @@ exports.sendNotification = async (receivers, message, senderId) => {
         username: user.username,
         avatar: user.avatar,
       },
+      link: link
     };
 
     if (Array.isArray(receivers)) {
       for (const receiver of receivers) {
-        await saveNotification(receiver.toString(), senderId, message);
+        await saveNotification(receiver.toString(), senderId, message,link);
         io.to(receiver.toString()).emit('notification', notificationData);
       }
       console.log(`Notification sent to multiple receivers: ${receivers.join(', ')}`);
     } else {
-      await saveNotification(receivers, senderId, message);
+      await saveNotification(receivers, senderId, message,link);
       io.to(receivers).emit('notification', notificationData);
       console.log(`Notification sent to ${receivers}`);
     }
@@ -35,11 +36,12 @@ exports.sendNotification = async (receivers, message, senderId) => {
   }
 };
 
-async function saveNotification(receiver, sender, message) {
+async function saveNotification(receiver, sender, message, link) {
   const notification = new Notification({
     receiver,
     sender,
     message,
+    link,
   });
   await notification.save();
 }
@@ -99,3 +101,26 @@ exports.markAllNotificationsAsRead = async (req, res) => {
     });
   }
 };
+
+exports.markAsReadById = async (req,res) => {
+  try {
+
+    const notification = await Notification.findById(req.params.id)
+
+    notification.read = true;
+
+    await notification.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Notification marked as read',
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error marking notification as read',
+      error: error.message,
+    });
+  }
+}
