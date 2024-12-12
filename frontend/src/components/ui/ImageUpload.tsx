@@ -138,7 +138,7 @@ const ImageUpload: FC<ImageUploadModalProps> = ({
 									<div className="grid grid-cols-3 gap-4 mt-4">
 										{previews.map((preview, index) => (
 											<div key={index} className="relative">
-												<Image
+												<img
 													src={preview}
 													alt={`Preview ${index + 1}`}
 													className="w-full h-24 object-cover rounded"

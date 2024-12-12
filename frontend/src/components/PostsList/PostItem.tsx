@@ -15,10 +15,13 @@ import { getPostUrl } from '@/config/url.config'
 import { PostService } from '@/services/post.service'
 import useUserStore from '@/stores/user.store'
 
-const PostItem: FC<{ post: IPost; refetchPosts: () => void }> = ({
-	post,
-	refetchPosts,
-}) => {
+interface IPostItem {
+	post: IPost
+	refetchPosts: () => void
+	isDetail?: boolean
+}
+
+const PostItem: FC<IPostItem> = ({ post, refetchPosts, isDetail = false }) => {
 	const { accountID, isAuth, accessToken } = useUserStore()
 	const [isLiked, setIsLiked] = useState(post.likes.includes(accountID))
 	const [isRetweeted, setIsRetweeted] = useState(
@@ -81,10 +84,17 @@ const PostItem: FC<{ post: IPost; refetchPosts: () => void }> = ({
 						<MaterialIcon name="MdReply" />
 						<span>{post.retweetCount}</span>
 					</button>
-					<Link href={getPostUrl(post._id)}>
-						<MaterialIcon name="MdModeComment" />
-						<span>{post.commentsCount}</span>
-					</Link>
+					{!isDetail ? (
+						<Link href={getPostUrl(post._id)}>
+							<MaterialIcon name="MdModeComment" />
+							<span>{post.commentsCount}</span>
+						</Link>
+					) : (
+						<button className="cursor-default">
+							<MaterialIcon name="MdModeComment" />
+							<span>{post.commentsCount}</span>
+						</button>
+					)}
 				</div>
 			</div>
 		</div>

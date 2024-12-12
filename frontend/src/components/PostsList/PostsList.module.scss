@@ -7,10 +7,10 @@
 
 	> button,
 	a {
-		@apply bg-transparent border-none flex items-center gap-2 cursor-default;
+		@apply bg-transparent border-none flex items-center gap-2;
 
 		> svg {
-			@apply fill-white size-6 cursor-pointer;
+			@apply fill-white size-6;
 			transition: fill 0.3s ease;
 		}
 
