@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { AnimatePresence } from 'motion/react'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Socket, io } from 'socket.io-client'
 
@@ -7,6 +7,7 @@ import MaterialIcon from '@/components/ui/MaterialIcons'
 
 import { IMessage } from '@/shared/types/message.types'
 
+import ChatMenu from './ChatMenu'
 import { MessageService } from '@/services/message.service'
 import { UserService } from '@/services/user.service'
 import useUserStore from '@/stores/user.store'
@@ -18,12 +19,13 @@ interface IChatRoom {
 
 const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 	const { username, accountID, accessToken } = useUserStore()
-	const [socket, setSocket] = useState<Socket | null>(null)
-	const [messages, setMessages] = useState<IMessage[]>([])
-	const [newMessage, setNewMessage] = useState('')
-	const messagesEndRef = useRef<HTMLDivElement>(null)
 	const [receiverUsername, setReceiverUsername] = useState('')
-	const router = useRouter()
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+	const [newMessage, setNewMessage] = useState('')
+	const [messages, setMessages] = useState<IMessage[]>([])
+
+	const [socket, setSocket] = useState<Socket | null>(null)
+	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		if (accessToken && receiverAccountID) {
@@ -96,15 +98,30 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 
 	return (
 		<Meta title={`Chat with ${receiverUsername}`}>
-			<div className="flex flex-col h-screen bg-gray-900 text-gray-100">
+			<div className="flex flex-col h-screen bg-gray-900 bg-opacity-30 text-gray-100">
 				<header className="bg-gray-800 p-4 flex items-center gap-4 border-b border-gray-700">
 					<BackButton />
 					<h2 className="text-xl font-semibold flex-grow">
 						Chat with {receiverUsername}
 					</h2>
-					<button disabled className="text-gray-400 hover:text-gray-200">
-						<MaterialIcon name="MdMoreVert" />
-					</button>
+					<div className="relative">
+						<button
+							onClick={() => {
+								setIsDropdownOpen(!isDropdownOpen)
+							}}
+							className="text-gray-400 hover:text-gray-200"
+						>
+							<MaterialIcon name="MdMoreVert" />
+						</button>
+						<AnimatePresence>
+							{isDropdownOpen && (
+								<ChatMenu
+									receiverAccountID={receiverUsername}
+									onClose={() => setIsDropdownOpen(false)}
+								/>
+							)}
+						</AnimatePresence>
+					</div>
 				</header>
 				<main className="flex-grow overflow-y-auto p-4 space-y-4">
 					{messages.map((message) => (

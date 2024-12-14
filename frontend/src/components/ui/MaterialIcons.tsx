@@ -1,11 +1,16 @@
-import { FC } from "react";
-import * as MaterialIcons from "react-icons/md";
+import { FC } from 'react'
+import * as MaterialIcons from 'react-icons/md'
 
-import { TypeMaterialIconName } from "../../shared/types/icon.types";
+import { TypeMaterialIconName } from '../../shared/types/icon.types'
 
-const MaterialIcon: FC<{ name: TypeMaterialIconName }> = ({ name }) => {
-  const IconComponent = MaterialIcons[name];
+interface IMaterialIcon {
+	name: TypeMaterialIconName
+	classname?: string
+}
 
-  return <IconComponent /> || <MaterialIcons.MdDragIndicator />;
-};
-export default MaterialIcon;
+const MaterialIcon: FC<IMaterialIcon> = ({ name, classname }) => {
+	const IconComponent = MaterialIcons[name]
+
+	return <IconComponent className={classname} />
+}
+export default MaterialIcon

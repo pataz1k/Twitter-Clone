@@ -1,4 +1,5 @@
 import cn from 'classnames'
+import { AnimatePresence } from 'motion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
@@ -8,6 +9,7 @@ import FollowersModal from '@/components/ui/FollowersModal/FollowersModal'
 
 import { IProfile } from '@/shared/types/profile.types'
 
+import FullScreenGallery from '../ui/FullScreenGallery'
 import GradientBanner from '../ui/GradientBanner'
 import LinkButton from '../ui/LinkButton'
 import MaterialIcon from '../ui/MaterialIcons'
@@ -35,6 +37,7 @@ const ProfileData: FC<IProfileData> = ({
 	const [modalType, setModalType] = useState<modalTypeEnum>(
 		modalTypeEnum.FOLLOWERS
 	)
+	const [isFullScreen, setIsFullScreen] = useState(false)
 
 	const formatDate = (isoDate: string | undefined) => {
 		return isoDate ? new Date(isoDate).getUTCFullYear() : ''
@@ -66,6 +69,15 @@ const ProfileData: FC<IProfileData> = ({
 
 	return (
 		<>
+			<AnimatePresence>
+				{isFullScreen && (
+					<FullScreenGallery
+						images={[profile?.avatar!]}
+						active={profile?.avatar!}
+						onClose={() => setIsFullScreen(false)}
+					/>
+				)}
+			</AnimatePresence>
 			<FollowersModal
 				isOpen={isModalOpen}
 				onClose={closeModal}
@@ -78,14 +90,22 @@ const ProfileData: FC<IProfileData> = ({
 			<div className="border border-gray-800 rounded-lg mt-5">
 				<GradientBanner banner={profile?.settings?.banner!} />
 				<div className="ml-2 relative">
-					<Image
-						alt="pfp"
-						src={profile?.avatar!}
-						width={130}
-						height={130}
-						priority
-						className="rounded-full w-32 h-32 mt-[-65px] border-[6px] border-black object-cover"
-					/>
+					<div>
+						<button
+							onClick={() => setIsFullScreen(true)}
+							className="absolute rounded-full w-32 h-32 object-cover border-[6px] border-black flex items-center justify-center bg-transparent hover:bg-slate-400 hover:bg-opacity-50 hover:text-white text-transparent transition-all"
+						>
+							<MaterialIcon name="MdSearch" classname="size-12" />
+						</button>
+						<Image
+							alt="pfp"
+							src={profile?.avatar!}
+							width={130}
+							height={130}
+							priority
+							className="rounded-full w-32 h-32 mt-[-65px] border-[6px] border-black object-cover"
+						/>
+					</div>
 					<div className="flex justify-between">
 						<div>
 							<h3 className="font-bold text-xl">{profile?.fullname}</h3>

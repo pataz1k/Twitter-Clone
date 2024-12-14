@@ -22,10 +22,15 @@ export const PostService = {
 			},
 		})
 	},
-	async createPost(token: string, caption: string, images: string[]) {
+	async createPost(
+		token: string,
+		caption: string,
+		images: string[],
+		tags: string[]
+	) {
 		return axiosClassic.post(
 			getPostsUrl(''),
-			{ caption: caption, files: images, tags: [] },
+			{ caption: caption, files: images, tags: tags },
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -33,20 +38,24 @@ export const PostService = {
 			}
 		)
 	},
-	async getPostById(id: string, token:string) {
+	async getPostById(id: string, token: string) {
 		return axiosClassic.get(getPostsUrl(id), {
 			headers: {
 				Authorization: `Bearer ${token}`,
-			}
+			},
 		})
 	},
-	async addComment(postId:string, text: string,token: string) {
-		return axiosClassic.post(getPostsUrl(`${postId}/comments`),{
-			text: text
-		}, {
-			headers: {
-				Authorization: `Bearer ${token}`,
+	async addComment(postId: string, text: string, token: string) {
+		return axiosClassic.post(
+			getPostsUrl(`${postId}/comments`),
+			{
+				text: text,
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
 			}
-		})
-	}
+		)
+	},
 }

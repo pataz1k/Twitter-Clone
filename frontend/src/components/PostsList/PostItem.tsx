@@ -10,6 +10,8 @@ import TimeItem from '@/components/ui/TimeItem'
 
 import { IPost } from '@/shared/types/post.types'
 
+import TagsList from '../ui/TagsList/TagsList'
+
 import styles from './PostsList.module.scss'
 import { getPostUrl } from '@/config/url.config'
 import { PostService } from '@/services/post.service'
@@ -65,7 +67,7 @@ const PostItem: FC<IPostItem> = ({ post, refetchPosts, isDetail = false }) => {
 					<ImageGallery images={post.files} />
 				</div>
 			)}
-
+			<TagsList tags={post.tags} />
 			<div className="border-t border-zinc-700 pt-3 mt-3">
 				<div className={styles.buttonWrap}>
 					<button

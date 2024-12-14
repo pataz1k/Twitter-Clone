@@ -28,7 +28,8 @@ const ChatRoomItem: FC<IChatRoomItem> = ({
 					<Image
 						src={avatar}
 						alt={`${username}'s avatar`}
-						layout="fill"
+						fill
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 						className="rounded-full object-cover"
 					/>
 				</div>

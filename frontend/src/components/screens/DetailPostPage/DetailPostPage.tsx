@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { useQuery } from 'react-query'
 
 import PostItem from '@/components/PostsList/PostItem'
+import BackButton from '@/components/ui/BackButton/BackButton'
 import Heading from '@/components/ui/Heading'
 
 import { IPost } from '@/shared/types/post.types'
@@ -48,9 +49,12 @@ const DetailPostPage: FC = () => {
 	const username = post.user?.username || 'Unknown User'
 
 	return (
-		<div>
+		<main className="flex-grow">
 			<Meta title={`Post from ${username}`}>
-				<Heading title={`Post from ${username}`} className="mb-4" />
+				<header className="flex gap-4 align-middle mb-4 mt-2">
+					<BackButton />
+					<Heading title={`Post from ${username}`} />
+				</header>
 				<PostItem post={post} refetchPosts={refetch} isDetail />
 				<CommentsList
 					comments={post.comments || []}
@@ -58,7 +62,7 @@ const DetailPostPage: FC = () => {
 					refetchPosts={refetch}
 				/>
 			</Meta>
-		</div>
+		</main>
 	)
 }
 

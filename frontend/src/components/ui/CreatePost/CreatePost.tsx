@@ -1,11 +1,12 @@
 import { EmojiClickData } from 'emoji-picker-react'
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import EmojiModal from '../EmojiModal'
 import MaterialIcon from '../MaterialIcons'
 import ProfileItem from '../ProfileItem/ProfileItem'
+import TagsList from '../TagsList/TagsList'
 
 import styles from './CreatePost.module.scss'
 import { PostService } from '@/services/post.service'
@@ -26,9 +27,9 @@ const CreatePost: FC<ICreatePost> = ({
 	openImageUpload,
 	images,
 }) => {
-	const { isAuth, accessToken, username, avatar, accountID, isLoading } =
-		useUserStore()
+	const { accessToken, username, avatar, accountID } = useUserStore()
 	const [isEmojiOpen, setIsEmojiOpen] = useState(false)
+	const [hashtags, setHashtags] = useState<string[]>([])
 	const { register, handleSubmit, reset, watch, setValue, trigger } =
 		useForm<Inputs>()
 	const buttonRef = useRef<HTMLButtonElement>(null)
@@ -36,8 +37,33 @@ const CreatePost: FC<ICreatePost> = ({
 
 	const caption = watch('caption', '')
 
+	function extractHashtags(text: string) {
+		const regex = /#\w+ /g
+		const extractedHashtags = text.match(regex) || []
+		const newHashtags = extractedHashtags.filter(
+			(tag) => !hashtags.includes(tag)
+		)
+		newHashtags.forEach((tag) => {
+			setHashtags((prevHashtags) => [...prevHashtags, tag.trim()])
+		})
+
+		return text.replace(regex, '')
+	}
+
+	useEffect(() => {
+		const extractedText = extractHashtags(caption)
+		setValue('caption', extractedText, {
+			shouldValidate: true,
+			shouldDirty: true,
+			shouldTouch: true,
+		})
+		trigger('caption')
+	}, [caption, setValue, trigger])
+
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		PostService.createPost(accessToken, data.caption, images)
+		const fullCaption = `${data.caption}`
+
+		PostService.createPost(accessToken, fullCaption, images, hashtags)
 			.then((res) => {
 				if (res.data.success) {
 					toast.success('Post created successfully')
@@ -47,6 +73,7 @@ const CreatePost: FC<ICreatePost> = ({
 			.finally(() => {
 				refetchPosts()
 				reset()
+				setHashtags([])
 			})
 	}
 
@@ -57,6 +84,12 @@ const CreatePost: FC<ICreatePost> = ({
 			shouldTouch: true,
 		})
 		trigger('caption')
+	}
+
+	const removeHashtag = (tagToRemove: string) => {
+		setHashtags((prevHashtags) =>
+			prevHashtags.filter((tag) => tag !== tagToRemove)
+		)
 	}
 
 	return (
@@ -78,6 +111,7 @@ const CreatePost: FC<ICreatePost> = ({
 						required: { value: true, message: 'Caption is required' },
 					})}
 				/>
+				<TagsList tags={hashtags} onRemoveTag={removeHashtag} />
 				<div className={styles.info}>
 					<div className={styles.additionalButtons}>
 						<button onClick={openImageUpload} type="button">

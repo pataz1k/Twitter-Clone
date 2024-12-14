@@ -1,6 +1,0 @@
-.container {
-	@apply mt-1 flex flex-wrap gap-2 overflow-hidden;
-	> p {
-		@apply hover:bg-blue-700 bg-blue-600 rounded-full px-2 text-sm truncate transition-colors;
-	}
-}
