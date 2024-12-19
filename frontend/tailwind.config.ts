@@ -9,7 +9,7 @@ const config: Config = {
 	theme: {
 		extend: {},
 	},
-	plugins: [],
+	plugins: [require('tailwind-scrollbar')],
 	darkMode: 'selector',
 }
 export default config

@@ -3,13 +3,11 @@ import { FC } from 'react'
 
 import MaterialIcon from '../MaterialIcons'
 
-import styles from './BackButton.module.scss'
-
 const BackButton: FC = () => {
 	const router = useRouter()
 	return (
-		<button onClick={router.back} className={styles.backButton}>
-			<MaterialIcon name="MdArrowBack" />
+		<button onClick={router.back}>
+			<MaterialIcon name="MdArrowBack" classname="size-6" />
 		</button>
 	)
 }

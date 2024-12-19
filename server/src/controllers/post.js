@@ -4,11 +4,34 @@ const User = require('../models/User');
 const Comment = require('../models/Comment');
 const asyncHandler = require('../middlewares/asyncHandler');
 const { sendNotification } = require('./notification');
-const {getPostLink} = require('../utils/link')
+const { getPostLink } = require('../utils/link');
 
 exports.getTags = asyncHandler(async (req, res, next) => {
   const tags = await Post.find().distinct('tags');
-  res.status(200).json({ success: true, data: tags });
+
+  const tagCounts = await Promise.all(
+    tags.map(async (tag) => {
+      const count = await Post.countDocuments({ tags: tag });
+      return { tag, count };
+    })
+  );
+
+  res.status(200).json({ success: true, data: tagCounts });
+});
+
+exports.getPostByTag = asyncHandler(async (req, res, next) => {
+  console.log('Tag', req.params.tag);
+  if (req.params.tag) {
+    const posts = await Post.find({ tags: `#${req.params.tag}` });
+    console.log(posts.length);
+    if (posts.length === 0) {
+      res.status(404).json({ success: false, message: 'No posts found' });
+    } else {
+      res.status(200).json({ success: true, data: posts });
+    }
+  } else {
+    res.status(400).json({ success: false, message: 'No tag provided' });
+  }
 });
 
 exports.getPosts = asyncHandler(async (req, res, next) => {

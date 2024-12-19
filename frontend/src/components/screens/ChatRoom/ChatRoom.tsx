@@ -123,7 +123,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 						</AnimatePresence>
 					</div>
 				</header>
-				<main className="flex-grow overflow-y-auto p-4 space-y-4">
+				<main className="flex-grow overflow-y-auto p-4 space-y-4 ">
 					{messages.map((message) => (
 						<div
 							key={message._id}

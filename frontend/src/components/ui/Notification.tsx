@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FC } from 'react'
 
+import MaterialIcon from './MaterialIcons'
 
 export interface INotify {
 	text: string
@@ -9,7 +10,7 @@ export interface INotify {
 		username: string
 		avatar: string
 	}
-	link:string
+	link: string
 }
 
 interface NotificationProps {
@@ -32,20 +33,7 @@ const Notification: FC<NotificationProps> = ({ notify, onClose }) => {
 					<h3 className="font-semibold text-white">{notify.sender.username}</h3>
 					<p className="text-sm text-gray-400">{notify.text}</p>
 				</div>
-				<svg
-					className="text-blue-400 w-5 h-5"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						strokeWidth={2}
-						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-					/>
-				</svg>
+				<MaterialIcon name="MdNotifications" classname="text-blue-400 size-5" />
 			</div>
 			<div className="mt-4 flex justify-end">
 				<Link href={notify.link} passHref>

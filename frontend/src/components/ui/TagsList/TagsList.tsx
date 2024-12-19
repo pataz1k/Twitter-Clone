@@ -11,7 +11,7 @@ const TagsList: FC<ITagsList> = ({ tags, onRemoveTag }) => {
 	if (!tags.length) return null
 
 	return (
-		<ul className="mt-1 flex flex-wrap gap-2 overflow-hidden">
+		<ul className="my-3 flex flex-wrap gap-2 overflow-hidden">
 			{tags.map((tag, index) => (
 				<p
 					key={index}

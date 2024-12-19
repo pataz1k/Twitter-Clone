@@ -1,4 +1,4 @@
-import { IComment } from "./comment.types"
+import { IComment } from './comment.types'
 
 export interface IPost {
 	tags: string[]
@@ -19,4 +19,8 @@ export interface IUser {
 	avatar: string
 	_id: string
 	username: string
+}
+export interface ITag {
+	tag: string
+	count: number
 }

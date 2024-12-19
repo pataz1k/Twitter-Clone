@@ -11,18 +11,8 @@
 	--secondary: rgb(29 78 216);
 }
 
-*::-webkit-scrollbar {
-	width: 12px;
-	height: 12px;
-}
-*::-webkit-scrollbar-track {
-	background: var(--primary);
-	border-radius: 5px;
-}
-*::-webkit-scrollbar-thumb {
-	background-color: var(--secondary);
-	border-radius: 14px;
-	border: 3px solid var(--primary);
+html {
+	@apply scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800;
 }
 
 @media (prefers-color-scheme: dark) {

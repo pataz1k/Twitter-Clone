@@ -27,7 +27,7 @@ const Search: FC = () => {
 						initial={{ opacity: 0, transform: 'translateY(10px)' }}
 						animate={{ opacity: 1, transform: 'translateY(0)' }}
 						exit={{ transform: 'translateY(10px)', opacity: 0 }}
-						className="border rounded-xl border-zinc-700 p-5 mt-2"
+						className="absolute w-full bg-gray-950 border rounded-xl border-zinc-700 p-5 mt-2"
 					>
 						{isSuccessPosts && (
 							<>

@@ -37,7 +37,7 @@ const EmojiModal: FC<IEmojiModal> = ({
 			const rect = buttonRef.current.getBoundingClientRect()
 			setButtonPosition({ top: rect.bottom, left: rect.left })
 		}
-	}, [isOpen])
+	}, [isOpen, buttonRef])
 	return (
 		<div
 			ref={emojiOutsideRef}

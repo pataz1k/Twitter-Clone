@@ -34,7 +34,7 @@ const UserPage: FC = () => {
 		if (isAuth && username === router.query.username) {
 			router.replace('/profile')
 		}
-	}, [username, router.query.username, isAuth])
+	}, [username, router.query.username, isAuth, router])
 
 	const {
 		isSuccess,

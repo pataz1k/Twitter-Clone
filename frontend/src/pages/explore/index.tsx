@@ -1,8 +1,8 @@
-import { FC } from "react"
+import { FC } from 'react'
 
-const index:FC = () => {
-  return (
-    <div>Explore</div>
-  )
+import Explore from '@/components/screens/Explore/Explore'
+
+const index: FC = () => {
+	return <Explore />
 }
 export default index
