@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import SearchField from '@/components/ui/search-filed/SearchField'
 
@@ -18,16 +18,18 @@ const Search: FC = () => {
 	} = useSearch()
 
 	const displayBorder = isSuccessPosts || isSuccessUsers
+	const [isSelected, setIsSelected] = useState(false)
+
 	return (
 		<div className="relative ">
-			<SearchField searchTerm={searchTerm} handleSearch={handleSearch} />
+			<SearchField searchTerm={searchTerm} handleSearch={handleSearch} handleSelect={setIsSelected}/>
 			<AnimatePresence>
-				{displayBorder && (
+				{displayBorder && isSelected && (
 					<motion.div
 						initial={{ opacity: 0, transform: 'translateY(10px)' }}
 						animate={{ opacity: 1, transform: 'translateY(0)' }}
 						exit={{ transform: 'translateY(10px)', opacity: 0 }}
-						className="absolute w-full bg-gray-950 border rounded-xl border-zinc-700 p-5 mt-2"
+						className="absolute w-full bg-gray-950 border rounded-xl border-zinc-700 p-5 mt-2 "
 					>
 						{isSuccessPosts && (
 							<>

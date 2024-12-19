@@ -62,6 +62,6 @@ export const PostService = {
 		return axiosClassic.get(getPostsUrl('tags'))
 	},
 	async getPostsByTag(tag: string) {
-		return axiosClassic.get(getPostsUrl(`tags/${tag.slice(1)}`))
+		return axiosClassic.get(getPostsUrl(`tags/${tag}`))
 	},
 }

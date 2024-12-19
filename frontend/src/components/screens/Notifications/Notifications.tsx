@@ -31,7 +31,6 @@ const Notifications: FC = () => {
 			enabled: isAuth,
 		}
 	)
-	console.log(data)
 	if (!isAuth) {
 		return <NotAuth />
 	}
@@ -42,7 +41,6 @@ const Notifications: FC = () => {
 	const readAllNotifications = () => {
 		NotificationService.markNotificationsAsRead(accessToken)
 			.then((res) => {
-				console.log(res)
 				refetch()
 				updateNotificationsCount(accessToken)
 			})

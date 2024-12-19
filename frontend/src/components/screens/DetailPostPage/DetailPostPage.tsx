@@ -12,6 +12,7 @@ import CommentsList from './Comments/CommentsList'
 import { PostService } from '@/services/post.service'
 import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
+import NotAuth from '@/components/ui/NotAuth'
 
 interface IPostResponse {
 	success: boolean
@@ -31,10 +32,9 @@ const DetailPostPage: FC = () => {
 		}
 	)
 
-	console.log('API Response:', data)
 
 	if (!isAuth) {
-		return <h1>Please log in to view this post</h1>
+		return <NotAuth/>
 	}
 
 	if (isLoading) {

@@ -60,7 +60,6 @@ const CreatePost: FC<ICreatePost> = ({
 		useForm<Inputs>()
 
 	const caption = watch('caption', '')
-	console.log(caption)
 
 	const { isSuccess, isLoading, data, refetch } = useQuery(
 		['get tags'],
@@ -149,7 +148,6 @@ const CreatePost: FC<ICreatePost> = ({
 	}
 
 	const handleAddTag = (tag: string) => {
-		console.log(caption.indexOf('#'))
 		setValue(
 			'caption',
 			`${caption.substring(0, caption.indexOf('#'))}#${tag} `,

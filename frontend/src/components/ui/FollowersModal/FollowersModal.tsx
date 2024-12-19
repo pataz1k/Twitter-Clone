@@ -1,4 +1,4 @@
-import { useClickAway } from '@uidotdev/usehooks'
+import { useClickAway, useLockBodyScroll } from '@uidotdev/usehooks'
 import { AnimatePresence, motion } from 'motion/react'
 import { FC } from 'react'
 
@@ -20,6 +20,7 @@ const FollowersModal: FC<IFollowersModal> = ({
 	const modalRef = useClickAway<HTMLDivElement>(() => {
 		onClose()
 	})
+	useLockBodyScroll()
 
 	return (
 		<AnimatePresence>
