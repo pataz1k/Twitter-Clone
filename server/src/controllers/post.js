@@ -22,7 +22,11 @@ exports.getTags = asyncHandler(async (req, res, next) => {
 exports.getPostByTag = asyncHandler(async (req, res, next) => {
   console.log('Tag', req.params.tag);
   if (req.params.tag) {
-    const posts = await Post.find({ tags: `#${req.params.tag}` });
+    const posts = await Post.find({ tags: `#${req.params.tag}` }).populate({
+      path: 'user',
+      select: 'username avatar',
+    });
+  ;
     console.log(posts.length);
     if (posts.length === 0) {
       res.status(404).json({ success: false, message: 'No posts found' });
