@@ -17,7 +17,9 @@ interface FormData {
 	images: FileList
 }
 
-const Home: FC = () => {
+interface IHome {}
+
+const Home: FC<IHome> = () => {
 	const { isAuth } = useUserStore()
 
 	const [isOpenImageUpload, setIsOpenImageUpload] = useState(false)
