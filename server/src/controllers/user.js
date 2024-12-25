@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 const asyncHandler = require('../middlewares/asyncHandler');
+const { sendNotification } = require('./notification');
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   let users = await User.find().select('-password').lean().exec();
@@ -13,8 +14,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
     }
   });
 
-  users = users.filter((user) => user._id.toString() !== req.user.id);
-
+  
   res.status(200).json({ success: true, data: users });
 });
 
@@ -179,6 +179,8 @@ exports.follow = asyncHandler(async (req, res, next) => {
     $push: { following: req.params.id },
     $inc: { followingCount: 1 },
   });
+
+  sendNotification(user._id.toString(),`Now following you!`,req.user.id,`/user/${req.user.username}`)
 
   res.status(200).json({ success: true, data: {} });
 });

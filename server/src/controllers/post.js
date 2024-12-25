@@ -95,7 +95,7 @@ exports.addPost = asyncHandler(async (req, res, next) => {
   const { caption, files, tags } = req.body;
   const user = req.user.id;
 
-  let post = await Post.create({ caption, files, tags, user });
+  let post = await Post.create({ caption: caption.replace(/\\n/g, '\n'), files, tags, user });
 
   await User.findByIdAndUpdate(req.user.id, {
     $push: { posts: post._id },
