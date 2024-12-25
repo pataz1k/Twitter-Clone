@@ -25,7 +25,7 @@ const PopularTags: FC = () => {
 
 	if (isError) {
 		return (
-			<div className="w-1/2 border border-zinc-700 rounded-lg p-4 mt-5">
+			<div className="w-full md:w-1/2 border border-zinc-700 rounded-lg p-4 mt-5">
 				<Heading title="Most popular tags" className="text-lg" />
 				<h1 className="text-xl font-bold text-center m-5">
 					Error loading popular tags.
@@ -36,7 +36,7 @@ const PopularTags: FC = () => {
 
 	if (isLoading) {
 		return (
-			<div className="w-1/2 border border-zinc-700 rounded-lg p-4 mt-5">
+			<div className="w-full md:w-1/2 border border-zinc-700 rounded-lg p-4 mt-5">
 				<Heading title="Most popular tags" className="text-lg" />
 				<Skeleton count={8} height={25} />
 			</div>
@@ -45,7 +45,7 @@ const PopularTags: FC = () => {
 
 	if (isSuccess) {
 		return (
-			<div className="w-1/2 border border-zinc-700 rounded-lg p-4 mt-5">
+			<div className="w-full md:w-1/2 border border-zinc-700 rounded-lg p-4 mt-5">
 				<Heading title="Most popular tags" className="text-lg" />
 				{data?.data
 					.sort((a, b) => b.count - a.count)

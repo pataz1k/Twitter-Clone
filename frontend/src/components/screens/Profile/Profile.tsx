@@ -4,6 +4,8 @@ import { useQuery } from 'react-query'
 import ProfileData from '@/components/Profile/ProfileData'
 import ProfilePostList from '@/components/Profile/ProfilePostList'
 import NotAuth from '@/components/ui/NotAuth'
+import ProfileError from '@/components/ui/ProfileError'
+import ProfileSkeleton from '@/components/ui/ProfileSkeleton/ProfileSkeleton'
 
 import { IProfile } from '@/shared/types/profile.types'
 
@@ -17,10 +19,10 @@ interface IProfileResponse {
 }
 
 const Profile: FC = () => {
-	const { isAuth, accessToken } = useUserStore()
+	const { isAuth, accessToken, username } = useUserStore()
 
-	const { isSuccess, data, refetch } = useQuery(
-		['get user profile'],
+	const { isSuccess, isError, isLoading, data, refetch } = useQuery(
+		[`get ${username} profile`],
 		() => AuthService.me(accessToken),
 		{ select: ({ data }: { data: IProfileResponse }) => data, enabled: isAuth }
 	)
@@ -29,15 +31,21 @@ const Profile: FC = () => {
 		return <NotAuth />
 	}
 
-	if (!isSuccess || !data) {
-		return null
+	if (isError) {
+		return <ProfileError refetch={refetch} />
 	}
 
-	return (
-		<Meta title={`Profile ${data.data.username}`}>
-			<ProfileData profile={data.data} refetchProfile={refetch} />
-			<ProfilePostList profile={data.data} refetchPosts={refetch} />
-		</Meta>
-	)
+	if (isLoading) {
+		return <ProfileSkeleton />
+	}
+
+	if (isSuccess && data) {
+		return (
+			<Meta title={`Profile ${data.data.username}`}>
+				<ProfileData profile={data.data} refetchProfile={refetch} />
+				<ProfilePostList profile={data.data} refetchPosts={refetch} />
+			</Meta>
+		)
+	}
 }
 export default Profile

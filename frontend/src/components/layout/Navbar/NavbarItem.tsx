@@ -10,7 +10,7 @@ import styles from './Navbar.module.scss'
 import { INavbarItem } from './navbar.interface'
 import useNotificationStore from '@/stores/notification.store'
 
-const NavbarItem: FC<{ item: INavbarItem }> = ({ item }) => {
+const NavbarItem: FC<{ item: INavbarItem, onClick: () => void }> = ({ item, onClick }) => {
 	const pathname = usePathname()
 	const { unReadNotifications } = useNotificationStore()
 
@@ -20,7 +20,7 @@ const NavbarItem: FC<{ item: INavbarItem }> = ({ item }) => {
 			whileHover={{ scale: 1.05 }}
 			className={cn({ [styles.active]: pathname === item.link })}
 		>
-			<Link href={item.link} className={styles.navbarItem}>
+			<Link href={item.link} className={styles.navbarItem} onClick={onClick}>
 				<MaterialIcon name={item.icon} />
 				<p>{item.title}</p>
 				{item.link === '/notifications' && (

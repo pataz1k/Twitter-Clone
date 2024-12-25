@@ -60,7 +60,7 @@ const PostItem: FC<IPostItem> = ({ post, refetchPosts, isDetail = false }) => {
 				<TimeItem time={post.createdAt} textSize="sm" />
 			</div>
 
-			<p className="text-gray-100">{post.caption}</p>
+			<p className="text-gray-100 whitespace-pre-wrap">{post.caption}</p>
 
 			{post.files.length !== 0 && (
 				<div className="mt-2">

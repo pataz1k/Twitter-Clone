@@ -11,8 +11,8 @@
 	--secondary: rgb(29 78 216);
 }
 
-html {
-	@apply scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800;
+html, main {
+	@apply scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-gray-500 hover:scrollbar-thumb-gray-600 active:scrollbar-thumb-gray-700 scrollbar-track-gray-800;
 }
 
 @media (prefers-color-scheme: dark) {

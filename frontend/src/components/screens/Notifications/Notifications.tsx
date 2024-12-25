@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import { FC } from 'react'
+import Skeleton from 'react-loading-skeleton'
 import { useQuery } from 'react-query'
 
 import Heading from '@/components/ui/Heading'
@@ -34,9 +35,6 @@ const Notifications: FC = () => {
 	if (!isAuth) {
 		return <NotAuth />
 	}
-	if (isLoading) {
-		return <div>Loading...</div>
-	}
 
 	const readAllNotifications = () => {
 		NotificationService.markNotificationsAsRead(accessToken)
@@ -69,6 +67,7 @@ const Notifications: FC = () => {
 					</button>
 				</div>
 				{isSuccess && <NotificationsList notifications={data?.data!} />}
+				{isLoading && <Skeleton count={8} height={80} className="my-1" />}
 			</Meta>
 		</>
 	)

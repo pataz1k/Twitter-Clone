@@ -44,7 +44,7 @@ $max-bar-width: 450px;
 		display: none;
 		position: fixed;
 		top: 0.5rem;
-		left: 0.5rem;
+		right: 0.5rem;
 		z-index: 30;
 		background-color: theme('colors.gray.800');
 		color: theme('colors.white');
@@ -76,7 +76,6 @@ $max-bar-width: 450px;
 		.center {
 			margin-left: 0;
 			margin-right: 0;
-			padding-top: 4rem; // Add space for the toggle button
 		}
 
 		.navbarToggle {

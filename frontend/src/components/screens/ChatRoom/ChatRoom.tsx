@@ -98,7 +98,7 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 
 	return (
 		<Meta title={`Chat with ${receiverUsername}`}>
-			<div className="flex flex-col h-screen bg-gray-900 bg-opacity-30 text-gray-100">
+			<div className="flex flex-col h-screen bg-opacity-30 text-gray-100 mx-[-1rem]">
 				<header className="bg-gray-800 p-4 flex items-center gap-4 border-b border-gray-700">
 					<BackButton />
 					<h2 className="text-xl font-semibold flex-grow">

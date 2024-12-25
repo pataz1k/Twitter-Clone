@@ -12,7 +12,10 @@ import styles from './Navbar.module.scss'
 import NavbarItem from './NavbarItem'
 import useUserStore from '@/stores/user.store'
 
-const Navbar: FC = () => {
+interface INavbar {
+	toggleNavbar: () => void
+}
+const Navbar: FC<INavbar> = ({toggleNavbar}) => {
 	const { isAuth, expireAuthStatus } = useUserStore()
 
 	const router = useRouter()
@@ -30,7 +33,7 @@ const Navbar: FC = () => {
 					<Logo />
 					<ul className="list-none">
 						{NavbarData.items.map((item) => (
-							<NavbarItem key={item.title} item={item} />
+							<NavbarItem key={item.title} item={item} onClick={toggleNavbar}/>
 						))}
 					</ul>
 				</div>

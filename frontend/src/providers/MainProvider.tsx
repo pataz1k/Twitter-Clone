@@ -25,7 +25,7 @@ const MainProvider: FC<PropsWithChildren> = ({ children }) => {
 		<QueryClientProvider client={queryClient}>
 			<ThemeProvider>
 				<NotificationsProvider>
-					<SkeletonTheme baseColor="#4d4646" highlightColor="#fff">
+					<SkeletonTheme baseColor="#2a2a2a" highlightColor="#3a3a3a">
 						<LoadingWrapper>
 							<Layout>{children}</Layout>
 							<Toaster

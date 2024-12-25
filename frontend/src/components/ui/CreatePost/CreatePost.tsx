@@ -131,21 +131,22 @@ const CreatePost: FC<ICreatePost> = ({
 	}, [caption, setValue, trigger])
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		const fullCaption = `${data.caption}`
-
+		// Replace newline characters with a special string
+		const fullCaption = data.caption.replace(/\n/g, '\\n');
+	  
 		PostService.createPost(accessToken, fullCaption, images, hashtags)
-			.then((res) => {
-				if (res.data.success) {
-					toast.success('Post created successfully')
-				}
-			})
-			.catch((err) => console.log(err))
-			.finally(() => {
-				refetchPosts()
-				reset()
-				setHashtags([])
-			})
-	}
+		  .then((res) => {
+			if (res.data.success) {
+			  toast.success('Post created successfully');
+			}
+		  })
+		  .catch((err) => console.log(err))
+		  .finally(() => {
+			refetchPosts();
+			reset();
+			setHashtags([]);
+		  });
+	  };
 
 	const handleAddTag = (tag: string) => {
 		setValue(

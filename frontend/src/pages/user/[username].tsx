@@ -6,6 +6,7 @@ import ProfileData from '@/components/Profile/ProfileData'
 import ProfilePostList from '@/components/Profile/ProfilePostList'
 import LinkButton from '@/components/ui/LinkButton'
 import NotAuth from '@/components/ui/NotAuth'
+import ProfileError from '@/components/ui/ProfileError'
 import ProfileSkeleton from '@/components/ui/ProfileSkeleton/ProfileSkeleton'
 
 import { IProfile } from '@/shared/types/profile.types'
@@ -44,7 +45,7 @@ const UserPage: FC = () => {
 		data,
 		refetch,
 	}: UseQueryResult<IProfileResponse, ApiError> = useQuery(
-		['get user profile'],
+		[`get ${router.query.username} profile`],
 		() => UserService.getUser(accessToken, router.query.username?.toString()!),
 		{
 			select: ({ data }: { data: IProfileResponse }) => data,
@@ -72,25 +73,27 @@ const UserPage: FC = () => {
 		)
 	}
 
-	if (!isSuccess || !data) {
-		return null
+	if (isError && error?.response?.status !== 404) {
+		return <ProfileError refetch={refetch} />
 	}
 
-	return (
-		<Meta
-			title={`Profile ${data?.data.username}`}
-			description={`Profile ${data?.data.username} ,Followers: ${data?.data.followersCount}, Following: ${data?.data.followingCount}`}
-		>
-			<>
-				<ProfileData
-					profile={data?.data}
-					canFollow={true}
-					refetchProfile={refetch}
-					token={accessToken}
-				/>
-				<ProfilePostList profile={data?.data!} refetchPosts={refetch} />
-			</>
-		</Meta>
-	)
+	if (isSuccess && data) {
+		return (
+			<Meta
+				title={`Profile ${data?.data.username}`}
+				description={`Profile ${data?.data.username} ,Followers: ${data?.data.followersCount}, Following: ${data?.data.followingCount}`}
+			>
+				<>
+					<ProfileData
+						profile={data?.data}
+						canFollow={true}
+						refetchProfile={refetch}
+						token={accessToken}
+					/>
+					<ProfilePostList profile={data?.data!} refetchPosts={refetch} />
+				</>
+			</Meta>
+		)
+	}
 }
 export default UserPage

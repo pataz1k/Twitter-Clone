@@ -24,10 +24,6 @@ const NotificationsItem: FC<NotificationsItemProps> = ({ notification }) => {
     }
   }
 
-  if (link === undefined) {
-	return null
-  }
-
   return (
     <div className={`relative flex items-start space-x-4 p-4 rounded-lg transition-colors ${
       read ? "bg-gray-800" : "bg-gray-700"

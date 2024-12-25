@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { FC, PropsWithChildren, useState } from 'react'
 
 import MaterialIcon from '../ui/MaterialIcons'
@@ -9,20 +10,25 @@ import Sidebar from './Sidebar/Sidebar'
 const Layout: FC<PropsWithChildren> = ({ children }) => {
 	const [isNavbarOpen, setIsNavbarOpen] = useState(false)
 
+	const { pathname } = useRouter()
+	console.log(pathname)
+
 	const toggleNavbar = () => setIsNavbarOpen(!isNavbarOpen)
 
 	return (
 		<div className={styles.layout}>
 			<div className={`${styles.navbar} ${isNavbarOpen ? styles.open : ''}`}>
-				<Navbar />
+				<Navbar toggleNavbar={toggleNavbar} />
 			</div>
-			<button className={styles.navbarToggle} onClick={toggleNavbar}>
-				{isNavbarOpen ? (
-					<MaterialIcon name="MdClose" />
-				) : (
-					<MaterialIcon name="MdMenu" />
-				)}
-			</button>
+			{pathname !== "/messages/[userID]" && (
+				<button className={styles.navbarToggle} onClick={toggleNavbar}>
+					{isNavbarOpen ? (
+						<MaterialIcon name="MdClose" />
+					) : (
+						<MaterialIcon name="MdMenu" />
+					)}
+				</button>
+			)}
 			<div className={styles.center}>{children}</div>
 			<div className={styles.sidebar}>
 				<Sidebar />

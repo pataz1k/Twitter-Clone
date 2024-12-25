@@ -77,16 +77,19 @@ const ProfileData: FC<IProfileData> = ({
 						onClose={() => setIsFullScreen(false)}
 					/>
 				)}
+				{isModalOpen && (
+					<FollowersModal
+						// isOpen={isModalOpen}
+						onClose={closeModal}
+						followers={
+							modalType === modalTypeEnum.FOLLOWERS
+								? profile?.followers!
+								: profile?.following!
+						}
+					/>
+				)}
 			</AnimatePresence>
-			<FollowersModal
-				isOpen={isModalOpen}
-				onClose={closeModal}
-				followers={
-					modalType === modalTypeEnum.FOLLOWERS
-						? profile?.followers!
-						: profile?.following!
-				}
-			/>
+
 			<div className="border border-gray-800 rounded-lg mt-5">
 				<GradientBanner banner={profile?.settings?.banner!} />
 				<div className="ml-2 relative">
