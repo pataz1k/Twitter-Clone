@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Message = require('../models/Message');
-const jwt = require('jsonwebtoken');
 const { protect } = require('../middlewares/auth');
 
 // Get all dialogs for the user
