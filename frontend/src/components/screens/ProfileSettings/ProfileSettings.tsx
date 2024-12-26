@@ -15,15 +15,17 @@ const ProfileSettings: FC = () => {
 	return (
 		<Meta title="Profile Settings">
 			<div className="flex flex-col min-h-screen">
-				<div className="flex-grow">
+				<header className="flex-grow">
 					<div className="flex gap-4 align-middle mt-2 mb-5">
 						<BackButton />
 						<Heading title="Profile Settings" />
 					</div>
+				</header>
+				<main className="mb-5">
 					<ProfileInfo />
 					<Appearance />
-				</div>
-				<div className="sticky bottom-0 right-0 p-4 bg-background border-t border-gray-700">
+				</main>
+				<footer className="sticky bottom-0 right-0 p-4 bg-background border-t border-gray-700">
 					<button
 						disabled={!isChanged}
 						onClick={() => {
@@ -37,7 +39,7 @@ const ProfileSettings: FC = () => {
 					>
 						Apply
 					</button>
-				</div>
+				</footer>
 			</div>
 		</Meta>
 	)

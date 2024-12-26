@@ -1,7 +1,10 @@
-import { FC, useState } from 'react'
 import { motion } from 'motion/react'
+import { FC, useState } from 'react'
 
 import PostsList from '@/components/PostsList/PostsList'
+
+import { TabButton } from '@/ui/TabButton/TabButton'
+
 import { IProfile } from '@/shared/types/profile.types'
 
 const ProfilePostList: FC<{
@@ -13,7 +16,7 @@ const ProfilePostList: FC<{
 	return (
 		<div className="mt-6">
 			<div className="flex justify-center mb-6">
-				<TabWrapper>
+				<div className="bg-gray-800 p-1 rounded-full inline-flex">
 					<TabButton
 						active={postsType === 'created'}
 						onClick={() => setPostsType('created')}
@@ -26,14 +29,13 @@ const ProfilePostList: FC<{
 					>
 						Saved Posts
 					</TabButton>
-				</TabWrapper>
+				</div>
 			</div>
 
 			<motion.div
-				initial={{ opacity: 0}}
-				animate={{ opacity: 1}}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
 				transition={{ duration: 0.3 }}
-
 			>
 				{postsType === 'created' ? (
 					<PostsList posts={profile.posts} refetchPosts={refetchPosts} />
@@ -45,37 +47,4 @@ const ProfilePostList: FC<{
 	)
 }
 
-interface TabWrapperProps {
-	children: React.ReactNode
-}
-
-const TabWrapper: FC<TabWrapperProps> = ({ children }) => (
-	<div className="bg-gray-800 p-1 rounded-full inline-flex">
-		{children}
-	</div>
-)
-
-interface TabButtonProps {
-	active: boolean
-	onClick: () => void
-	children: React.ReactNode
-}
-
-const TabButton: FC<TabButtonProps> = ({ active, onClick, children }) => (
-	<button
-		onClick={onClick}
-		className={`
-			px-4 py-2 text-sm font-medium rounded-full transition-all duration-300
-			${active
-				? 'bg-blue-600 text-white shadow-lg'
-				: 'text-gray-400 hover:text-white hover:bg-gray-700'
-			}
-		`}
-		aria-pressed={active}
-	>
-		{children}
-	</button>
-)
-
 export default ProfilePostList
-

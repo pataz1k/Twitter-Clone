@@ -1,18 +1,20 @@
 import cn from 'classnames'
+import { format } from 'date-fns'
 import { AnimatePresence } from 'motion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
 import toast from 'react-hot-toast'
-import { format } from 'date-fns'
 
 import FollowersModal from '@/components/ui/FollowersModal/FollowersModal'
+
+import { IProfile } from '@/shared/types/profile.types'
+
 import FullScreenGallery from '../ui/FullScreenGallery'
 import GradientBanner from '../ui/GradientBanner'
 import LinkButton from '../ui/LinkButton'
 import MaterialIcon from '../ui/MaterialIcons'
 
-import { IProfile } from '@/shared/types/profile.types'
 import { getDMPageUrl } from '@/config/url.config'
 import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 import { modalTypeEnum } from '@/constants/modalType.enum'
@@ -106,7 +108,9 @@ const ProfileData: FC<IProfileData> = ({
 					</div>
 					<div className="mt-16 flex justify-between items-start">
 						<div className="space-y-2">
-							<h3 className="font-bold text-2xl text-white">{profile?.fullname}</h3>
+							<h3 className="font-bold text-2xl text-white">
+								{profile?.fullname}
+							</h3>
 							<span className="text-gray-400">@{profile?.username}</span>
 							<p className="text-gray-300 mt-2">{profile?.bio}</p>
 							<p className="text-gray-400 text-sm">
@@ -137,15 +141,20 @@ const ProfileData: FC<IProfileData> = ({
 										href={getDMPageUrl(profile?._id!)}
 										className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
 									>
-										<MaterialIcon name="MdMail" classname="text-white text-xl" />
+										<MaterialIcon
+											name="MdMail"
+											classname="text-white text-xl"
+										/>
 									</Link>
 									<button
 										onClick={followClick}
 										className={cn(
 											'py-2 px-4 rounded-full transition-colors text-sm font-medium',
 											{
-												'bg-blue-600 hover:bg-blue-700 text-white': !profile?.isFollowing,
-												'bg-gray-700 hover:bg-gray-600 text-white': profile?.isFollowing,
+												'bg-blue-600 hover:bg-blue-700 text-white':
+													!profile?.isFollowing,
+												'bg-gray-700 hover:bg-gray-600 text-white':
+													profile?.isFollowing,
 											}
 										)}
 									>
@@ -168,4 +177,3 @@ const ProfileData: FC<IProfileData> = ({
 }
 
 export default ProfileData
-

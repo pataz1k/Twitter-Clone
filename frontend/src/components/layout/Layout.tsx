@@ -19,7 +19,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
 			<div className={`${styles.navbar} ${isNavbarOpen ? styles.open : ''}`}>
 				<Navbar toggleNavbar={toggleNavbar} />
 			</div>
-			{pathname !== "/messages/[userID]" && (
+			{pathname !== '/messages/[userID]' && (
 				<button className={styles.navbarToggle} onClick={toggleNavbar}>
 					{isNavbarOpen ? (
 						<MaterialIcon name="MdClose" />
