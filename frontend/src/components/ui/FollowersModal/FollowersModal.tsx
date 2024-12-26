@@ -19,24 +19,32 @@ const FollowersModal: FC<IFollowersModal> = ({ onClose, followers }) => {
 	useLockBodyScroll()
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-[2px]">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
 			<motion.div
-				initial={{ scale: 0.5, opacity: 0 }}
+				initial={{ scale: 0.9, opacity: 0 }}
 				animate={{ scale: 1, opacity: 1 }}
-				exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.15 } }}
+				exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+				transition={{ type: 'spring', damping: 20, stiffness: 300 }}
 				ref={modalRef}
-				className="relative bg-gray-800 rounded-lg p-6 shadow-lg max-w-md w-full border border-gray-800"
+				className="relative bg-gray-900 rounded-xl p-6 shadow-2xl max-w-md w-full border border-gray-700"
 			>
-				<button
-					className="absolute top-2 right-2 text-xl text-white"
-					onClick={onClose}
-				>
-					<MaterialIcon name='MdClose' classname='size-6 hover:fill-red-500 transition-colors' />
-				</button>
-				<h2 className="text-lg font-bold text-white mt-[-13px]">Users</h2>
-				<UsersList followers={followers} />
+				<div className="flex justify-between items-center mb-4">
+					<h2 className="text-xl font-bold text-white">Users</h2>
+					<button
+						className="text-gray-400 hover:text-white transition-colors duration-200"
+						onClick={onClose}
+						aria-label="Close modal"
+					>
+						<MaterialIcon name='MdClose' classname='size-6' />
+					</button>
+				</div>
+				<div className="max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+					<UsersList followers={followers} />
+				</div>
 			</motion.div>
 		</div>
 	)
 }
+
 export default FollowersModal
+

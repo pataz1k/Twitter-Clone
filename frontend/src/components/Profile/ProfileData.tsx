@@ -4,17 +4,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
 import toast from 'react-hot-toast'
+import { format } from 'date-fns'
 
 import FollowersModal from '@/components/ui/FollowersModal/FollowersModal'
-
-import { IProfile } from '@/shared/types/profile.types'
-
 import FullScreenGallery from '../ui/FullScreenGallery'
 import GradientBanner from '../ui/GradientBanner'
 import LinkButton from '../ui/LinkButton'
 import MaterialIcon from '../ui/MaterialIcons'
 
-import styles from './Profile.module.scss'
+import { IProfile } from '@/shared/types/profile.types'
 import { getDMPageUrl } from '@/config/url.config'
 import { LinkButtonColor } from '@/constants/linkButtonColor.enum'
 import { modalTypeEnum } from '@/constants/modalType.enum'
@@ -39,10 +37,6 @@ const ProfileData: FC<IProfileData> = ({
 	)
 	const [isFullScreen, setIsFullScreen] = useState(false)
 
-	const formatDate = (isoDate: string | undefined) => {
-		return isoDate ? new Date(isoDate).getUTCFullYear() : ''
-	}
-
 	const closeModal = () => setIsModalOpen(false)
 	const openModal = (modalType: modalTypeEnum) => {
 		setIsModalOpen(true)
@@ -52,14 +46,14 @@ const ProfileData: FC<IProfileData> = ({
 	const followClick = () => {
 		if (profile?.isFollowing) {
 			UserService.unfollowUser(token!, profile._id)
-				.then((res) => {
+				.then(() => {
 					toast.success(`Unfollowed ${profile?.username}`)
 				})
 				.catch((err) => console.log(err))
 				.finally(refetchProfile)
 		} else {
 			UserService.followUser(token!, profile!._id)
-				.then((res) => {
+				.then(() => {
 					toast.success(`Followed ${profile?.username}`)
 				})
 				.catch((err) => console.log(err))
@@ -79,7 +73,6 @@ const ProfileData: FC<IProfileData> = ({
 				)}
 				{isModalOpen && (
 					<FollowersModal
-						// isOpen={isModalOpen}
 						onClose={closeModal}
 						followers={
 							modalType === modalTypeEnum.FOLLOWERS
@@ -90,87 +83,89 @@ const ProfileData: FC<IProfileData> = ({
 				)}
 			</AnimatePresence>
 
-			<div className="border border-gray-800 rounded-lg mt-5">
+			<div className="bg-gray-900 border border-gray-800 rounded-lg mt-5 overflow-hidden shadow-lg">
 				<GradientBanner banner={profile?.settings?.banner!} />
-				<div className="ml-2 relative">
-					<div>
+				<div className="px-6 py-4 relative">
+					<div className="absolute top-0 left-6 transform -translate-y-1/2">
 						<button
 							onClick={() => setIsFullScreen(true)}
-							className="absolute rounded-full w-32 h-32 object-cover border-[6px] border-black flex items-center justify-center bg-transparent hover:bg-slate-400 hover:bg-opacity-50 hover:text-white text-transparent transition-all"
+							className="group relative rounded-full w-32 h-32 overflow-hidden border-4 border-gray-900 shadow-lg transition-transform hover:scale-105"
 						>
-							<MaterialIcon name="MdSearch" classname="size-12" />
+							<Image
+								alt="Profile picture"
+								src={profile?.avatar!}
+								width={128}
+								height={128}
+								priority
+								className="rounded-full object-cover size-32"
+							/>
+							<div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
+								<MaterialIcon name="MdSearch" classname="text-white text-3xl" />
+							</div>
 						</button>
-						<Image
-							alt="pfp"
-							src={profile?.avatar!}
-							width={130}
-							height={130}
-							priority
-							className="rounded-full w-32 h-32 mt-[-65px] border-[6px] border-black object-cover"
-						/>
 					</div>
-					<div className="flex justify-between">
-						<div>
-							<h3 className="font-bold text-xl">{profile?.fullname}</h3>
-							<span className="text-gray-500">@{profile?.username}</span>
-							<p>{profile?.bio}</p>
-							<p>
-								<span className="font-bold">Join Scince: </span>
-								{formatDate(profile?.createdAt)}
+					<div className="mt-16 flex justify-between items-start">
+						<div className="space-y-2">
+							<h3 className="font-bold text-2xl text-white">{profile?.fullname}</h3>
+							<span className="text-gray-400">@{profile?.username}</span>
+							<p className="text-gray-300 mt-2">{profile?.bio}</p>
+							<p className="text-gray-400 text-sm">
+								<span className="font-semibold">Joined: </span>
+								{format(profile?.createdAt!, 'MMMM d, yyyy')}
 							</p>
-							<div className="flex gap-3">
+							<div className="flex gap-6 mt-3">
 								<button
-									onClick={() => {
-										openModal(modalTypeEnum.FOLLOWING)
-									}}
+									onClick={() => openModal(modalTypeEnum.FOLLOWING)}
+									className="text-gray-300 hover:text-white transition-colors"
 								>
 									<span className="font-bold">{profile?.followingCount}</span>{' '}
-									Following
+									<span className="text-gray-400">Following</span>
 								</button>
 								<button
-									onClick={() => {
-										openModal(modalTypeEnum.FOLLOWERS)
-									}}
+									onClick={() => openModal(modalTypeEnum.FOLLOWERS)}
+									className="text-gray-300 hover:text-white transition-colors"
 								>
 									<span className="font-bold">{profile?.followersCount}</span>{' '}
-									Followers
+									<span className="text-gray-400">Followers</span>
 								</button>
 							</div>
 						</div>
-						{canFollow ? (
-							<div className="flex items-center mr-2 gap-2">
-								<Link
-									href={getDMPageUrl(profile?._id!)}
-									className={`${styles.messageButton} p-2 px-4 rounded-2xl transition-colors h-11 flex items-center justify-center bg-slate-600 hover:bg-slate-700`}
-								>
-									<MaterialIcon name="MdMail" />
-								</Link>
-								<button
-									onClick={followClick}
-									className={cn(
-										'p-2 px-4 rounded-2xl transition-colors h-11 flex items-center justify-center',
-										{
-											'bg-blue-500 hover:bg-blue-700': !profile?.isFollowing,
-											'bg-slate-600 hover:bg-slate-700': profile?.isFollowing,
-										}
-									)}
-								>
-									{profile?.isFollowing ? 'Following' : 'Follow'}
-								</button>
-							</div>
-						) : (
-							<div className="flex items-center mr-2">
+						<div className="flex items-center gap-3">
+							{canFollow ? (
+								<>
+									<Link
+										href={getDMPageUrl(profile?._id!)}
+										className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
+									>
+										<MaterialIcon name="MdMail" classname="text-white text-xl" />
+									</Link>
+									<button
+										onClick={followClick}
+										className={cn(
+											'py-2 px-4 rounded-full transition-colors text-sm font-medium',
+											{
+												'bg-blue-600 hover:bg-blue-700 text-white': !profile?.isFollowing,
+												'bg-gray-700 hover:bg-gray-600 text-white': profile?.isFollowing,
+											}
+										)}
+									>
+										{profile?.isFollowing ? 'Following' : 'Follow'}
+									</button>
+								</>
+							) : (
 								<LinkButton
 									color={LinkButtonColor.SECONDARY}
 									href="/profile/settings"
 									text="Edit Profile"
 								/>
-							</div>
-						)}
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
 		</>
 	)
 }
+
 export default ProfileData
+

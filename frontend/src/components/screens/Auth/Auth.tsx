@@ -19,16 +19,22 @@ const Auth: FC = () => {
 		<Meta title="Auth">
 			<div className="mt-8 p-5 border border-zinc-700 rounded-xl">
 				<AuthForm authType={authType} />
-				<button
+				<span className='text-white'>
+				{authType == 'login'
+						? "Don't have an account? "
+						: 'Already have an account? '}
+										<button
 					className="mt-2 hover:text-blue-500 underline transition-all"
 					onClick={() => {
 						authType == 'login' ? setAuthType('signup') : setAuthType('login')
 					}}
 				>
 					{authType == 'login'
-						? "Don't have an account? Sign up."
-						: 'Already have an account? Login.'}
+						? "Sign up."
+						: 'Login.'}
 				</button>
+				</span>
+
 			</div>
 		</Meta>
 	)

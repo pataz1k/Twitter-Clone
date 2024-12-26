@@ -132,7 +132,7 @@ const CreatePost: FC<ICreatePost> = ({
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		// Replace newline characters with a special string
-		const fullCaption = data.caption.replace(/\n/g, '\\n');
+		const fullCaption = data.caption
 	  
 		PostService.createPost(accessToken, fullCaption, images, hashtags)
 		  .then((res) => {

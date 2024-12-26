@@ -8,10 +8,12 @@ import MaterialIcon from '@/components/ui/MaterialIcons'
 import { IMessage } from '@/shared/types/message.types'
 
 import ChatMenu from './ChatMenu'
+import styles from './ChatRoom.module.scss'
 import { MessageService } from '@/services/message.service'
 import { UserService } from '@/services/user.service'
 import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
+import TimeItem from '@/components/ui/TimeItem'
 
 interface IChatRoom {
 	receiverAccountID: string
@@ -136,31 +138,31 @@ const ChatRoom: FC<IChatRoom> = ({ receiverAccountID }) => {
 										: 'bg-gray-700 text-gray-100'
 								}`}
 							>
-								<p className="break-words">{message.message}</p>
-								<p className="text-xs mt-1 opacity-75">
-									{new Date(message.timestamp).toLocaleString()}
+								<p className="break-words whitespace-pre-wrap">
+									{message.message}
 								</p>
+								<TimeItem textSize='xs' time={message.timestamp} />
 							</div>
 						</div>
 					))}
 					<div ref={messagesEndRef} />
 				</main>
 				<footer className="bg-gray-800 p-4">
-					<div className="flex items-center gap-2 bg-gray-700 rounded-full p-2">
-						<button disabled className="text-gray-400 hover:text-gray-200 p-2">
+					<div className="flex items-center gap-2 bg-gray-700 rounded-lg p-2">
+						<button disabled className="text-gray-400 hover:text-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed p-2">
 							<MaterialIcon name="MdAttachFile" />
 						</button>
-						<input
-							type="text"
+						<textarea
 							placeholder="Type a message..."
 							value={newMessage}
 							onChange={(e) => setNewMessage(e.target.value)}
 							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
+								if (e.key === 'Enter' && !e.shiftKey) {
+									e.preventDefault()
 									handleSend()
 								}
 							}}
-							className="flex-grow bg-transparent text-gray-100 focus:outline-none"
+							className={`flex-grow bg-transparent text-gray-100 focus:outline-none resize-none ${styles.textArea}`}
 						/>
 						<button
 							onClick={handleSend}

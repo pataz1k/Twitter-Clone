@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 
 import GradientBanner from '@/components/ui/GradientBanner'
-
 import {
 	BannerColors,
 	BannerColorsEnum,
@@ -29,12 +28,14 @@ const BannerSettings: FC = () => {
 	}
 
 	return (
-		<div className="mt-3">
-			<GradientBanner banner={BannerColors[selectedColor]} />
+		<div className="space-y-4">
+			<div className="rounded-lg overflow-hidden shadow-lg">
+				<GradientBanner banner={BannerColors[selectedColor]} />
+			</div>
 			<select
 				value={selectedColor}
 				onChange={changeColorHandler}
-				className="mt-3 bg-gray-700 text-white border-none outline-none p-2 rounded w-full"
+				className="w-full bg-gray-700 text-white border-none rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
 			>
 				<option value="" disabled hidden>
 					Pick Color
@@ -48,4 +49,6 @@ const BannerSettings: FC = () => {
 		</div>
 	)
 }
+
 export default BannerSettings
+

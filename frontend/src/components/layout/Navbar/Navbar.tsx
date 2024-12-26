@@ -30,7 +30,7 @@ const Navbar: FC<INavbar> = ({toggleNavbar}) => {
 		<nav className={styles.navbar}>
 			<div className={styles.navbarContent}>
 				<div>
-					<Logo />
+					<Logo className='size-10'/>
 					<ul className="list-none">
 						{NavbarData.items.map((item) => (
 							<NavbarItem key={item.title} item={item} onClick={toggleNavbar}/>

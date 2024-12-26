@@ -8,6 +8,7 @@ import NotAuth from '@/components/ui/NotAuth'
 import { MessageService } from '@/services/message.service'
 import useUserStore from '@/stores/user.store'
 import Meta from '@/utils/meta/Meta'
+import MaterialIcon from '@/components/ui/MaterialIcons'
 
 interface IDialog {
 	chatMember: {
@@ -40,8 +41,20 @@ const Dialogs: FC = () => {
 		return <NotAuth />
 	}
 
-	if (!isSuccess || !data || data.length === 0) {
+	if (!isSuccess || !data ) {
 		return null
+	}
+
+	if (data.length === 0) {
+		return (
+			<div className="flex flex-col items-center justify-center h-[calc(100vh-100px)] text-gray-400">
+				<MaterialIcon name='MdMessage'  classname='size-16'/>
+			  <h2 className="text-2xl font-semibold mb-2">No Chats Yet</h2>
+			  <p className="text-center max-w-md">
+				Start a conversation with someone to see your chats here. Your dialogs will appear once you begin messaging.
+			  </p>
+			</div>
+		  )
 	}
 
 	return (

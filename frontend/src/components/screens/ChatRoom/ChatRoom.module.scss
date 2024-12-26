@@ -3,3 +3,8 @@
 		@apply size-6;
 	}
 }
+
+.textArea {
+	field-sizing: content;
+	max-height: 96px;
+}

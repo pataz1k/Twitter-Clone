@@ -29,10 +29,10 @@ const ProfileSettings: FC = () => {
 						onClick={() => {
 							applySettings(accessToken)
 						}}
-						className={`p-2 px-6 rounded-2xl transition-colors h-11 flex items-center justify-center ml-auto ${
+						className={`p-2 px-6 rounded-full transition-colors h-11 flex items-center justify-center ml-auto ${
 							isChanged
-								? 'bg-blue-500 hover:bg-blue-700 text-white'
-								: 'bg-gray-400 cursor-not-allowed text-gray-600'
+								? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg'
+								: 'bg-gray-600 text-gray-400 cursor-not-allowed'
 						}`}
 					>
 						Apply

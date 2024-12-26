@@ -11,7 +11,6 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
 	const [isNavbarOpen, setIsNavbarOpen] = useState(false)
 
 	const { pathname } = useRouter()
-	console.log(pathname)
 
 	const toggleNavbar = () => setIsNavbarOpen(!isNavbarOpen)
 
