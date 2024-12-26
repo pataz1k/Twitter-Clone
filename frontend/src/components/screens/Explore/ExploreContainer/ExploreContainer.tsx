@@ -9,7 +9,7 @@ interface IExploreContainer {
 
 const ExploreContainer: FC<IExploreContainer> = ({ children, heading }) => {
 	return (
-		<div className="w-full md:w-1/2 bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-6 mt-8">
+		<div className="w-full md:w-1/2 bg-gray-900 border border-gray-800 rounded-lg shadow-lg p-6 mt-8">
 			<Heading
 				title={heading}
 				className="text-2xl font-bold text-gray-100 mb-4"

@@ -27,7 +27,7 @@ const PopularTags: FC = () => {
 	if (isError) {
 		return (
 			<ExploreContainer heading="Most Popular Tags">
-				<div className="flex items-center justify-center h-64 bg-gray-700 rounded-lg">
+				<div className="flex items-center justify-center h-64 bg-gray-800 rounded-lg">
 					<h1 className="text-xl font-bold text-red-400">
 						Error loading popular tags.
 					</h1>
@@ -41,13 +41,7 @@ const PopularTags: FC = () => {
 			<ExploreContainer heading="Most Popular Tags">
 				<div className="space-y-3">
 					{[...Array(8)].map((_, index) => (
-						<Skeleton
-							key={index}
-							height={40}
-							className="rounded-lg"
-							baseColor="#374151"
-							highlightColor="#4B5563"
-						/>
+						<Skeleton key={index} height={40} className="rounded-lg" />
 					))}
 				</div>
 			</ExploreContainer>
@@ -65,12 +59,12 @@ const PopularTags: FC = () => {
 							<Link
 								href={getTagPageUrl(tag.tag)}
 								key={index}
-								className="flex justify-between items-center p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-300 group"
+								className="flex justify-between items-center p-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors duration-300 group"
 							>
 								<h1 className="text-lg font-medium text-gray-200 group-hover:text-white transition-colors">
 									{tag.tag}
 								</h1>
-								<div className="flex items-center gap-2 bg-gray-600 px-2 py-1 rounded-full group-hover:bg-gray-500 transition-colors">
+								<div className="flex items-center gap-2 bg-gray-800 px-2 py-1 rounded-full group-hover:bg-gray-600 transition-colors">
 									<span className="text-sm text-gray-300 group-hover:text-white transition-colors">
 										{tag.count}
 									</span>

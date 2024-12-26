@@ -1,4 +1,5 @@
-import { AnimatePresence, motion } from 'motion/react'
+import { useClickAway } from '@uidotdev/usehooks'
+import { AnimatePresence, motion } from 'framer-motion'
 import { FC, useState } from 'react'
 
 import SearchField from '@/components/ui/search-filed/SearchField'
@@ -18,35 +19,42 @@ const Search: FC = () => {
 	} = useSearch()
 
 	const displayBorder = isSuccessPosts || isSuccessUsers
-	const [isSelected, setIsSelected] = useState(false)
+	const [showResults, setShowResults] = useState(true)
+	const clickOutside = useClickAway<HTMLDivElement>(() => {
+		setShowResults(false)
+	})
 
 	return (
-		<div className="relative ">
-			<SearchField searchTerm={searchTerm} handleSearch={handleSearch} handleSelect={setIsSelected}/>
+		<div className="relative" ref={clickOutside}>
+			<SearchField
+				searchTerm={searchTerm}
+				handleSearch={handleSearch}
+				handleSelect={setShowResults}
+			/>
 			<AnimatePresence>
-				{displayBorder && isSelected && (
+				{displayBorder && showResults && (
 					<motion.div
-						initial={{ opacity: 0, transform: 'translateY(10px)' }}
-						animate={{ opacity: 1, transform: 'translateY(0)' }}
-						exit={{ transform: 'translateY(10px)', opacity: 0 }}
-						className="absolute w-full bg-gray-950 border rounded-xl border-zinc-700 p-5 mt-2 "
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: 10 }}
+						className="absolute w-full bg-gray-900 border rounded-lg border-gray-800 p-4 mt-2 shadow-lg"
 					>
 						{isSuccessPosts && (
-							<>
-								<h1 className="border-b-[1px] border-zinc-700 pb-2 mb-2 text-center font-bold">
+							<div className="mb-4">
+								<h2 className="text-lg font-semibold text-white border-b border-gray-800 pb-2 mb-3">
 									Posts
-								</h1>
+								</h2>
 								<PostsList posts={dataPosts.data} />
-							</>
+							</div>
 						)}
 
 						{isSuccessUsers && (
-							<>
-								<h1 className="border-b-[1px] border-zinc-700 pb-2 mb-2 text-center font-bold">
+							<div>
+								<h2 className="text-lg font-semibold text-white border-b border-gray-800 pb-2 mb-3">
 									Users
-								</h1>
+								</h2>
 								<UsersList users={dataUsers.data} />
-							</>
+							</div>
 						)}
 					</motion.div>
 				)}
@@ -54,4 +62,5 @@ const Search: FC = () => {
 		</div>
 	)
 }
+
 export default Search

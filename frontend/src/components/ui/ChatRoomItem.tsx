@@ -23,7 +23,7 @@ const ChatRoomItem: FC<IChatRoomItem> = ({
 
 	return (
 		<Link href={`/messages/${_id}`} className="block">
-			<div className="flex items-center p-4 bg-gray-800 hover:bg-gray-700 transition-all duration-300 rounded-lg border border-gray-700 shadow-md hover:shadow-lg">
+			<div className="flex items-center p-4 bg-gray-900 hover:bg-gray-800 transition-all duration-300 rounded-lg border border-gray-800 shadow-md hover:shadow-lg">
 				<div className="relative w-14 h-14 mr-4 rounded-full overflow-hidden border-2 border-gray-600">
 					<Image
 						src={avatar}

@@ -17,11 +17,9 @@ const LoadingWrapper: FC<PropsWithChildren> = ({ children }) => {
 	// 	}
 	// }, [isSettingsLoading, isUserLoading,isAuth])
 
-
 	setTimeout(() => {
 		setIsLoading(false)
-	}, 2000)
-
+	}, 1500)
 
 	return (
 		<>
