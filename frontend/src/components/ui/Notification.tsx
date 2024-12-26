@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
@@ -23,7 +24,9 @@ const Notification: FC<NotificationProps> = ({ notify, onClose }) => {
 		<div className="w-80 bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-700">
 			<div className="flex items-center space-x-4">
 				<div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-					<img
+					<Image
+						height={40}
+						width={40}
 						src={notify.sender.avatar}
 						alt={notify.sender.username}
 						className="w-full h-full object-cover"

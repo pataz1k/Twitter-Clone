@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -31,8 +32,10 @@ const CommentsForm: FC<ICommentsForm> = ({ onSubmit }) => {
 			className="flex items-center gap-4 bg-gray-900/50 p-4 rounded-lg"
 		>
 			<div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
-				<img
+				<Image
 					src={avatar}
+					height={40}
+					width={40}
 					alt="User Avatar"
 					className="h-full w-full object-cover"
 				/>

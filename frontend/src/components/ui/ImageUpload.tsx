@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { FC, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
+import MaterialIcon from './MaterialIcons'
+
 interface FormData {
 	images: FileList
 }
@@ -63,19 +65,7 @@ const ImageUpload: FC<ImageUploadModalProps> = ({
 									onClick={handleClose}
 									className="text-gray-400 hover:text-white focus:outline-none"
 								>
-									<svg
-										className="h-6 w-6"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M6 18L18 6M6 6l12 12"
-										/>
-									</svg>
+									<MaterialIcon name="MdClose" classname="size-6" />
 								</button>
 							</div>
 							<form
@@ -116,19 +106,7 @@ const ImageUpload: FC<ImageUploadModalProps> = ({
 												document.getElementById('image-upload')?.click()
 											}
 										>
-											<svg
-												className="mr-2 h-4 w-4"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-											>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													strokeWidth={2}
-													d="M12 4v16m8-8H4"
-												/>
-											</svg>
+											<MaterialIcon name="MdAdd" classname="size-5 mr-1" />
 											Select Images
 										</button>
 									</div>
@@ -138,29 +116,19 @@ const ImageUpload: FC<ImageUploadModalProps> = ({
 									<div className="grid grid-cols-3 gap-4 mt-4">
 										{previews.map((preview, index) => (
 											<div key={index} className="relative">
-												<img
+												<Image
 													src={preview}
 													alt={`Preview ${index + 1}`}
-													className="w-full h-24 object-cover rounded"
+													height={96}
+													width={128}
+													className="w-32 h-24 object-cover rounded"
 												/>
 												<button
 													type="button"
 													className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-gray-300 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
 													onClick={() => removeImage(index)}
 												>
-													<svg
-														className="h-4 w-4"
-														fill="none"
-														viewBox="0 0 24 24"
-														stroke="currentColor"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															strokeWidth={2}
-															d="M6 18L18 6M6 6l12 12"
-														/>
-													</svg>
+													<MaterialIcon name="MdClose" classname="size-5" />
 													<span className="sr-only">Remove image</span>
 												</button>
 											</div>
