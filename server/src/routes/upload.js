@@ -1,34 +1,37 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+require('dotenv').config();
+let EasyYandexS3 = require('easy-yandex-s3').default;
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../../public/images")); // Обратите внимание на изменение пути
+let s3 = new EasyYandexS3({
+  auth: {
+    accessKeyId: process.env.YANDEX_BUCKET_ACCESS_KEY_ID,
+    secretAccessKey: process.env.YANDEX_BUCKET_ACCESS_KEY,
   },
-  filename: function (req, file, cb) {
-    const uniqueName = uuidv4();
-    cb(null, uniqueName + path.extname(file.originalname));
-  },
+  Bucket: 'twitter-clone', // Название бакета
 });
 
-const upload = multer({ storage: storage });
-
-router.post("/", upload.array("images", 10), (req, res) => {
-  const imagePaths = req.files.map((file) => "/images/" + file.filename);
-
-  const jsonResponse = {
-    status: "success",
-    paths: imagePaths,
-  };
-
+router.post('/', async (req, res) => {
   try {
-    res.status(200).json(jsonResponse);
-  } catch (err) {
-    res.status(500).json({ status: "error", message: "Internal Server Error" });
+    // Массив для сохранения информации о загрузке каждого файла
+    let uploadResults = [];
+
+    // Перебираем все файлы из запроса
+    for (let file of req.files) {
+      let buffer = file.buffer; // Буфер текущего файла
+      let upload = await s3.Upload({ buffer }, '/files/'); // Загрузка файла в бакет
+      uploadResults.push(upload.Key); // Добавляем результат загрузки в массив
+    }
+
+    // Отправляем все результаты загрузки клиенту
+    res.send(uploadResults);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Ошибка загрузки файлов' });
   }
 });
 

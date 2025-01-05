@@ -13,8 +13,8 @@ import { Socket, io } from 'socket.io-client'
 import Notification, { INotify } from '@/components/ui/Notification'
 
 import { getDMPageUrl } from '@/config/url.config'
-import useUserStore from '@/stores/user.store'
 import useNotificationStore from '@/stores/notification.store'
+import useUserStore from '@/stores/user.store'
 
 interface INotificationsContext {
 	notifications: string[]
@@ -30,7 +30,7 @@ const NotificationsContext = createContext<INotificationsContext>(initialValue)
 
 const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 	const { accountID, isAuth, accessToken } = useUserStore()
-	const {updateNotificationsCount} = useNotificationStore()
+	const { updateNotificationsCount } = useNotificationStore()
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const [notifications, setNotifications] = useState<string[]>([])
 	const { asPath } = useRouter()
@@ -80,7 +80,7 @@ const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
 		return () => {
 			socket.off('notification', notificationsHandler)
 		}
-	}, [socket, asPath,accessToken,updateNotificationsCount])
+	}, [socket, asPath, accessToken, updateNotificationsCount])
 
 	const readAllNotifications = () => {
 		setNotifications([])

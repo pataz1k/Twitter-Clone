@@ -15,6 +15,7 @@ const User = require('./models/User');
 
 const app = express();
 const server = http.createServer(app);
+let multer = require('multer');
 initializeSocket(server);
 
 //! Cors Headers
@@ -40,9 +41,11 @@ app.use(cors());
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
 app.use('/api/v1/posts', post);
-app.use('/api/v1/upload', upload);
 app.use('/api/v1/messages', message);
 app.use('/api/v1/notifications', notification); // Added notification route
+
+app.use(multer().any());
+app.use('/api/v1/upload', upload);
 
 app.use(errorHandler);
 

@@ -31,7 +31,8 @@ const nextConfig: NextConfig = {
 		return [
 			{
 				source: '/images/:path*',
-				destination: 'http://localhost:5000/images/:path*',
+				destination:
+					'https://server-twitter-clone-production.up.railway.app/images/:path*',
 			},
 		]
 	},
